@@ -1,6 +1,6 @@
 import { AppBar, Toolbar, Typography } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
-import { baselightTheme } from "../../../theme/DefaultColor";
+import { baselightTheme } from "../../../theme/DefaultTheme";
 
 import "./Navbar.css";
 const Navbar = () => {
@@ -15,6 +15,7 @@ const Navbar = () => {
             right: 0,
             background: "primary.main",
           }}
+          style={{ boxShadow: baselightTheme.shadows[1] }}
         >
           <Toolbar className="navbar-container">
             <img className="navbar-logo" src="./src/assets/football.png"></img>
