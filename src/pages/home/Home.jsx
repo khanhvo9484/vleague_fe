@@ -1,14 +1,16 @@
 import React, { useEffect } from "react";
-import Navbar from "../../components/ui/navbar/Navbar";
+import DefaultLayout from "../../layout/DefaultLayout";
 
 const home = () => {
   useEffect(() => {
     document.title = "Trang chủ";
-  },[]);
+  }, []);
   return (
-    <>
-      <Navbar />
-    </>
+    <DefaultLayout>
+      <div>
+        <h1>Hello</h1>
+      </div>
+    </DefaultLayout>
   );
 };
 
