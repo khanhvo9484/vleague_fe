@@ -12,6 +12,9 @@ import { makeStyles } from "@mui/styles";
 import { useState } from "react";
 import ClearIcon from "@mui/icons-material/Clear";
 import SearchIcon from "@mui/icons-material/Search";
+import LoginIcon from "@mui/icons-material/Login";
+import { Link } from "react-router-dom";
+import { useTheme } from "@mui/material/styles";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,6 +30,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Navbar = () => {
+  const theme = useTheme();
   const classes = useStyles();
   const [searchValue, setSearchValue] = useState("");
 
@@ -44,12 +48,10 @@ const Navbar = () => {
         <Toolbar sx={{ display: "flex" }}>
           <img
             className="navbar-logo"
-            src="./src/assets/football.png"
-            style={{ height: "25px", margin: "10px" }}
+            src="./src/assets/football1.png"
+            style={{ height: "50px", margin: "10px", cursor: "pointer" }}
+            onClick={() => Link("/")}
           />
-          <Typography variant="h6" component="div">
-            Giải vô địch quốc gia Việt Nam
-          </Typography>
 
           <TextField
             size="small"
@@ -91,8 +93,23 @@ const Navbar = () => {
               ),
             }}
           />
-
-          <Avatar />
+          <Typography
+            variant="body"
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              userSelect: "none",
+              "&:hover": {
+                color: theme.palette.secondary.main,
+                textDecoration: "underline",
+              },
+              cursor: "pointer",
+            }}
+          >
+            <LoginIcon sx={{ margin: "5px" }} />
+            Đăng nhập
+          </Typography>
+          <Avatar sx={{ margin: "5px" }}></Avatar>
         </Toolbar>
       </AppBar>
     </header>

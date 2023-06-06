@@ -9,6 +9,9 @@ const baselightTheme = createTheme({
       light: "#ECF2FF",
       dark: "#4570EA",
     },
+    myprimary: {
+      main: "#1818",
+    },
     secondary: {
       main: "#49BEFF",
       light: "#E8F7FF",
