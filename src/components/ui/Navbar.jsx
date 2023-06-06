@@ -45,13 +45,19 @@ const Navbar = () => {
   return (
     <header>
       <AppBar position="fixed" className={classes.root}>
-        <Toolbar sx={{ display: "flex" }}>
-          <img
-            className="navbar-logo"
-            src="./src/assets/football1.png"
-            style={{ height: "50px", margin: "10px", cursor: "pointer" }}
-            onClick={() => Link("/")}
-          />
+        <Toolbar sx={{ display: "flex", userSelect: "none" }}>
+          <Link to="/" sx={{}}>
+            <img
+              className="navbar-logo"
+              src="./src/assets/football1.png"
+              style={{
+                height: "50px",
+                margin: "10px",
+                cursor: "pointer",
+                userSelect: "none",
+              }}
+            />{" "}
+          </Link>
 
           <TextField
             size="small"
@@ -93,23 +99,25 @@ const Navbar = () => {
               ),
             }}
           />
-          <Typography
-            variant="body"
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              userSelect: "none",
-              "&:hover": {
-                color: theme.palette.secondary.main,
-                textDecoration: "underline",
-              },
-              cursor: "pointer",
-            }}
-          >
-            <LoginIcon sx={{ margin: "5px" }} />
-            Đăng nhập
-          </Typography>
-          <Avatar sx={{ margin: "5px" }}></Avatar>
+          <Link to="/login">
+            <Typography
+              variant="body"
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                userSelect: "none",
+                "&:hover": {
+                  color: theme.palette.secondary.main,
+                  textDecoration: "underline",
+                },
+                cursor: "pointer",
+              }}
+            >
+              <LoginIcon sx={{ margin: "5px" }} />
+              Đăng nhập
+            </Typography>
+          </Link>
+          <Avatar sx={{ margin: "5px", cursor: "pointer" }}></Avatar>
         </Toolbar>
       </AppBar>
     </header>
