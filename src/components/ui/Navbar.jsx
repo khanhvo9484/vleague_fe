@@ -18,7 +18,7 @@ import { useTheme } from "@mui/material/styles";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    bgcolor: "primary",
+    bgcolor: theme.palette.primary.main,
   },
   searchField: {
     borderRadius: "80px",
@@ -101,7 +101,7 @@ const Navbar = () => {
           />
           <Link to="/login">
             <Typography
-              variant="body"
+              variant="body1"
               sx={{
                 display: "flex",
                 alignItems: "center",
