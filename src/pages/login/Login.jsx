@@ -32,7 +32,8 @@ export default function Login() {
           headers: { "Content-Type": "application/json" },
         }
       );
-      const accessToken = response?.data?.token;
+      console.log(response)
+      const accessToken = response?.data?.data?.token;
       const role = response?.data?.role;
       console.log(accessToken);
       setAuth({ username, password, role, accessToken });
