@@ -17,6 +17,7 @@ const DefaultLayout = (props) => {
   return (
     <div className={classes.root}>
       <Navbar />
+      <div className={classes.toolbar}> </div>
       <main className={classes.content}>{props.children}</main>
       <Footer />
     </div>

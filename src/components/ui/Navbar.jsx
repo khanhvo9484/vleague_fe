@@ -76,8 +76,7 @@ const Navbar = () => {
                     onClick={handleClearSearch}
                     style={{ cursor: "pointer" }}
                     sx={{
-                      "&:hover": { bgcolor: "primary.main" },
-                      "&:active": { bgcolor: "red", border: "none" },
+                      "&:hover": { bgcolor: "primary.light" },
                     }}
                   >
                     <SearchIcon />
