@@ -8,19 +8,28 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import DefaultLayout from "../../layout/DefaultLayout";
-import { useContext } from "react";
-import AuthContext from "../../context/AuthProvider";
-import MyAxios from "../../api/MyAxios";
 
+import useAuth from "../../hooks/useAuth";
+import MyAxios from "../../api/MyAxios";
+import { Label } from "@mui/icons-material";
+import { useEffect, useState } from "react";
+import CheckIcon from "@mui/icons-material/CheckCircleOutlined";
+import ErrorIcon from "@mui/icons-material/ErrorOutlineOutlined";
+import Loader from "@mui/material/CircularProgress";
+import { useNavigate } from "react-router-dom";
 export default function Login() {
-  const { setAuth } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const { setAuth } = useAuth();
+  const [notify, setNotify] = useState({ message: "", status: null });
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setLoading(true);
     const data = new FormData(event.currentTarget);
     let username = data.get("username");
     let password = data.get("password");
-    console.log({ username, password });
+
     try {
       const response = await MyAxios.post(
         "/auth/login",
@@ -32,17 +41,24 @@ export default function Login() {
           headers: { "Content-Type": "application/json" },
         }
       );
-      const accessToken = response?.data?.token;
+      const accessToken = response?.data?.data?.token;
       const role = response?.data?.role;
-      console.log(accessToken);
       setAuth({ username, password, role, accessToken });
+      setNotify({ message: "Đăng nhập thành công", status: "success" });
+      setTimeout(() => {
+        navigate("/");
+      }, 1000);
     } catch (error) {
-      console.log(error, error?.message);
       if (!error.response) {
-        console.log("Network error");
-      } else if (error.response.status === 403) {
-        alert("Sai tên đăng nhập hoặc mật khẩu");
+        setNotify({ message: "Lỗi mạng", status: "error" });
+      } else if (error.response.status === 401) {
+        setNotify({
+          message: "Sai tên đăng nhập hoặc mật khẩu",
+          status: "error",
+        });
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -58,7 +74,7 @@ export default function Login() {
           }}
         >
           <Typography component="h1" variant="h5">
-            Sign in
+            Đăng nhập
           </Typography>
           <Box
             component="form"
@@ -81,14 +97,14 @@ export default function Login() {
               required
               fullWidth
               name="password"
-              label="Password"
+              label="Mật khẩu"
               type="password"
               id="password"
               autoComplete="current-password"
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
+              label="Ghi nhớ đăng nhập"
             />
             <Button
               type="submit"
@@ -96,7 +112,7 @@ export default function Login() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign In
+              Đăng nhập
             </Button>
             <Grid container>
               <Grid item xs>
@@ -110,6 +126,53 @@ export default function Login() {
                 </Link>
               </Grid>
             </Grid>
+
+            <Box
+              sx={{
+                mt: "1rem",
+                bgcolor:
+                  notify.status === "error"
+                    ? "error.light"
+                    : notify.status === "success"
+                    ? "success.light"
+                    : "inherit",
+                borderRadius: "4px",
+                opacity: 0.5,
+              }}
+            >
+              <Box
+                sx={{
+                  display: loading ? "flex" : "none",
+                  justifyContent: "center",
+                }}
+              >
+                <Loader sx={{ textAlign: "center" }}></Loader>
+              </Box>
+              <Typography
+                sx={{
+                  display: loading ? "none" : "flex",
+                  padding: "0.5rem",
+                  alignItems: "center",
+                  alignContent: "center",
+                  color:
+                    notify.status === "error"
+                      ? "error.main"
+                      : notify.status === "success"
+                      ? "success.main"
+                      : "inherit",
+                  fontWeight: "550",
+                }}
+                variant="h6"
+              >
+                {notify.status === "error" ? (
+                  <ErrorIcon sx={{ mr: "1rem" }}></ErrorIcon>
+                ) : null}
+                {notify.status === "success" ? (
+                  <CheckIcon sx={{ mr: "1rem" }}></CheckIcon>
+                ) : null}
+                {notify.message}
+              </Typography>
+            </Box>
           </Box>
         </Box>
       </Container>

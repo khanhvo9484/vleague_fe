@@ -13,13 +13,16 @@ const baselightTheme = createTheme({
     myprimary: {
       main: "#1818",
     },
+    green: {
+      main: "#89f0aa",
+    },
     secondary: {
       main: "#04476a",
       light: "#E8F7FF",
       dark: "#23afdb",
     },
     success: {
-      main: "#13DEB9",
+      main: "#07b696",
       light: "#E6FFFA",
       dark: "#02b3a9",
       contrastText: "#ffffff",
@@ -31,7 +34,7 @@ const baselightTheme = createTheme({
       contrastText: "#ffffff",
     },
     error: {
-      main: "#FA896B",
+      main: "#fe0000",
       light: "#FDEDE8",
       dark: "#f3704d",
       contrastText: "#ffffff",
