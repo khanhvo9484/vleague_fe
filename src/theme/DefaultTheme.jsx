@@ -70,7 +70,7 @@ const baselightTheme = createTheme({
     divider: "#e5eaef",
   },
   typography,
-  // shadows,
+  shadows,
 });
 
 export { baselightTheme };

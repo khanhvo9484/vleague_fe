@@ -2,6 +2,7 @@ import {
   AppBar,
   Avatar,
   Grid,
+  Box,
   IconButton,
   TextField,
   Toolbar,
@@ -113,28 +114,36 @@ const Navbar = () => {
               ),
             }}
           />
-          {!isLogin && (
-            <Link to="/login">
-              <Typography
-                variant="body1"
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  userSelect: "none",
-                  "&:hover": {
-                    color: theme.palette.secondary.main,
-                    textDecoration: "underline",
-                  },
-                  cursor: "pointer",
-                }}
-              >
-                <LoginIcon sx={{ margin: "5px" }} />
-                Đăng nhập
-              </Typography>
-            </Link>
-          )}
+          <Box
+            sx={{
+              minWidth: "6rem",
+              display: "flex",
+              justifyContent: "flex-start",
+            }}
+          >
+            {!isLogin && (
+              <Link to="/login">
+                <Typography
+                  variant="body1"
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    userSelect: "none",
+                    "&:hover": {
+                      color: theme.palette.secondary.main,
+                      textDecoration: "underline",
+                    },
+                    cursor: "pointer",
+                  }}
+                >
+                  <LoginIcon sx={{ margin: "5px" }} />
+                  Đăng nhập
+                </Typography>
+              </Link>
+            )}
 
-          {isLogin && <UserMenu />}
+            {isLogin && <UserMenu />}
+          </Box>
         </Toolbar>
       </AppBar>
     </header>
