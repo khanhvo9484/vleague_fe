@@ -17,18 +17,28 @@ import CheckIcon from "@mui/icons-material/CheckCircleOutlined";
 import ErrorIcon from "@mui/icons-material/ErrorOutlineOutlined";
 import Loader from "@mui/material/CircularProgress";
 import { useNavigate } from "react-router-dom";
+import { useRef } from "react";
+
 export default function Login() {
   const navigate = useNavigate();
-  const { setAuth } = useAuth();
+
+  const { auth, updateAuth, handleStorageOptionChange } = useAuth();
   const [notify, setNotify] = useState({ message: "", status: null });
   const [loading, setLoading] = useState(false);
+  const [isFirstLogin, setIsFirstLogin] = useState(false);
+  let usernameRef = useRef(null);
+  let passwordRef = useRef(null);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
     const data = new FormData(event.currentTarget);
-    let username = data.get("username");
-    let password = data.get("password");
+
+    usernameRef.current = data.get("username");
+    passwordRef.current = data.get("password");
+    let username = usernameRef.current;
+    let password = passwordRef.current;
+    let isRemember = data.get("remember");
 
     try {
       const response = await MyAxios.post(
@@ -42,12 +52,20 @@ export default function Login() {
         }
       );
       const accessToken = response?.data?.data?.token;
-      const role = response?.data?.role;
-      setAuth({ username, password, role, accessToken });
+      const role = response?.data?.data?.role;
+      let storageOption = "cookieStorage";
+      if (isRemember === "remember") {
+        storageOption = "localStorage";
+      } else {
+        storageOption = "cookieStorage";
+      }
+      handleStorageOptionChange(storageOption);
+      updateAuth({ username, password, role, accessToken });
       setNotify({ message: "Đăng nhập thành công", status: "success" });
+      setIsFirstLogin(true);
       setTimeout(() => {
         navigate("/");
-      }, 1000);
+      }, 1500);
     } catch (error) {
       if (!error.response) {
         setNotify({ message: "Lỗi mạng", status: "error" });
@@ -64,118 +82,124 @@ export default function Login() {
 
   return (
     <DefaultLayout>
-      <Container component="main" maxWidth="xs">
-        <Box
-          sx={{
-            marginTop: 8,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <Typography component="h1" variant="h5">
-            Đăng nhập
-          </Typography>
+      {(!auth?.username || isFirstLogin) && (
+        <Container component="main" maxWidth="xs">
           <Box
-            component="form"
-            onSubmit={handleSubmit}
-            noValidate
-            sx={{ mt: 1 }}
+            sx={{
+              marginTop: 8,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
           >
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="username"
-              label="Tên đăng nhập"
-              name="username"
-              autoComplete="username"
-              autoFocus
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Mật khẩu"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-            />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Ghi nhớ đăng nhập"
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
+            <Typography component="h1" variant="h5">
               Đăng nhập
-            </Button>
-            <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link href="#" variant="body2">
-                  {"Don't have an account? Sign Up"}
-                </Link>
-              </Grid>
-            </Grid>
-
+            </Typography>
             <Box
-              sx={{
-                mt: "1rem",
-                bgcolor:
-                  notify.status === "error"
-                    ? "error.light"
-                    : notify.status === "success"
-                    ? "success.light"
-                    : "inherit",
-                borderRadius: "4px",
-                opacity: 0.5,
-              }}
+              component="form"
+              onSubmit={handleSubmit}
+              noValidate
+              sx={{ mt: 1 }}
             >
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="username"
+                label="Tên đăng nhập"
+                name="username"
+                autoComplete="username"
+                ref={usernameRef}
+                autoFocus
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                name="password"
+                label="Mật khẩu"
+                type="password"
+                id="password"
+                ref={passwordRef}
+                autoComplete="current-password"
+              />
+              <FormControlLabel
+                name="remember"
+                control={<Checkbox value="remember" color="primary" />}
+                label="Ghi nhớ đăng nhập"
+              />
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+              >
+                Đăng nhập
+              </Button>
+              <Grid container>
+                <Grid item xs>
+                  <Link href="#" variant="body2">
+                    Quên mật khẩu?
+                  </Link>
+                </Grid>
+                <Grid item>
+                  <Link href="#" variant="body2">
+                    {"Chưa có tài khoản? Đăng ký ngay"}
+                  </Link>
+                </Grid>
+              </Grid>
+
               <Box
                 sx={{
-                  display: loading ? "flex" : "none",
-                  justifyContent: "center",
-                }}
-              >
-                <Loader sx={{ textAlign: "center" }}></Loader>
-              </Box>
-              <Typography
-                sx={{
-                  display: loading ? "none" : "flex",
-                  padding: "0.5rem",
-                  alignItems: "center",
-                  alignContent: "center",
-                  color:
+                  mt: "1rem",
+                  bgcolor:
                     notify.status === "error"
-                      ? "error.main"
+                      ? "error.light"
                       : notify.status === "success"
-                      ? "success.main"
+                      ? "success.light"
                       : "inherit",
-                  fontWeight: "550",
+                  borderRadius: "4px",
+                  opacity: 0.5,
                 }}
-                variant="h6"
               >
-                {notify.status === "error" ? (
-                  <ErrorIcon sx={{ mr: "1rem" }}></ErrorIcon>
-                ) : null}
-                {notify.status === "success" ? (
-                  <CheckIcon sx={{ mr: "1rem" }}></CheckIcon>
-                ) : null}
-                {notify.message}
-              </Typography>
+                <Box
+                  sx={{
+                    display: loading ? "flex" : "none",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Loader sx={{ textAlign: "center" }}></Loader>
+                </Box>
+                <Typography
+                  sx={{
+                    display: loading ? "none" : "flex",
+                    padding: "0.5rem",
+                    alignItems: "center",
+                    alignContent: "center",
+                    color:
+                      notify.status === "error"
+                        ? "error.main"
+                        : notify.status === "success"
+                        ? "success.main"
+                        : "inherit",
+                    fontWeight: "550",
+                  }}
+                  variant="h6"
+                >
+                  {notify.status === "error" ? (
+                    <ErrorIcon sx={{ mr: "1rem" }}></ErrorIcon>
+                  ) : null}
+                  {notify.status === "success" ? (
+                    <CheckIcon sx={{ mr: "1rem" }}></CheckIcon>
+                  ) : null}
+                  {notify.message}
+                </Typography>
+              </Box>
             </Box>
           </Box>
-        </Box>
-      </Container>
+        </Container>
+      )}
+      {auth?.username && !isFirstLogin && <h1>Đã đăng nhập</h1>}
     </DefaultLayout>
   );
 }

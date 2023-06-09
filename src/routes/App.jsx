@@ -13,10 +13,18 @@ const App = () => {
         {/* Public routes */}
         <Route exact path="/" element={<Home />} />
         <Route exact path="/login" element={<Login />} />
-        {/* Private routes */}
-        <Route element={<RequiredAuth />}>
-          {/* <Route exact path="/dashboard" element={<Dashboard />} /> */}
+
+        {/* Private routes for manager*/}
+        <Route element={<RequiredAuth allowedRoles={["QLGD"]} />}>
+          <Route exact path="/dashboard" element={<Dashboard />} />
         </Route>
+
+        {/* Protected route for admin */}
+        <Route element={<RequiredAuth allowedRoles={["ADMIN"]} />}>
+          <Route exact path="/dashboard/admin" />
+        </Route>
+
+        {/* <Route path="*" element={<NotFound />} /> */}
       </Routes>
     </ThemeProvider>
   );

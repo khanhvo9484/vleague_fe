@@ -1,5 +1,5 @@
 import React from "react";
-import Navbar from "../components/ui/Navbar";
+import Navbar from "../components/ui/navbar/Navbar.jsx";
 import Footer from "../components/ui/Footer";
 import { makeStyles } from "@mui/styles";
 

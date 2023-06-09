@@ -78,7 +78,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const home = () => {
+const Home = () => {
   const [backgroundImage, setBackgroundImage] = useState(null);
   const [backgroundLoaded, setBackgroundLoaded] = useState(false);
   useEffect(() => {
@@ -197,4 +197,4 @@ const home = () => {
   );
 };
 
-export default home;
+export default Home;

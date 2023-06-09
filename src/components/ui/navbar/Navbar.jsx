@@ -9,16 +9,20 @@ import {
   InputAdornment,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ClearIcon from "@mui/icons-material/Clear";
 import SearchIcon from "@mui/icons-material/Search";
 import LoginIcon from "@mui/icons-material/Login";
 import { Link } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
+import { useContext } from "react";
+import useAuth from "../../../hooks/useAuth";
+import UserMenu from "./UserMenu";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     bgcolor: theme.palette.primary.main,
+    padding: "0!important",
   },
   searchField: {
     borderRadius: "80px",
@@ -30,6 +34,17 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Navbar = () => {
+  const authContext = useAuth();
+  const [isLogin, setIsLogin] = useState(false);
+  useEffect(() => {
+    console.log(authContext);
+    if (authContext?.auth?.username) {
+      setIsLogin(true);
+    } else {
+      console.log("no user");
+      setIsLogin(false);
+    }
+  }, [authContext]);
   const theme = useTheme();
   const classes = useStyles();
   const [searchValue, setSearchValue] = useState("");
@@ -98,25 +113,28 @@ const Navbar = () => {
               ),
             }}
           />
-          <Link to="/login">
-            <Typography
-              variant="body1"
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                userSelect: "none",
-                "&:hover": {
-                  color: theme.palette.secondary.main,
-                  textDecoration: "underline",
-                },
-                cursor: "pointer",
-              }}
-            >
-              <LoginIcon sx={{ margin: "5px" }} />
-              Đăng nhập
-            </Typography>
-          </Link>
-          <Avatar sx={{ margin: "5px", cursor: "pointer" }}></Avatar>
+          {!isLogin && (
+            <Link to="/login">
+              <Typography
+                variant="body1"
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  userSelect: "none",
+                  "&:hover": {
+                    color: theme.palette.secondary.main,
+                    textDecoration: "underline",
+                  },
+                  cursor: "pointer",
+                }}
+              >
+                <LoginIcon sx={{ margin: "5px" }} />
+                Đăng nhập
+              </Typography>
+            </Link>
+          )}
+
+          {isLogin && <UserMenu />}
         </Toolbar>
       </AppBar>
     </header>
