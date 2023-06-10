@@ -1,17 +1,20 @@
+import { Box } from "@mui/material";
 import React from "react";
 
-const Footer = () => {
+const Footer = ({ drawerWidth }) => {
   return (
-    <footer
-      style={{
-        backgroundColor: "#f5f5f5",
-        textAlign: "center",
-        display: "flex",
-        width: "100%",
-      }}
-    >
-      <p style={{ margin: "0 auto" }}>This is the footer content.</p>
-    </footer>
+    <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+      <footer
+        style={{
+          width: drawerWidth ? `calc(100% - ${drawerWidth}px)` : "100%",
+          backgroundColor: "#f5f5f5",
+          textAlign: "center",
+          display: "flex",
+        }}
+      >
+        <p style={{ margin: "0 auto" }}>This is the footer content.</p>
+      </footer>
+    </Box>
   );
 };
 

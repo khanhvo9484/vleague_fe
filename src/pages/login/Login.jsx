@@ -8,7 +8,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import DefaultLayout from "../../layout/DefaultLayout";
-
+import { Backdrop, LinearProgress } from "@mui/material";
 import useAuth from "../../hooks/useAuth";
 import MyAxios from "../../api/MyAxios";
 import { Label } from "@mui/icons-material";
@@ -194,6 +194,11 @@ export default function Login() {
                   ) : null}
                   {notify.message}
                 </Typography>
+                {notify.status === "success" ? (
+                  <Box sx={{ width: "100%" }}>
+                    <LinearProgress color="primary" />
+                  </Box>
+                ) : null}
               </Box>
             </Box>
           </Box>

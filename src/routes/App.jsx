@@ -5,7 +5,7 @@ import Dashboard from "../pages/dashboard/Dashboard";
 import { baselightTheme } from "../theme/DefaultTheme";
 import { ThemeProvider } from "@mui/material/styles";
 import RequiredAuth from "../utils/RequiredAuth";
-
+import Unauthorized from "../pages/unauthorized/Unauthorized";
 const App = () => {
   return (
     <ThemeProvider theme={baselightTheme}>
@@ -23,6 +23,11 @@ const App = () => {
         <Route element={<RequiredAuth allowedRoles={["ADMIN"]} />}>
           <Route exact path="/dashboard/admin" />
         </Route>
+        <Route
+          exact
+          path="/unauthorized"
+          element={<Unauthorized></Unauthorized>}
+        ></Route>
 
         {/* <Route path="*" element={<NotFound />} /> */}
       </Routes>

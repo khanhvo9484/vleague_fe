@@ -15,6 +15,8 @@ import {
 import { makeStyles } from "@mui/styles";
 import listItem from "../../data/muagiai.js";
 import { useState } from "react";
+import useProgressiveImage from "../../hooks/useProgressiveImage";
+import bgImage from "../../assets/background1.jpg";
 const backgroundStyle = {
   backgroundSize: "cover",
   backgroundPosition: "center",
@@ -79,19 +81,20 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Home = () => {
+  const loadedImage = useProgressiveImage(bgImage);
   const [backgroundImage, setBackgroundImage] = useState(null);
   const [backgroundLoaded, setBackgroundLoaded] = useState(false);
-  useEffect(() => {
-    document.title = "Trang chủ";
-    import("../../assets/background1.jpg")
-      .then((image) => {
-        setBackgroundLoaded(true);
-        setBackgroundImage(image.default);
-      })
-      .catch((error) => {
-        console.error("Failed to load background image:", error);
-      });
-  }, []);
+  // useEffect(() => {
+  //   document.title = "Trang chủ";
+
+  //     .then((image) => {
+  //       setBackgroundLoaded(true);
+  //       setBackgroundImage(image.default);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Failed to load background image:", error);
+  //     });
+  // }, []);
 
   // const [allTournament, setAllTournament] = useState(listItem);
   const tournament = {
@@ -109,15 +112,15 @@ const Home = () => {
   }, [selectedTournament]);
   const classes = useStyles();
 
-  const handleBackgroundLoad = () => {
-    setBackgroundLoaded(true);
-  };
+  // const handleBackgroundLoad = () => {
+  //   setBackgroundLoaded(true);
+  // };
   return (
     <DefaultLayout>
       <Box>
         <Box
           sx={{
-            display: backgroundLoaded ? "none" : "flex",
+            display: loadedImage ? "none" : "flex",
             justifyContent: "center",
             alignItems: "center",
             height: "100vh",
@@ -126,13 +129,12 @@ const Home = () => {
         >
           <Loader size="5rem"></Loader>
         </Box>
-        <Box sx={{ display: backgroundLoaded ? "block" : "none" }}>
+        <Box sx={{ display: loadedImage ? "block" : "none" }}>
           <Box
             style={{
               ...backgroundStyle,
-              backgroundImage: `url(${backgroundImage})`,
+              backgroundImage: `url(${loadedImage})`,
             }}
-            onLoad={handleBackgroundLoad}
           ></Box>
           <Box style={contentStyle}>
             <Box>
