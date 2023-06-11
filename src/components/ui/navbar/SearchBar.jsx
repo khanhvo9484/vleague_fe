@@ -1,10 +1,30 @@
-import { IconButton, TextField, InputAdornment, Box } from "@mui/material";
+import {
+  IconButton,
+  TextField,
+  InputAdornment,
+  Box,
+  Typography,
+} from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { Clear as ClearIcon, Search as SearchIcon } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import { Autocomplete } from "@mui/material";
 import MyAxios from "../../../api/MyAxios";
 import { v4 as uuidv4 } from "uuid";
+import { styled } from "@mui/system";
+import { CircularProgress } from "@mui/material";
+const GroupHeader = styled("div")(({ theme }) => ({
+  position: "sticky",
+  top: "-8px",
+  padding: "4px 10px",
+  color: theme.palette.primary.dark,
+  backgroundColor: theme.palette.primary.light,
+}));
+
+const GroupItems = styled("ul")(({ theme }) => ({
+  // backgroundColor: "blue",
+  padding: 0,
+}));
 
 const useStyles = makeStyles((theme) => ({
   searchField: {
@@ -21,10 +41,11 @@ const SearchBar = () => {
   const [searchValue, setSearchValue] = useState("");
 
   const [allTeams, setAllTeams] = useState([]);
-  const [filterTeams, setFilterTeams] = useState([]);
   const [allPlayers, setAllPlayers] = useState([]);
   const [searchResult, setSearchResult] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const handleClearSearch = () => {
     setSearchValue("");
@@ -34,8 +55,9 @@ const SearchBar = () => {
     setSearchValue(event.target.value);
   };
 
-  useEffect(async () => {
-    if (isLoading === false) return;
+  const handleLoading = async () => {
+    if (loaded === true) return;
+    setIsLoading(true);
     try {
       const res = await MyAxios.get("/doibong", {
         params: { page: 1, limit: 100 },
@@ -73,24 +95,40 @@ const SearchBar = () => {
         });
         setAllPlayers(mappedArr);
         // console.log(mappedArr);
-        if (allTeams.length > 0) {
-          let filterTeamsArr = allTeams.filter((item) => {
-            return item.name.toLowerCase().includes(searchValue.toLowerCase());
-          });
-          setFilterTeams([filterTeamsArr]);
-        }
+        // if (allTeams.length > 0) {
+        //   let filterTeamsArr = allTeams.filter((item) => {
+        //     return item.name.toLowerCase().includes(searchValue.toLowerCase());
+        //   });
+        //   setFilterTeams([filterTeamsArr]);
+        // }
       }
+
+      setLoaded(true);
       setIsLoading(false);
     } catch (err) {
       console.log(err);
     }
-  }, [isLoading]);
+  };
   useEffect(() => {
-    setSearchResult([...allTeams, ...allPlayers]);
-  }, [allPlayers]);
+    if (allTeams.length > 0 && allPlayers.length > 0) {
+      if (searchValue !== "") {
+        setSearchResult([...allTeams, ...allPlayers]);
+      }
+    }
+  }, [allPlayers, allTeams]);
+
   useEffect(() => {
-    console.log("search RS: ", searchResult);
-  }, [searchResult]);
+    if (searchValue !== "") {
+      if (searchResult.length == 0) {
+        setSearchResult([...allTeams, ...allPlayers]);
+      }
+    } else {
+      if (searchResult.length > 0) {
+        setSearchResult([]);
+      }
+    }
+  }, [searchValue]);
+
   return (
     <>
       <Autocomplete
@@ -99,32 +137,51 @@ const SearchBar = () => {
           option.name === value.name && option.id === value.id
         }
         getOptionLabel={(option) => {
-          return option.name;
+          return `${option.id}. ${option.name}`;
         }}
-        filterOptions={(x) => x}
+        // filterOptions={(x) => x}
+        filterOptions={(options, state) => {
+          const inputValue = state.inputValue.toLowerCase();
+          return options.filter((option) =>
+            option.name.toLowerCase().includes(inputValue)
+          );
+        }}
         options={searchResult}
-        // autoHighlight
+        loading={isLoading}
+        loadingText="Đang tải dữ liệu..."
+        autoHighlight
         groupBy={(option) => option.type}
         filterSelectedOptions
         noOptionsText="Không tìm thấy kết quả"
-        // renderGroup={(params) => (
-        //     <li key={params.key}>
-
-        //     </li>
-        // )}
-        // renderOption={(props, option) => (
-        //   <Box key={uuidv4()} {...props}>
-        //     {option.name} hehe
-        //   </Box>
-        // )}
+        open={open}
+        onOpen={() => {
+          setOpen(true);
+          handleLoading();
+        }}
+        onClose={() => setOpen(false)}
+        renderGroup={(params) => (
+          <li key={params.key}>
+            <GroupHeader>
+              <Typography
+                variant="h6"
+                style={{
+                  backgroundColor: "#FFFF!important",
+                  marginLeft: "0.2rem",
+                }}
+              ></Typography>
+              {params.group === "team" ? "Đội bóng" : "Cầu thủ"}
+            </GroupHeader>
+            <GroupItems>{params.children}</GroupItems>
+          </li>
+        )}
         renderInput={(params) => (
           <TextField
             {...params}
             size="small"
             value={searchValue}
             onChange={handleSearchChange}
-            onFocus={() => setIsLoading(true)}
-            onBlur={() => setIsLoading(false)}
+            // onFocus={handleLoading}
+            // onBlur={() => setIsLoading(false)}
             placeholder="Tìm kiếm cầu thủ, đội bóng,..."
             sx={{
               "& fieldset": { border: "none" },
@@ -145,6 +202,14 @@ const SearchBar = () => {
                     <SearchIcon />
                   </IconButton>
                 </InputAdornment>
+              ),
+              endAdornment: (
+                <>
+                  {isLoading ? (
+                    <CircularProgress color="inherit" size={20} />
+                  ) : null}
+                  {params.InputProps.endAdornment}
+                </>
               ),
             }}
           />
