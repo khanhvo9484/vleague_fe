@@ -1,8 +1,11 @@
 import { createContext, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext({});
 
 export const AuthProvider = ({ children }) => {
+  const navigate = useNavigate();
+
   const [storageOption, setStorageOption] = useState("cookieStorage");
 
   useEffect(() => {
@@ -60,6 +63,19 @@ export const AuthProvider = ({ children }) => {
     document.cookie = "auth=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     localStorage.clear();
   };
+  const [token, setToken] = useState(null);
+  const handleTokenExpired = () => {
+    setToken(null);
+    logout();
+    navigate("/unauthorized", { replace: true });
+  };
+  const updateToken = (token, status) => {
+    if (status === "OK") {
+      setToken(token);
+    } else {
+      handleTokenExpired();
+    }
+  };
   return (
     <AuthContext.Provider
       value={{
@@ -68,6 +84,7 @@ export const AuthProvider = ({ children }) => {
         storageOption,
         handleStorageOptionChange,
         logout,
+        updateToken,
       }}
     >
       {children}
