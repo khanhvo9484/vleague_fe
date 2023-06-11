@@ -18,6 +18,7 @@ import useProgressiveImage from "../../hooks/useProgressiveImage";
 import bgImage from "../../assets/background1.jpg";
 import Scheduler from "../../components/ui/scheduler/Scheduler";
 import Ranking from "../../components/ui/ranking/Ranking";
+import League from "../../components/ui/league/League";
 const backgroundStyle = {
   backgroundSize: "cover",
   backgroundPosition: "center",
@@ -138,41 +139,8 @@ const Home = () => {
             <Box>
               <Grid container spacing={0} justifyContent="space-around">
                 <Grid item xs={12} sm={6} md={4} lg={3}>
-                  <Paper elevation={3} className={classes.leagueCard}>
-                    <Typography variant="h3" className={classes.boxTitle}>
-                      Mùa giải hiện tại
-                    </Typography>
-
-                    <List sx={{ padding: 0 }}>
-                      {listItem.map((item, index) => {
-                        const isEven = index % 2 === 0;
-                        const itemClass = isEven
-                          ? classes.evenItem
-                          : classes.oddItem;
-                        return (
-                          <ListItem
-                            onClick={() => handleSelectTour(item.id)}
-                            key={item.id}
-                            className={`${classes.leagueItem} ${itemClass} `}
-                            sx={
-                              index === listItem.length - 1
-                                ? { borderRadius: "0 0 4px 4px" }
-                                : {}
-                            }
-                          >
-                            <Box sx={{ display: "flex", alignItems: "center" }}>
-                              <Typography variant="h5">{item.id}. </Typography>
-                              <img
-                                style={{ width: "35px" }}
-                                src={item.logo}
-                              ></img>
-                              <Typography variant="h5">{item.name}</Typography>
-                            </Box>
-                          </ListItem>
-                        );
-                      })}
-                    </List>
-                  </Paper>
+                  {/*  */}
+                  <League></League>
                 </Grid>
 
                 <Grid item xs={12} sm={6} md={4} lg={5}>

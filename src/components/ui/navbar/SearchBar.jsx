@@ -101,6 +101,13 @@ const SearchBar = () => {
       setIsLoading(false);
     } catch (err) {
       console.log(err);
+      setSearchResult(
+        allTeams.length !== 0
+          ? allTeams
+          : allPlayers.length !== 0
+          ? allPlayers
+          : []
+      );
     }
   };
   useEffect(() => {
