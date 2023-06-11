@@ -3,15 +3,15 @@ import { makeStyles } from "@mui/styles";
 import { Paper, Typography } from "@mui/material";
 const useStyles = makeStyles((theme) => ({}));
 
-const Ranking = () => {
+const Scheduler = () => {
   const classes = useStyles();
   return (
     <>
       <Paper elevation={3}>
-        <Typography variant="h3">Bảng xếp hạng</Typography>
+        <Typography variant="h3">Lịch thi đấu</Typography>
       </Paper>
     </>
   );
 };
 
-export default Ranking;
+export default Scheduler;

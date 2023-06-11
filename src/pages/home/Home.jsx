@@ -5,7 +5,6 @@ import Loader from "@mui/material/CircularProgress";
 import {
   Box,
   Button,
-  Card,
   Grid,
   List,
   ListItem,
@@ -17,6 +16,8 @@ import listItem from "../../data/muagiai.js";
 import { useState } from "react";
 import useProgressiveImage from "../../hooks/useProgressiveImage";
 import bgImage from "../../assets/background1.jpg";
+import Scheduler from "../../components/ui/scheduler/Scheduler";
+import Ranking from "../../components/ui/ranking/Ranking";
 const backgroundStyle = {
   backgroundSize: "cover",
   backgroundPosition: "center",
@@ -112,9 +113,6 @@ const Home = () => {
   }, [selectedTournament]);
   const classes = useStyles();
 
-  // const handleBackgroundLoad = () => {
-  //   setBackgroundLoaded(true);
-  // };
   return (
     <DefaultLayout>
       <Box>
@@ -176,19 +174,15 @@ const Home = () => {
                     </List>
                   </Paper>
                 </Grid>
+
                 <Grid item xs={12} sm={6} md={4} lg={5}>
-                  <Paper elevation={3} className={classes.schedule}>
-                    <Typography variant="h3" className={classes.boxTitle}>
-                      Lịch thi đấu
-                    </Typography>
-                  </Paper>
+                  {/*  schedule*/}
+                  <Scheduler></Scheduler>
                 </Grid>
+
                 <Grid item xs={12} sm={6} md={4} lg={3}>
-                  <Paper elevation={3} className={classes.chart}>
-                    <Typography variant="h3" className={classes.boxTitle}>
-                      Bảng xếp hạng
-                    </Typography>
-                  </Paper>
+                  {/*  Ranking*/}
+                  <Ranking></Ranking>
                 </Grid>
               </Grid>
             </Box>
