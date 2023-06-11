@@ -13,6 +13,7 @@ import MyAxios from "../../../api/MyAxios";
 import { v4 as uuidv4 } from "uuid";
 import { styled } from "@mui/system";
 import { CircularProgress } from "@mui/material";
+import { SportsSoccer, DirectionsRun } from "@mui/icons-material";
 const GroupHeader = styled("div")(({ theme }) => ({
   position: "sticky",
   top: "-8px",
@@ -94,13 +95,6 @@ const SearchBar = () => {
           };
         });
         setAllPlayers(mappedArr);
-        // console.log(mappedArr);
-        // if (allTeams.length > 0) {
-        //   let filterTeamsArr = allTeams.filter((item) => {
-        //     return item.name.toLowerCase().includes(searchValue.toLowerCase());
-        //   });
-        //   setFilterTeams([filterTeamsArr]);
-        // }
       }
 
       setLoaded(true);
@@ -139,7 +133,6 @@ const SearchBar = () => {
         getOptionLabel={(option) => {
           return `${option.id}. ${option.name}`;
         }}
-        // filterOptions={(x) => x}
         filterOptions={(options, state) => {
           const inputValue = state.inputValue.toLowerCase();
           return options.filter((option) =>
@@ -163,13 +156,24 @@ const SearchBar = () => {
           <li key={params.key}>
             <GroupHeader>
               <Typography
-                variant="h6"
+                variant="subtitle1"
                 style={{
-                  backgroundColor: "#FFFF!important",
                   marginLeft: "0.2rem",
                 }}
-              ></Typography>
-              {params.group === "team" ? "Đội bóng" : "Cầu thủ"}
+              >
+                {" "}
+                {params.group === "team" ? (
+                  <Box sx={{ display: "flex", alignItems: "center" }}>
+                    <SportsSoccer sx={{ marginRight: "0.5rem" }} />
+                    Đội bóng
+                  </Box>
+                ) : (
+                  <Box sx={{ display: "flex", alignItems: "center" }}>
+                    <DirectionsRun sx={{ marginRight: "0.5rem" }} />
+                    Cầu thủ
+                  </Box>
+                )}
+              </Typography>
             </GroupHeader>
             <GroupItems>{params.children}</GroupItems>
           </li>
@@ -180,8 +184,6 @@ const SearchBar = () => {
             size="small"
             value={searchValue}
             onChange={handleSearchChange}
-            // onFocus={handleLoading}
-            // onBlur={() => setIsLoading(false)}
             placeholder="Tìm kiếm cầu thủ, đội bóng,..."
             sx={{
               "& fieldset": { border: "none" },

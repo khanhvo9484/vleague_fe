@@ -51,6 +51,9 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     if (Object.keys(auth).length > 0) {
       // Add this condition to prevent storing an empty object initially
+      if (auth?.token?.status === "expired") {
+        handleTokenExpired();
+      }
       setCookie("auth", JSON.stringify(auth), 1); // Set the cookie to expire in 1 days
     }
   }, [auth]);
@@ -63,19 +66,13 @@ export const AuthProvider = ({ children }) => {
     document.cookie = "auth=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     localStorage.clear();
   };
-  const [token, setToken] = useState(null);
+
   const handleTokenExpired = () => {
     setToken(null);
     logout();
     navigate("/unauthorized", { replace: true });
   };
-  const updateToken = (token, status) => {
-    if (status === "OK") {
-      setToken(token);
-    } else {
-      handleTokenExpired();
-    }
-  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -84,7 +81,6 @@ export const AuthProvider = ({ children }) => {
         storageOption,
         handleStorageOptionChange,
         logout,
-        updateToken,
       }}
     >
       {children}

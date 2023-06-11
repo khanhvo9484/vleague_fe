@@ -18,6 +18,7 @@ import ErrorIcon from "@mui/icons-material/ErrorOutlineOutlined";
 import Loader from "@mui/material/CircularProgress";
 import { useNavigate } from "react-router-dom";
 import { useRef } from "react";
+import AlreadyLogin from "./AlreadyLogin";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -51,8 +52,13 @@ export default function Login() {
           headers: { "Content-Type": "application/json" },
         }
       );
-      const accessToken = response?.data?.data?.token;
-      const role = response?.data?.data?.role;
+      const data = response?.data?.data;
+      const accessToken = data.token;
+      const role = data.role;
+      const name = data.hoTen;
+      const token = { accessToken, status: "OK" };
+      const dob = data.ngaySinh;
+      const image = data.hinhAnh;
       let storageOption = "cookieStorage";
       if (isRemember === "remember") {
         storageOption = "localStorage";
@@ -60,7 +66,7 @@ export default function Login() {
         storageOption = "cookieStorage";
       }
       handleStorageOptionChange(storageOption);
-      updateAuth({ username, password, role, accessToken });
+      updateAuth({ username, password, role, token, name, dob, image });
       setNotify({ message: "Đăng nhập thành công", status: "success" });
       setIsFirstLogin(true);
       setTimeout(() => {
@@ -72,6 +78,16 @@ export default function Login() {
       } else if (error.response.status === 401) {
         setNotify({
           message: "Sai tên đăng nhập hoặc mật khẩu",
+          status: "error",
+        });
+      } else if (error.response.status === 500) {
+        setNotify({
+          message: "Lỗi máy chủ",
+          status: "error",
+        });
+      } else if (error.response.status === 403) {
+        setNotify({
+          message: "Tài khoản của bạn đã bị khóa",
           status: "error",
         });
       }
@@ -204,7 +220,7 @@ export default function Login() {
           </Box>
         </Container>
       )}
-      {auth?.username && !isFirstLogin && <h1>Đã đăng nhập</h1>}
+      {auth?.username && !isFirstLogin && <AlreadyLogin />}
     </DefaultLayout>
   );
 }
