@@ -2,14 +2,9 @@ import React, { useEffect, useState } from "react";
 import { makeStyles } from "@mui/styles";
 import {
     Box,
-    Button,
-    Card,
     Grid,
-    List,
-    ListItem,
     Paper,
     Typography,
-    Divider,
     Table,
     TablePagination,
     TableContainer,
@@ -226,7 +221,7 @@ const teamInfor = () =>{
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
 
-    const handleChangePage = (event, newPage) => {
+    const handleChangePage = (newPage) => {
         setPage(newPage);
     };
     
@@ -236,10 +231,6 @@ const teamInfor = () =>{
     };
 
     const classes = useStyles();
-
-    console.log(rows.length)
-    console.log(page)
-    console.log(rowsPerPage)
 
     return (
         <DefaultLayout>
@@ -380,14 +371,15 @@ const teamInfor = () =>{
                                             </TableBody>
                                         </Table>
                                     </TableContainer> 
-                                    <TablePagination>
+                                    <TablePagination
                                         rowsPerPageOptions={[10, 25, 50]}
                                         component="div"
-                                        count={rows.length}
-                                        rowsPerPage={rowsPerPage}
-                                        page={page}
+                                        count={rows? rows.length : 0}
+                                        rowsPerPage={rows? rowsPerPage : 0}
+                                        page={rows? page : 0}                               
                                         onPageChange={handleChangePage}
                                         onRowsPerPageChange={handleChangeRowsPerPage}
+                                    >                                        
                                     </TablePagination>                                  
                                 </Paper>
                             </Grid>
