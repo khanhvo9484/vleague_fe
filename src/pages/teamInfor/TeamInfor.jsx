@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { makeStyles } from "@mui/styles";
 import {
     Box,
@@ -34,6 +35,7 @@ const contentStyle = {
     position: "relative",
     paddingTop: "80px",
     boxSizing: "border-box",
+    marginBottom: '20px'
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -60,6 +62,26 @@ const useStyles = makeStyles((theme) => ({
     inforContent: {
         margin: '5px', 
         paddingLeft: '20px'
+    },
+    tableTitle:{
+        color: theme.palette.primary.light,
+        textAlign: 'center',
+        textTransform: 'uppercase',
+    },
+    tableRow:{        
+        "&:nth-child(odd)":{
+            backgroundColor: '#dff1fd',            
+        },
+        "&:nth-child(even)":{
+            backgroundColor: '#ffffff'
+        },        
+    },
+    linkSub:{
+        color: theme.palette.primary.main,
+        "&:hover":{
+            textDecoration: 'underline',
+            color: theme.palette.primary.dark
+        }
     }
 }))
   
@@ -281,13 +303,13 @@ const teamInfor = () =>{
                                                 <Typography variant="body2" className={classes.inforSubTitle}>
                                                     Tên sân:
                                                 </Typography>
-                                                <Typography variant="body1" className={classes.inforContent}>
+                                                <Typography variant="h5" className={classes.inforContent}>
                                                     {team.sanNha.tenSan}
                                                 </Typography>
                                                 <Typography variant="body2" className={classes.inforSubTitle}>
                                                     Địa điểm:
                                                 </Typography>
-                                                <Typography variant="body1" className={classes.inforContent}>
+                                                <Typography variant="h5" className={classes.inforContent}>
                                                     {team.sanNha.diaDiem}
                                                 </Typography>
                                             </Grid>
@@ -298,13 +320,13 @@ const teamInfor = () =>{
                                                 <Typography variant="body2" className={classes.inforSubTitle}>
                                                     Họ Tên:
                                                 </Typography>
-                                                <Typography variant="body1" className={classes.inforContent}>
+                                                <Typography variant="h5" className={classes.inforContent}>
                                                     {team.quanLy.hoTen}
                                                 </Typography>
                                                 <Typography variant="body2" className={classes.inforSubTitle}>
                                                     Ngày Sinh:
                                                 </Typography>
-                                                <Typography variant="body1" className={classes.inforContent}>
+                                                <Typography variant="h5" className={classes.inforContent}>
                                                     {team.quanLy.ngaySinh}
                                                 </Typography>
                                             </Grid>
@@ -320,24 +342,36 @@ const teamInfor = () =>{
                                     <TableContainer sx={{maxHeight: 400}}>
                                         <Table stickyHeader>
                                             <TableHead>
-                                                <TableRow >
-                                                    <TableCell key={'stt'} align="center" style={{minWidth: 20}}>
-                                                        STT
+                                                <TableRow>
+                                                    <TableCell key={'stt'} align="center" style={{minWidth: 20}} sx={{backgroundColor: '#1b9beb'}}>
+                                                        <Typography variant="body1" className={classes.tableTitle} style={{fontWeight:'bold'}}>
+                                                            STT
+                                                        </Typography>
                                                     </TableCell>
-                                                    <TableCell key={'name'} align="center" style={{minWidth: 80}}>
-                                                        Họ Tên
+                                                    <TableCell key={'name'} align="center" style={{minWidth: 80}} sx={{backgroundColor: '#1b9beb'}}>
+                                                        <Typography variant="body1" className={classes.tableTitle} style={{fontWeight:'bold'}}>
+                                                            Họ Tên
+                                                        </Typography>
                                                     </TableCell>
-                                                    <TableCell key={'birthday'} align="center" style={{minWidth: 60}}>
-                                                        Ngày Sinh
+                                                    <TableCell key={'birthday'} align="center" style={{minWidth: 50}} sx={{backgroundColor: '#1b9beb'}}>
+                                                        <Typography variant="body1" className={classes.tableTitle} style={{fontWeight:'bold'}}>
+                                                            Ngày Sinh
+                                                        </Typography>
                                                     </TableCell>
-                                                    <TableCell key={'type'} align="center" style={{minWidth: 60}}>
-                                                        Loại cầu thủ
+                                                    <TableCell key={'type'} align="center" style={{minWidth: 50}} sx={{backgroundColor: '#1b9beb'}}>
+                                                        <Typography variant="body1" className={classes.tableTitle} style={{fontWeight:'bold'}}> 
+                                                            Loại cầu thủ
+                                                        </Typography>                                                        
                                                     </TableCell>
-                                                    <TableCell key={'status'} align="center"style={{minWidth: 60}}>
-                                                        Trạng thái
+                                                    <TableCell key={'status'} align="center"style={{minWidth: 50}} sx={{backgroundColor: '#1b9beb'}}>
+                                                        <Typography variant="body1" className={classes.tableTitle} style={{fontWeight:'bold'}}>
+                                                            Trạng thái
+                                                        </Typography>                                                        
                                                     </TableCell>
-                                                    <TableCell key={'note'} align="center" style={{minWidth: 60}}>
-                                                        Ghi chú
+                                                    <TableCell key={'note'} align="center" style={{minWidth: 60}} sx={{backgroundColor: '#1b9beb'}}>
+                                                        <Typography variant="body1" className={classes.tableTitle} style={{fontWeight:'bold'}}>
+                                                            Ghi chú
+                                                        </Typography>                                                        
                                                     </TableCell>
                                                 </TableRow>
                                             </TableHead>
@@ -346,24 +380,38 @@ const teamInfor = () =>{
                                                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                                     .map((row, index) => {
                                                         return (
-                                                        <TableRow hover role="checkbox" tabIndex={-1} key={index}>
+                                                        <TableRow hover role="checkbox" tabIndex={-1} key={index} className={classes.tableRow}>
                                                             <TableCell key={'stt'} align="center" style={{minWidth: 20}}>
-                                                                {index + 1}
+                                                                <Typography variant="body1" style={{fontWeight:'bold'}}>
+                                                                    {index + 1}
+                                                                </Typography>
                                                             </TableCell>
                                                             <TableCell key={'name'} align="left" style={{minWidth: 80}}>
-                                                                {row.hoTen}
+                                                                <Typography variant="body1">
+                                                                    {row.hoTen}
+                                                                </Typography>
                                                             </TableCell>
                                                             <TableCell key={'birthday'} align="left" style={{minWidth: 60}}>
+                                                                <Typography variant="body1">
                                                                 {row.ngaySinh}
+                                                                </Typography>
                                                             </TableCell>
                                                             <TableCell key={'type'} align="center" style={{minWidth: 60}}>
+                                                                <Typography variant="body1">
                                                                 {row.loaiCauThu}
+                                                                </Typography>
                                                             </TableCell>
                                                             <TableCell key={'status'} align="center"style={{minWidth: 60}}>
+                                                                <Typography variant="body1">
                                                                 {row.trangThai}
+                                                                </Typography>
                                                             </TableCell>
                                                             <TableCell key={'note'} align="center" style={{minWidth: 60}}>
-                                                                Xem thông tin chi tiết
+                                                                    <Link to={`/playerInfor?id=${row.id}`}>
+                                                                        <Typography variant="body1" className={classes.linkSub}>
+                                                                            Xem thông tin chi tiết
+                                                                        </Typography>
+                                                                    </Link>
                                                             </TableCell>
                                                         </TableRow>
                                                         );

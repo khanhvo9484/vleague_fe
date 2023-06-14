@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+import React, { useEffect} from "react";
+import { useLocation } from 'react-router-dom';
 import { makeStyles } from "@mui/styles";
 import {
     Box,
@@ -32,6 +33,7 @@ const contentStyle = {
     position: "relative",
     paddingTop: "80px",
     boxSizing: "border-box",
+    marginBottom: '20px'
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -54,17 +56,33 @@ const useStyles = makeStyles((theme) => ({
 const playerInfor = () =>{
     useEffect(()=>{
        document.title = 'Thông tin cầu thủ'
+    //    console.log(req.query.id)
     }, [])
 
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+
+    const playerID = queryParams.get('id');
+
+    console.log(playerID)
+
     const player = {
-        hoTen:"Cristiano Ronaldo",
-        ngaySinh:"1985-02-05",
-        quocTich: "Portugal",
-        hinhAnh: "https://i.pinimg.com/474x/c8/7f/76/c87f765b7adc9b0c74431e12ef74eb37--christano-ronaldo-cristiano-ronaldo-.jpg",
-        queQuan: "Portugal",
-        trangThai: "Tự do",
-        loaiCauThu:"Gay",
-        viTri: ["ST", "LF"]
+        "id": 14,
+        "idDoi": 2,
+        "hoTen": "CR7",
+        "ngaySinh": "2002-01-01",
+        "quocTich": "Pháp",
+        "hinhAnh": "https://upload.wikimedia.org/wikipedia/vi/c/c9/Cristiano_Ronaldo_2022.jpg",
+        "queQuan": "Hà lội",
+        "maDinhDanh": null,
+        "trangThai": "Thi đấu",
+        "loaiCauThu": "Ngoại binh",
+        "thoiDiemBatDau": null,
+        "thoiDiemKetThuc": null,
+        "tongSoBanThang": 0,
+        "viTri": [
+            "ST"
+        ]
     }
 
     const classes = useStyles();
@@ -99,50 +117,90 @@ const playerInfor = () =>{
                                 <Grid container columnSpacing={{ xs: 1, sm: 1, md: 2 }} rowSpacing={3}>                                    
                                     <Grid item xs={12} sm={12} md={6}>
                                         <Typography variant="body1" className={classes.inforTitle}>
-                                                Tên cầu thủ:
+                                            Tên cầu thủ:
                                         </Typography>
                                         <Typography variant="h5" className={classes.inforContent}>
-                                                {player.hoTen}
+                                            {player.hoTen}
                                         </Typography>                                     
                                     </Grid>
                                     <Grid item xs={12} sm={12} md={6}>
                                         <Typography variant="body1" className={classes.inforTitle}>
-                                                Ngày sinh:
+                                            Ngày sinh:
                                         </Typography>
                                         <Typography variant="h5" className={classes.inforContent}>
-                                                {player.ngaySinh}
+                                            {player.ngaySinh  || <> Không có</>}
                                         </Typography>
                                     </Grid>
                                     <Grid item xs={12} sm={12} md={6}>
                                         <Typography variant="body1" className={classes.inforTitle}>
-                                                Quốc tịch:
+                                            Quốc tịch:
                                         </Typography>
                                         <Typography variant="h5" className={classes.inforContent}>
-                                                {player.quocTich}
+                                            {player.quocTich  || <> Không có thông tin</>}
                                         </Typography>
                                     </Grid>
                                     <Grid item xs={12} sm={12} md={6}>
                                         <Typography variant="body1" className={classes.inforTitle}>
-                                                Quê quán:
+                                            Quê quán:
                                         </Typography>
                                         <Typography variant="h5" className={classes.inforContent}>
-                                                {player.queQuan}
+                                            {player.queQuan  || <> Không có thông tin</>}
                                         </Typography>
                                     </Grid>
                                     <Grid item xs={12} sm={12} md={6}>
                                         <Typography variant="body1" className={classes.inforTitle}>
-                                                Trạng thái:
+                                            Mã định danh:
                                         </Typography>
                                         <Typography variant="h5" className={classes.inforContent}>
-                                                {player.trangThai}
+                                            {player.maDinhDanh || <> Không có thông tin</>}
                                         </Typography>
                                     </Grid>
                                     <Grid item xs={12} sm={12} md={6}>
                                         <Typography variant="body1" className={classes.inforTitle}>
-                                                Vị trí:
+                                            Trạng thái:
                                         </Typography>
                                         <Typography variant="h5" className={classes.inforContent}>
-                                                {player.viTri.join(', ')}
+                                            {player.trangThai  || <> Không có thông tin</>}
+                                        </Typography>
+                                    </Grid>
+                                    <Grid item xs={12} sm={12} md={6}>
+                                        <Typography variant="body1" className={classes.inforTitle}>
+                                            Loại cầu thủ:
+                                        </Typography>
+                                        <Typography variant="h5" className={classes.inforContent}>
+                                            {player.loaiCauThu  || <> Không có thông tin</>}
+                                        </Typography>
+                                    </Grid>
+                                    <Grid item xs={12} sm={12} md={6}>
+                                        <Typography variant="body1" className={classes.inforTitle}>
+                                            Vị trí:
+                                        </Typography>
+                                        <Typography variant="h5" className={classes.inforContent}>
+                                            {player.viTri.join(', ')  || <> Không có thông tin</>}
+                                        </Typography>
+                                    </Grid>
+                                    <Grid item xs={12} sm={12} md={6}>
+                                        <Typography variant="body1" className={classes.inforTitle}>
+                                            Thời điểm bắt đầu:
+                                        </Typography>
+                                        <Typography variant="h5" className={classes.inforContent}>
+                                            {player.thoiDiemBatDau  || <> Không có thông tin</>}
+                                        </Typography>
+                                    </Grid>
+                                    <Grid item xs={12} sm={12} md={6}>
+                                        <Typography variant="body1" className={classes.inforTitle}>
+                                            Thời điểm kết thúc:
+                                        </Typography>
+                                        <Typography variant="h5" className={classes.inforContent}>
+                                            {player.thoiDiemKetThuc  || <> Không có thông tin</>}
+                                        </Typography>
+                                    </Grid>
+                                    <Grid item xs={12} sm={12} md={6}>
+                                        <Typography variant="body1" className={classes.inforTitle}>
+                                            Tổng số bàn thắng:
+                                        </Typography>
+                                        <Typography variant="h5" className={classes.inforContent}>
+                                            {player.tongSoBanThang  || <> Không có thông tin</>}
                                         </Typography>
                                     </Grid>
                                 </Grid>
