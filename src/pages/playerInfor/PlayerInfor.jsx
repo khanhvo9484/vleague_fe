@@ -42,7 +42,8 @@ const useStyles = makeStyles((theme) => ({
         textShadow: theme.shadows[1]
     },
     inforTitle: {
-        margin: '5px'
+        margin: '5px',
+        fontStyle: 'italic' 
     },
     inforContent: {
         margin: '5px', 
