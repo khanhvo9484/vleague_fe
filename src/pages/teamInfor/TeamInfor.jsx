@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles } from "@mui/styles";
 import {
     Box,
@@ -16,6 +16,7 @@ import {
     TableHead,
     TableRow,
     TableCell,
+    TableBody,
 } from "@mui/material";
 import DefaultLayout from "../../layout/DefaultLayout";
 import backgroundImage from "../../assets/background1.jpg";
@@ -66,7 +67,7 @@ const useStyles = makeStyles((theme) => ({
         paddingLeft: '20px'
     }
 }))
-
+  
 const teamInfor = () =>{
     useEffect(()=>{
        document.title = 'Thông tin đội bóng'
@@ -220,7 +221,25 @@ const teamInfor = () =>{
         ]
     }
 
+    const rows = team.danhSachCauThuDangThiDau
+
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
+
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    };
+    
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(+event.target.value);
+        setPage(0);
+    };
+
     const classes = useStyles();
+
+    console.log(rows.length)
+    console.log(page)
+    console.log(rowsPerPage)
 
     return (
         <DefaultLayout>
@@ -304,30 +323,71 @@ const teamInfor = () =>{
                             </Grid>
                             <Grid item xs={12} sm={12} md={12}>
                                 <Typography variant="h5" className={classes.subtitle}>
-                                    Danh sách cầu thủ
+                                    Danh sách cầu thủ đang thi đấu
                                 </Typography>
                                 <Paper>
                                     <TableContainer sx={{maxHeight: 400}}>
                                         <Table stickyHeader>
                                             <TableHead>
-                                                <TableRow>
-                                                    <TableCell key={'stt'}>
+                                                <TableRow >
+                                                    <TableCell key={'stt'} align="center" style={{minWidth: 20}}>
                                                         STT
                                                     </TableCell>
-                                                    <TableCell key={'name'}>
+                                                    <TableCell key={'name'} align="center" style={{minWidth: 80}}>
                                                         Họ Tên
                                                     </TableCell>
-                                                    <TableCell key={'birthday'}>
+                                                    <TableCell key={'birthday'} align="center" style={{minWidth: 60}}>
                                                         Ngày Sinh
                                                     </TableCell>
-                                                    <TableCell key={'type'}>
+                                                    <TableCell key={'type'} align="center" style={{minWidth: 60}}>
                                                         Loại cầu thủ
+                                                    </TableCell>
+                                                    <TableCell key={'status'} align="center"style={{minWidth: 60}}>
+                                                        Trạng thái
+                                                    </TableCell>
+                                                    <TableCell key={'note'} align="center" style={{minWidth: 60}}>
+                                                        Ghi chú
                                                     </TableCell>
                                                 </TableRow>
                                             </TableHead>
+                                            <TableBody>
+                                                {rows
+                                                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                                    .map((row, index) => {
+                                                        return (
+                                                        <TableRow hover role="checkbox" tabIndex={-1} key={index}>
+                                                            <TableCell key={'stt'} align="center" style={{minWidth: 20}}>
+                                                                {index + 1}
+                                                            </TableCell>
+                                                            <TableCell key={'name'} align="left" style={{minWidth: 80}}>
+                                                                {row.hoTen}
+                                                            </TableCell>
+                                                            <TableCell key={'birthday'} align="left" style={{minWidth: 60}}>
+                                                                {row.ngaySinh}
+                                                            </TableCell>
+                                                            <TableCell key={'type'} align="center" style={{minWidth: 60}}>
+                                                                {row.loaiCauThu}
+                                                            </TableCell>
+                                                            <TableCell key={'status'} align="center"style={{minWidth: 60}}>
+                                                                {row.trangThai}
+                                                            </TableCell>
+                                                            <TableCell key={'note'} align="center" style={{minWidth: 60}}>
+                                                                Xem thông tin chi tiết
+                                                            </TableCell>
+                                                        </TableRow>
+                                                        );
+                                                })}
+                                            </TableBody>
                                         </Table>
                                     </TableContainer> 
                                     <TablePagination>
+                                        rowsPerPageOptions={[10, 25, 50]}
+                                        component="div"
+                                        count={rows.length}
+                                        rowsPerPage={rowsPerPage}
+                                        page={page}
+                                        onPageChange={handleChangePage}
+                                        onRowsPerPageChange={handleChangeRowsPerPage}
                                     </TablePagination>                                  
                                 </Paper>
                             </Grid>
