@@ -2,7 +2,9 @@ import React from "react";
 import DrawerLayout from "../../layout/DrawerLayout";
 import { useEffect } from "react";
 import { DashboardOutlined } from "@mui/icons-material";
+import useAuth from "../../hooks/useAuth";
 const Dashboard = () => {
+  const authContext = useAuth();
   useEffect(() => {
     document.title = "Dashboard";
   });
@@ -11,10 +13,7 @@ const Dashboard = () => {
   ];
   return (
     <DrawerLayout menuItems={menuItems}>
-      <h1>
-        heheasdfjkasfhdjkashfkjashfdjkasdhfjkasfhasjkfhasjkfhaskjfhaskjfdh
-        jadsasdadfhjfhas
-      </h1>
+      <h1>ID của đội bóng là: {authContext?.auth?.teamId}</h1>
     </DrawerLayout>
   );
 };

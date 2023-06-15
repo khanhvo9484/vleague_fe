@@ -59,6 +59,7 @@ export default function Login() {
       const token = { accessToken, status: "OK" };
       const dob = data.ngaySinh;
       const image = data.hinhAnh;
+      const teamId = data.id_doibong;
       let storageOption = "cookieStorage";
       if (isRemember === "remember") {
         storageOption = "localStorage";
@@ -66,7 +67,7 @@ export default function Login() {
         storageOption = "cookieStorage";
       }
       handleStorageOptionChange(storageOption);
-      updateAuth({ username, password, role, token, name, dob, image });
+      updateAuth({ username, password, role, token, teamId, name, dob, image });
       setNotify({ message: "Đăng nhập thành công", status: "success" });
       setIsFirstLogin(true);
       setTimeout(() => {
