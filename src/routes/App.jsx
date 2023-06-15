@@ -18,7 +18,7 @@ const App = () => {
         <Route exact path="/teamInfo" element={<TeamInfor />} />
         <Route exact path="/playerInfo" element={<PlayerInfor />} />
         {/* Private routes for manager*/}
-        <Route element={<RequiredAuth allowedRoles={["QLGD"]} />}>
+        <Route element={<RequiredAuth allowedRoles={["QLDB"]} />}>
           <Route exact path="/dashboard" element={<Dashboard />} />
         </Route>
 
