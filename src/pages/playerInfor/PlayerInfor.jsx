@@ -85,6 +85,156 @@ const playerInfor = () =>{
         ]
     }
 
+    //get by id
+    const team = {
+        "id": 2,
+        "ten": "đội 2",
+        "hinhAnh": "https://upload.wikimedia.org/wikipedia/en/thumb/e/ee/Saigon_FC_logo_%282016%29.svg/1200px-Saigon_FC_logo_%282016%29.svg.png",
+        "namThanhLap": 2021,
+        "sanNha": {
+            "id": 2,
+            "tenSan": "sân 2",
+            "diaDiem": "hn"
+        },
+        "quanLy": {
+            "id": 2,
+            "hoTen": "quản lý 2",
+            "ngaySinh": "2023-06-21",
+            "hinhAnh": null
+        },
+        "danhSachCauThuDangThiDau": [
+            {
+                "id": 12,
+                "idDoi": 2,
+                "hoTen": "Franki De Jong",
+                "ngaySinh": "2002-01-01",
+                "quocTich": "Pháp",
+                "hinhAnh": "link hinh anh",
+                "queQuan": "Hà lội",
+                "maDinhDanh": null,
+                "trangThai": "Thi đấu",
+                "loaiCauThu": "Nhập tịch",
+                "thoiDiemBatDau": "2023-06-08",
+                "thoiDiemKetThuc": "2027-05-10",
+                "tongSoBanThang": 0,
+                "viTri": [
+                    "CAM"
+                ]
+            },
+            {
+                "id": 13,
+                "idDoi": 2,
+                "hoTen": "Steven Gerrand",
+                "ngaySinh": "2002-01-01",
+                "quocTich": "Pháp",
+                "hinhAnh": "link hinh anh",
+                "queQuan": "Hà lội",
+                "maDinhDanh": null,
+                "trangThai": "Thi đấu",
+                "loaiCauThu": "Nhập tịch",
+                "thoiDiemBatDau": "2023-06-08",
+                "thoiDiemKetThuc": "2027-05-10",
+                "tongSoBanThang": 0,
+                "viTri": [
+                    "CAM",
+                    "CM"
+                ]
+            },
+            {
+                "id": 14,
+                "idDoi": 2,
+                "hoTen": "CR7",
+                "ngaySinh": "2002-01-01",
+                "quocTich": "Pháp",
+                "hinhAnh": "link hinh anh",
+                "queQuan": "Hà lội",
+                "maDinhDanh": null,
+                "trangThai": "Thi đấu",
+                "loaiCauThu": "Nhập tịch",
+                "thoiDiemBatDau": "2023-06-08",
+                "thoiDiemKetThuc": "2027-05-10",
+                "tongSoBanThang": 0,
+                "viTri": [
+                    "ST"
+                ]
+            },
+            {
+                "id": 15,
+                "idDoi": 2,
+                "hoTen": "Đỗ Kim Phúc",
+                "ngaySinh": "2002-01-01",
+                "quocTich": "Pháp",
+                "hinhAnh": "link hinh anh",
+                "queQuan": "Hà lội",
+                "maDinhDanh": "097202022118",
+                "trangThai": "Thi đấu",
+                "loaiCauThu": "Nhập tịch",
+                "thoiDiemBatDau": "2023-06-09",
+                "thoiDiemKetThuc": "2027-05-10",
+                "tongSoBanThang": 0,
+                "viTri": [
+                    "CAM"
+                ]
+            },
+            {
+                "id": 17,
+                "idDoi": 2,
+                "hoTen": "Hoàng Huy Hoàng",
+                "ngaySinh": "2002-01-01",
+                "quocTich": "Pháp",
+                "hinhAnh": "link hinh anh",
+                "queQuan": "Hà lội",
+                "maDinhDanh": "097202022221138",
+                "trangThai": "Thi đấu",
+                "loaiCauThu": "Nhập tịch",
+                "thoiDiemBatDau": "2023-06-09",
+                "thoiDiemKetThuc": "2027-05-10",
+                "tongSoBanThang": 0,
+                "viTri": [
+                    "CAM"
+                ]
+            },
+            {
+                "id": 18,
+                "idDoi": 2,
+                "hoTen": "Hazard",
+                "ngaySinh": "2002-01-01",
+                "quocTich": "Pháp",
+                "hinhAnh": "link hinh anh",
+                "queQuan": "Hà lội",
+                "maDinhDanh": "0972011222022118",
+                "trangThai": "Thi đấu",
+                "loaiCauThu": "Nhập tịch",
+                "thoiDiemBatDau": "2023-06-09",
+                "thoiDiemKetThuc": "2027-05-10",
+                "tongSoBanThang": 0,
+                "viTri": [
+                    "CAM",
+                    "CM"
+                ]
+            },
+            {
+                "id": 19,
+                "idDoi": 2,
+                "hoTen": "Chú bé Dan",
+                "ngaySinh": "2002-01-01",
+                "quocTich": "Pháp",
+                "hinhAnh": "link hinh anh",
+                "queQuan": "Hà lội",
+                "maDinhDanh": "1231332312",
+                "trangThai": "Thi đấu",
+                "loaiCauThu": "Nhập tịch",
+                "thoiDiemBatDau": "2023-06-09",
+                "thoiDiemKetThuc": "2027-05-10",
+                "tongSoBanThang": 0,
+                "viTri": [
+                    "ST"
+                ]
+            }
+        ]
+    }
+
+
     const classes = useStyles();
 
     return (
@@ -128,7 +278,7 @@ const playerInfor = () =>{
                                             Ngày sinh:
                                         </Typography>
                                         <Typography variant="h5" className={classes.inforContent}>
-                                            {player.ngaySinh  || <> Không có</>}
+                                            {player.ngaySinh  || <> Không có thông tin</>}
                                         </Typography>
                                     </Grid>
                                     <Grid item xs={12} sm={12} md={6}>
@@ -154,7 +304,7 @@ const playerInfor = () =>{
                                         <Typography variant="h5" className={classes.inforContent}>
                                             {player.maDinhDanh || <> Không có thông tin</>}
                                         </Typography>
-                                    </Grid>
+                                    </Grid>                                    
                                     <Grid item xs={12} sm={12} md={6}>
                                         <Typography variant="body1" className={classes.inforTitle}>
                                             Trạng thái:
@@ -181,6 +331,22 @@ const playerInfor = () =>{
                                     </Grid>
                                     <Grid item xs={12} sm={12} md={6}>
                                         <Typography variant="body1" className={classes.inforTitle}>
+                                            Tổng số bàn thắng:
+                                        </Typography>
+                                        <Typography variant="h5" className={classes.inforContent}>
+                                            {player.tongSoBanThang  || <> Không có thông tin</>}
+                                        </Typography>
+                                    </Grid>
+                                    <Grid item xs={12} sm={12} md={6}>
+                                        <Typography variant="body1" className={classes.inforTitle}>
+                                            Đội bóng:
+                                        </Typography>
+                                        <Typography variant="h5" className={classes.inforContent}>
+                                            {team.ten || <> Không có</>}
+                                        </Typography>
+                                    </Grid>
+                                    <Grid item xs={12} sm={12} md={6}>
+                                        <Typography variant="body1" className={classes.inforTitle}>
                                             Thời điểm bắt đầu:
                                         </Typography>
                                         <Typography variant="h5" className={classes.inforContent}>
@@ -194,15 +360,7 @@ const playerInfor = () =>{
                                         <Typography variant="h5" className={classes.inforContent}>
                                             {player.thoiDiemKetThuc  || <> Không có thông tin</>}
                                         </Typography>
-                                    </Grid>
-                                    <Grid item xs={12} sm={12} md={6}>
-                                        <Typography variant="body1" className={classes.inforTitle}>
-                                            Tổng số bàn thắng:
-                                        </Typography>
-                                        <Typography variant="h5" className={classes.inforContent}>
-                                            {player.tongSoBanThang  || <> Không có thông tin</>}
-                                        </Typography>
-                                    </Grid>
+                                    </Grid>                                    
                                 </Grid>
                             </Grid>
                         </Grid>
