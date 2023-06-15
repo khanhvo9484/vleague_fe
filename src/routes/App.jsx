@@ -15,7 +15,8 @@ const App = () => {
         {/* Public routes */}
         <Route exact path="/" element={<Home />} />
         <Route exact path="/login" element={<Login />} />
-
+        <Route exact path="/teamInfo" element={<TeamInfor />} />
+        <Route exact path="/playerInfo" element={<PlayerInfor />} />
         {/* Private routes for manager*/}
         <Route element={<RequiredAuth allowedRoles={["QLGD"]} />}>
           <Route exact path="/dashboard" element={<Dashboard />} />
