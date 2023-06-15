@@ -8,10 +8,13 @@ const baselightTheme = createTheme({
     primary: {
       main: "#181823",
       light: "#ECF2FF",
-      dark: "#4570EA",
+      dark: "#0c3ba9b1",
     },
-    myprimary: {
-      main: "#1818",
+    blueBackground: {
+      main: "#c9deef",
+    },
+    disabledBackground: {
+      main: "#d6d6d6",
     },
     green: {
       main: "#89f0aa",
@@ -69,6 +72,7 @@ const baselightTheme = createTheme({
     },
     divider: "#e5eaef",
   },
+
   typography,
   shadows,
 });

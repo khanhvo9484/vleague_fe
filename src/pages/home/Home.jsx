@@ -54,26 +54,7 @@ const useStyles = makeStyles((theme) => ({
     // marginLeft: "3rem",
     marginTop: "2rem",
   },
-  leagueItem: {
-    display: "flex",
-    border: "1px solid black",
-    cursor: "pointer",
-    minHeight: "80px",
-    width: "100%",
-    // minWidth: "400px",
-  },
-  evenItem: {
-    backgroundColor: theme.palette.secondary.main,
-    "&:hover": {
-      backgroundColor: "green",
-    },
-  },
-  oddItem: {
-    backgroundColor: theme.palette.secondary.light,
-    "&:hover": {
-      backgroundColor: "green",
-    },
-  },
+
   schedule: {
     marginTop: "2rem",
   },

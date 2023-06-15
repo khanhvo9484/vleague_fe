@@ -44,11 +44,6 @@ const UserMenu = () => {
           AuthContext?.auth?.username.substring(0, 1)}
       </Avatar>
       <Popover
-        // sx={{
-        //   position: "absolute",
-        //   marginTop: (theme) => theme.spacing(1),
-        //   marginLeft: (theme) => theme.spacing(1),
-        // }}
         id={id}
         open={open}
         anchorEl={anchorEl}
@@ -63,7 +58,10 @@ const UserMenu = () => {
         }}
       >
         <MenuList
-          sx={{ padding: "0.2rem!important", backgroundColor: "primary.light" }}
+          sx={{
+            padding: "0.2rem!important",
+            backgroundColor: "blueBackground.main",
+          }}
         >
           <MenuItem
             onClick={handleGoToDashboard}
