@@ -11,7 +11,9 @@ const baselightTheme = createTheme({
       dark: "#0c3ba9b1",
     },
     blueBackground: {
+      light: "#e4f0f9",
       main: "#c9deef",
+      dark: "#a3c9e8",
     },
     disabledBackground: {
       main: "#d6d6d6",

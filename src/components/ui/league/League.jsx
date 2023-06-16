@@ -9,6 +9,7 @@ import {
   ExpandLess as ShowLess,
   ExpandMore as ShowMore,
 } from "@mui/icons-material";
+import useCurrentLeague from "../../../hooks/useCurrentLeague";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -64,6 +65,7 @@ const League = () => {
   const [listItem, setListItem] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [currentSelected, setCurrentSelected] = useState(null);
+  const { currentLeague, setCurrentLeague } = useCurrentLeague();
 
   useEffect(() => {
     const fetchListItems = async () => {
@@ -99,9 +101,12 @@ const League = () => {
     }
   };
   const handleSelect = (e) => {
-    console.log("id", e.currentTarget.id);
     setCurrentSelected(e.currentTarget.id);
   };
+  useEffect(() => {
+    setCurrentLeague(currentSelected);
+  }, [currentSelected]);
+
   return (
     <Paper elevation={3}>
       <Typography className={classes.title} variant="h3">

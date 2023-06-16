@@ -19,6 +19,8 @@ import bgImage from "../../assets/background1.jpg";
 import Scheduler from "../../components/ui/scheduler/Scheduler";
 import Ranking from "../../components/ui/ranking/Ranking";
 import League from "../../components/ui/league/League";
+import { CurrentLeagueProvider } from "../../context/CurrentLeagueContext";
+
 const backgroundStyle = {
   backgroundSize: "cover",
   backgroundPosition: "center",
@@ -117,24 +119,26 @@ const Home = () => {
             }}
           ></Box>
           <Box style={contentStyle}>
-            <Box>
-              <Grid container spacing={0} justifyContent="space-around">
-                <Grid item xs={12} sm={6} md={4} lg={3}>
-                  {/*  */}
-                  <League></League>
-                </Grid>
+            <CurrentLeagueProvider>
+              <Box>
+                <Grid container spacing={0} justifyContent="space-around">
+                  <Grid item xs={12} sm={6} md={4} lg={3}>
+                    {/*  */}
+                    <League></League>
+                  </Grid>
 
-                <Grid item xs={12} sm={6} md={4} lg={5}>
-                  {/*  schedule*/}
-                  <Scheduler></Scheduler>
-                </Grid>
+                  <Grid item xs={12} sm={6} md={4} lg={5}>
+                    {/*  schedule*/}
+                    <Scheduler></Scheduler>
+                  </Grid>
 
-                <Grid item xs={12} sm={6} md={4} lg={3}>
-                  {/*  Ranking*/}
-                  <Ranking></Ranking>
+                  <Grid item xs={12} sm={6} md={4} lg={3}>
+                    {/*  Ranking*/}
+                    <Ranking></Ranking>
+                  </Grid>
                 </Grid>
-              </Grid>
-            </Box>
+              </Box>
+            </CurrentLeagueProvider>
           </Box>
         </Box>
       </Box>
