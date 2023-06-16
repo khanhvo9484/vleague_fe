@@ -122,19 +122,40 @@ const Home = () => {
             <CurrentLeagueProvider>
               <Box>
                 <Grid container spacing={0} justifyContent="space-around">
-                  <Grid item xs={12} sm={6} md={4} lg={3}>
-                    {/*  */}
+                  {/* <Grid item xs={12} sm={6} md={4} lg={3}>
+            
                     <League></League>
                   </Grid>
 
-                  <Grid item xs={12} sm={6} md={4} lg={5}>
-                    {/*  schedule*/}
+                  <Grid item xs={12} sm={6} md={4} lg={4}>
+           
                     <Scheduler></Scheduler>
                   </Grid>
 
-                  <Grid item xs={12} sm={6} md={4} lg={3}>
-                    {/*  Ranking*/}
+                  <Grid item xs={12} sm={6} md={4} lg={4}>
                     <Ranking></Ranking>
+                  </Grid> */}
+                  <Grid item xs={12} sm={3}>
+                    {/* Your component */}
+                    {/* Replace the `YourComponent` with your actual component */}
+                    <League />
+                  </Grid>
+
+                  {/* Second Column */}
+                  <Grid item xs={12} sm={7} container>
+                    {/* First half of the second column */}
+                    <Grid item xs={12} sx={{ mb: "2rem" }}>
+                      {/* Your component */}
+                      {/* Replace the `YourFirstComponent` with your actual component */}
+                      <Scheduler />
+                    </Grid>
+
+                    {/* Second half of the second column */}
+                    <Grid item xs={12}>
+                      {/* Your component */}
+                      {/* Replace the `YourSecondComponent` with your actual component */}
+                      <Ranking />
+                    </Grid>
                   </Grid>
                 </Grid>
               </Box>

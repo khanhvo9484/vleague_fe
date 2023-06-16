@@ -108,13 +108,22 @@ const Ranking = () => {
                     </Typography>
                   </TableCell>
                   <TableCell align="center">
-                    <Typography variant="h6">Tên đội</Typography>
-                  </TableCell>
-                  <TableCell align="center">
-                    <Typography variant="h6">Logo</Typography>
+                    <Typography variant="h6">Đội bóng</Typography>
                   </TableCell>
                   <TableCell align="center">
                     <Typography variant="h6">Thắng</Typography>
+                  </TableCell>
+                  <TableCell align="center">
+                    <Typography variant="h6">Thua</Typography>
+                  </TableCell>
+                  <TableCell align="center">
+                    <Typography variant="h6">Hòa</Typography>
+                  </TableCell>
+                  <TableCell align="center">
+                    <Typography variant="h6">Điểm</Typography>
+                  </TableCell>
+                  <TableCell align="center">
+                    <Typography variant="h6">Hiệu số</Typography>
                   </TableCell>
                 </TableRow>
               </TableHead>
@@ -139,16 +148,38 @@ const Ranking = () => {
                         <Typography variant="h6"> {item.xephang}</Typography>
                       </TableCell>
                       <TableCell align="center" sx={{ padding: "8px" }}>
-                        <Typography variant="h6"> {item.ten_doi}</Typography>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Typography variant="h6"> {item.ten_doi}</Typography>
+                          <img
+                            style={{ width: "50px", marginLeft: "1rem" }}
+                            src={teamLogo.logo1}
+                          ></img>
+                        </Box>
                       </TableCell>
-                      <TableCell align="center" sx={{ padding: "8px" }}>
-                        <img
-                          style={{ width: "50px" }}
-                          src={teamLogo.logo1}
-                        ></img>
-                      </TableCell>
+
                       <TableCell align="center" sx={{ padding: "8px" }}>
                         <Typography variant="h6"> {item.tranThang}</Typography>
+                      </TableCell>
+                      <TableCell align="center" sx={{ padding: "8px" }}>
+                        <Typography variant="h6"> {item.tranThua}</Typography>
+                      </TableCell>
+                      <TableCell align="center" sx={{ padding: "8px" }}>
+                        <Typography variant="h6"> {item.tranHoa}</Typography>
+                      </TableCell>
+                      <TableCell align="center" sx={{ padding: "8px" }}>
+                        <Typography variant="h6">
+                          {" "}
+                          {item.diem ? item.diem : "0"}
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="center" sx={{ padding: "8px" }}>
+                        <Typography variant="h6"> {item.hieuSo}</Typography>
                       </TableCell>
                     </TableRow>
                   </Grow>

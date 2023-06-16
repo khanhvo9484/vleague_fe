@@ -194,15 +194,15 @@ const MatchDay = () => {
                               position: "absolute",
                               top: "0",
                               right: "0",
-                              borderRadius: "20px",
+                              borderRadius: "2px",
                               outline: "2px solid gray",
-                              mt: "0.5rem",
-                              mr: "0.5rem",
+                              mt: "0.2rem",
+                              mr: "0.2rem",
                             }}
                           >
                             <Typography
-                              variant="body2"
-                              sx={{ padding: "0.3rem", color: "gray" }}
+                              variant="body3"
+                              sx={{ padding: "0.1rem", color: "gray" }}
                             >
                               Đã kết thúc
                             </Typography>
