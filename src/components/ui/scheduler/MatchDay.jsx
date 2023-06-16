@@ -216,7 +216,7 @@ const MatchDay = () => {
                         <Box sx={{ padding: "1rem" }}>
                           <img
                             style={{ width: "50px" }}
-                            src={teamLogo.logo1}
+                            src={match.doiNha.hinhAnh}
                           ></img>
                         </Box>
                         <Box
@@ -268,7 +268,7 @@ const MatchDay = () => {
                         <Box sx={{ padding: "1rem" }}>
                           <img
                             style={{ width: "50px" }}
-                            src={teamLogo.logo2}
+                            src={match.doiKhach.hinhAnh}
                           ></img>
                         </Box>
                         <Box>

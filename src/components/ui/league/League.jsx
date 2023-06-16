@@ -163,7 +163,7 @@ const League = () => {
                               marginRight: "0.5rem",
                               marginLeft: "0.5rem",
                             }}
-                            src={teamLogo?.logo1}
+                            src={item.hinhAnh}
                             alt=""
                           ></img>
                           <Typography variant="h5">{item.ten}</Typography>
@@ -171,7 +171,7 @@ const League = () => {
                         <Box sx={{ display: "flex" }}>
                           <Typography variant="body1">
                             {Helper.formatDateToLocal(item.thoiDiemBatDau)} -{" "}
-                            {Helper.formatDateToLocal(item.thoiDiemBatDau)}
+                            {Helper.formatDateToLocal(item.thoiDiemKetThuc)}
                           </Typography>
                         </Box>
                       </Box>

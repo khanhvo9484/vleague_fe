@@ -158,7 +158,7 @@ const Ranking = () => {
                           <Typography variant="h6"> {item.ten_doi}</Typography>
                           <img
                             style={{ width: "50px", marginLeft: "1rem" }}
-                            src={teamLogo.logo1}
+                            src={item.hinhAnh}
                           ></img>
                         </Box>
                       </TableCell>
