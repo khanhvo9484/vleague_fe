@@ -15,7 +15,6 @@ import {
 import { useState, useEffect } from "react";
 import useCurrentLeague from "../../../hooks/useCurrentLeague";
 import MyAxios from "../../../api/MyAxios";
-import teamLogo from "../../../data/GlobalConstant";
 import { useTheme } from "@mui/material/styles";
 const useStyles = makeStyles((theme) => ({
   title: {

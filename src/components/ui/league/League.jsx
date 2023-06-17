@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { makeStyles } from "@mui/styles";
 import { Paper, List, ListItem, Box, Typography, Button } from "@mui/material";
 import MyAxios from "../../../api/MyAxios";
-import teamLogo from "../../../data/GlobalConstant";
 import Helper from "../../../utils/Helper";
 import { CircularProgress, Grow, IconButton } from "@mui/material";
 import {

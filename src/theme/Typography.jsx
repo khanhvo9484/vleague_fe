@@ -1,5 +1,6 @@
 const typography = {
   fontFamily: "'Plus Jakarta Sans', sans-serif;",
+
   h1: {
     fontWeight: 600,
     fontSize: "2.25rem",
@@ -62,6 +63,10 @@ const typography = {
   subtitle2: {
     fontSize: "0.875rem",
     fontWeight: 400,
+  },
+  subtitle0: {
+    fontSize: "1rem",
+    fontWeight: 500,
   },
 };
 

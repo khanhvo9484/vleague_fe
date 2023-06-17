@@ -3,7 +3,6 @@ import Loader from "@mui/material/CircularProgress";
 
 import { Box, Grid, Grow, Typography, Collapse, Slide } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import listItem from "../../data/muagiai.js";
 import { useState, useEffect } from "react";
 import useProgressiveImage from "../../hooks/useProgressiveImage";
 import bgImage from "../../assets/background1.jpg";

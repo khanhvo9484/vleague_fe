@@ -11,7 +11,6 @@ import {
 } from "@mui/material";
 import { ChevronLeft, ChevronRight } from "@mui/icons-material";
 import { makeStyles } from "@mui/styles";
-import teamLogo from "../../../data/GlobalConstant";
 import { List, ListItem } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import Helper from "../../../utils/Helper";
