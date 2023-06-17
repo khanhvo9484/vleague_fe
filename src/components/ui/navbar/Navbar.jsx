@@ -17,6 +17,7 @@ import UserMenu from "./UserMenu";
 import SearchBar from "./SearchBar";
 import useProgressiveImage from "../../../hooks/useProgressiveImage";
 import { NavLink, useNavigate } from "react-router-dom";
+import logo from "../../../assets/football1.png";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -66,7 +67,7 @@ const Navbar = ({ drawerWidth }) => {
   }, [authContext]);
   const theme = useTheme();
   const classes = useStyles();
-  const loadedLogo = useProgressiveImage("./src/assets/football1.png");
+  const loadedLogo = useProgressiveImage(logo);
 
   return (
     <header>

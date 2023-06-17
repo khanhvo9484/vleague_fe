@@ -2,7 +2,8 @@ import { Routes, Route } from "react-router-dom";
 import Home from "../pages/home/Home";
 import Login from "../pages/login/Login";
 import Dashboard from "../pages/dashboard/Dashboard";
-import PlayerInfor from "../pages/playerInfor/PlayerInfor";
+// import PlayerInfor from "../pages/playerInfor/PlayerInfor";
+import Player from "../pages/player/Player";
 import TeamInfor from "../pages/teamInfor/TeamInfor";
 import Standings from "../pages/standings/Standings";
 import Schedule from "../pages/schedule/Schedule";
@@ -18,8 +19,8 @@ const App = () => {
         {/* Public routes */}
         <Route exact path="/" element={<Home />} />
         <Route exact path="/login" element={<Login />} />
-        <Route exact path="/teamInfo" element={<TeamInfor />} />
-        <Route exact path="/playerInfo" element={<PlayerInfor />} />
+        <Route path="/clubs/:id" element={<TeamInfor />} />
+        <Route path="/players/:id" element={<Player />} />
         <Route exact path="/standings" element={<Standings />} />
         <Route exact path="/schedule" element={<Schedule />} />
         {/* Private routes for manager*/}
