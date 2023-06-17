@@ -4,7 +4,8 @@ import Login from "../pages/login/Login";
 import Dashboard from "../pages/dashboard/Dashboard";
 // import PlayerInfor from "../pages/playerInfor/PlayerInfor";
 import Player from "../pages/player/Player";
-import TeamInfor from "../pages/teamInfor/TeamInfor";
+import Club from "../pages/club/Club";
+
 import Standings from "../pages/standings/Standings";
 import Schedule from "../pages/schedule/Schedule";
 
@@ -19,7 +20,7 @@ const App = () => {
         {/* Public routes */}
         <Route exact path="/" element={<Home />} />
         <Route exact path="/login" element={<Login />} />
-        <Route path="/clubs/:id" element={<TeamInfor />} />
+        <Route path="/clubs/:id" element={<Club />} />
         <Route path="/players/:id" element={<Player />} />
         <Route exact path="/standings" element={<Standings />} />
         <Route exact path="/schedule" element={<Schedule />} />
