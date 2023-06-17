@@ -11,7 +11,6 @@ import {
   TableHead,
   TableRow,
   Grow,
-  Tab,
 } from "@mui/material";
 import { useState, useEffect } from "react";
 import useCurrentLeague from "../../../hooks/useCurrentLeague";
@@ -37,6 +36,42 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     minHeight: "20vh",
   },
+  row: {
+    cursor: "pointer",
+    "&:hover": {
+      backgroundColor: theme.palette.primary.dark,
+      "& h6": {
+        color: "white",
+      },
+      outline: "2px solid white",
+    },
+    boxShadow: theme.shadows[3],
+    borderRadius: "4px",
+    backgroundColor: "white",
+    minHeight: "1rem",
+    padding: "0.5rem",
+    margin: "5rem",
+    "& td:first-child": {
+      borderTopLeftRadius: "4px",
+      borderBottomLeftRadius: "4px",
+    },
+    "& td:last-child": {
+      borderTopRightRadius: "4px",
+      borderBottomRightRadius: "4px",
+    },
+  },
+  tableHeadRow: {
+    // backgroundColor: theme.palette.blueBackground.dark,
+    // color: "white",
+    "& td:first-child": {
+      borderTopLeftRadius: "10px",
+      borderBottomLeftRadius: "4px",
+    },
+    "& td:last-child": {
+      borderTopRightRadius: "4px",
+      borderBottomRightRadius: "4px",
+    },
+  },
 }));
 
 const Ranking = () => {
@@ -51,7 +86,9 @@ const Ranking = () => {
     try {
       setIsLoading(true);
       setNotify("");
-      const response = await MyAxios.get(`/muagiai/${currentLeague}/ranking`);
+      const response = await MyAxios.get(
+        `/muagiai/${currentLeague.id}/ranking`
+      );
       if (response?.data?.data) {
         setData(response.data.data);
       }
@@ -64,7 +101,7 @@ const Ranking = () => {
   }, [currentLeague]);
   return (
     <>
-      <Paper elevation={3}>
+      <Paper elevation={3} sx={{ minWidth: "40vw" }}>
         <Typography variant="h3" className={classes.title}>
           Bảng xếp hạng
         </Typography>
@@ -86,13 +123,17 @@ const Ranking = () => {
               backgroundColor: "blueBackground.main",
               borderRadius: "0 0 4px 4px",
             }}
-            // component={Paper}
           >
             <Table
-              sx={{ borderCollapse: "separate", borderSpacing: "0 0.5em" }}
+              sx={{
+                borderCollapse: "separate",
+                borderSpacing: "0 0.5em",
+                padding: "1rem",
+                paddingTop: "0",
+              }}
             >
               <TableHead>
-                <TableRow>
+                <TableRow className={classes.tableHeadRow}>
                   <TableCell align="center">
                     <Typography
                       variant="h6"
@@ -107,8 +148,10 @@ const Ranking = () => {
                       Xếp hạng
                     </Typography>
                   </TableCell>
-                  <TableCell align="center">
-                    <Typography variant="h6">Đội bóng</Typography>
+                  <TableCell align="left">
+                    <Typography sx={{ ml: "1rem" }} variant="h6">
+                      Đội bóng
+                    </Typography>
                   </TableCell>
                   <TableCell align="center">
                     <Typography variant="h6">Thắng</Typography>
@@ -127,23 +170,18 @@ const Ranking = () => {
                   </TableCell>
                 </TableRow>
               </TableHead>
-              <TableBody sx={{ backgroundColor: "blueBackground.light" }}>
+              <TableBody
+                sx={{
+                  backgroundColor: "blueBackground.light",
+                }}
+              >
                 {data.map((item, index) => (
                   <Grow
                     in={!isLoading}
                     {...(!isLoading ? { timeout: index * 1000 } : {})}
                     key={index}
                   >
-                    <TableRow
-                      key={index}
-                      sx={{
-                        boxShadow: `${theme.shadows[3]}`,
-                        backgroundColor: "white",
-                        minHeight: "1rem",
-                        padding: "0.5rem",
-                        margin: "5rem",
-                      }}
-                    >
+                    <TableRow key={index} className={classes.row}>
                       <TableCell align="center" sx={{ padding: "8px" }}>
                         <Typography variant="h6"> {item.xephang}</Typography>
                       </TableCell>
@@ -151,15 +189,19 @@ const Ranking = () => {
                         <Box
                           sx={{
                             display: "flex",
-                            justifyContent: "space-between",
+                            justifyContent: "flex-start",
                             alignItems: "center",
                           }}
                         >
-                          <Typography variant="h6"> {item.ten_doi}</Typography>
                           <img
-                            style={{ width: "50px", marginLeft: "1rem" }}
+                            style={{
+                              width: "35px",
+                              marginLeft: "1rem",
+                              marginRight: "1rem",
+                            }}
                             src={item.hinhAnh}
                           ></img>
+                          <Typography variant="h6"> {item.ten_doi}</Typography>
                         </Box>
                       </TableCell>
 

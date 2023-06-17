@@ -104,7 +104,11 @@ const League = () => {
     setCurrentSelected(e.currentTarget.id);
   };
   useEffect(() => {
-    setCurrentLeague(currentSelected);
+    setCurrentLeague(
+      listItem.find((item) => {
+        return item.id == currentSelected;
+      }) || null
+    );
   }, [currentSelected]);
 
   return (

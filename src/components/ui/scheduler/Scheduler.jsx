@@ -37,7 +37,10 @@ const Scheduler = () => {
       setIsLoading(true);
       setNotify("");
       try {
-        const response = await MyAxios.get(`/lichthidau/${currentLeague}`, {});
+        const response = await MyAxios.get(
+          `/lichthidau/${currentLeague.id}`,
+          {}
+        );
         if (response.status === 200 && response?.data?.data?.cacVongDau) {
           let data = response.data.data.cacVongDau;
           setCurrentSchedule(data);

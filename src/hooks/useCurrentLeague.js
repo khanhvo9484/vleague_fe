@@ -7,6 +7,8 @@ const useCurrentLeague = () => {
     setCurrentLeague,
     currentSchedule,
     setCurrentSchedule,
+    currentMatchDay,
+    setCurrentMatchDay,
   } = useContext(CurrentLeagueContext);
 
   return {
@@ -14,6 +16,8 @@ const useCurrentLeague = () => {
     setCurrentLeague,
     currentSchedule,
     setCurrentSchedule,
+    currentMatchDay,
+    setCurrentMatchDay,
   };
 };
 export default useCurrentLeague;

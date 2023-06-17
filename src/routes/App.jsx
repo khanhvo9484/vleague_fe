@@ -4,6 +4,9 @@ import Login from "../pages/login/Login";
 import Dashboard from "../pages/dashboard/Dashboard";
 import PlayerInfor from "../pages/playerInfor/PlayerInfor";
 import TeamInfor from "../pages/teamInfor/TeamInfor";
+import Standings from "../pages/standings/Standings";
+import Schedule from "../pages/schedule/Schedule";
+
 import { baselightTheme } from "../theme/DefaultTheme";
 import { ThemeProvider } from "@mui/material/styles";
 import RequiredAuth from "../utils/RequiredAuth";
@@ -17,6 +20,8 @@ const App = () => {
         <Route exact path="/login" element={<Login />} />
         <Route exact path="/teamInfo" element={<TeamInfor />} />
         <Route exact path="/playerInfo" element={<PlayerInfor />} />
+        <Route exact path="/standings" element={<Standings />} />
+        <Route exact path="/schedule" element={<Schedule />} />
         {/* Private routes for manager*/}
         <Route element={<RequiredAuth allowedRoles={["QLDB"]} />}>
           <Route exact path="/dashboard" element={<Dashboard />} />

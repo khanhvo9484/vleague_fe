@@ -1,25 +1,18 @@
-import React, { useEffect } from "react";
 import DefaultLayout from "../../layout/DefaultLayout";
 import Loader from "@mui/material/CircularProgress";
 
-import {
-  Box,
-  Button,
-  Grid,
-  List,
-  ListItem,
-  Paper,
-  Typography,
-} from "@mui/material";
+import { Box, Grid, Grow, Typography, Collapse, Slide } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import listItem from "../../data/muagiai.js";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import useProgressiveImage from "../../hooks/useProgressiveImage";
 import bgImage from "../../assets/background1.jpg";
-import Scheduler from "../../components/ui/scheduler/Scheduler";
-import Ranking from "../../components/ui/ranking/Ranking";
+import footballPlayer from "../../assets/football_player1.png";
+import footballPlayer2 from "../../assets/football_player2.png";
+
 import League from "../../components/ui/league/League";
-import { CurrentLeagueProvider } from "../../context/CurrentLeagueContext";
+import useCountdown from "../../hooks/useCountDown";
+import useCurrentLeague from "../../hooks/useCurrentLeague";
 
 const backgroundStyle = {
   backgroundSize: "cover",
@@ -37,72 +30,47 @@ const contentStyle = {
   position: "relative",
   paddingTop: "80px",
 };
-
 const useStyles = makeStyles((theme) => ({
-  boxTitle: {
-    color: theme.palette.primary.main,
-    bgcolor: "white",
-    overflow: "hidden",
-    borderRadius: "4px 4px 0 0",
-    textAlign: "center",
-    padding: "1rem",
-    boxShadow: 3,
-    border: "2px solid black",
+  timeBox: {
+    background: "linear-gradient(135deg, #FE6B8B 30%, #FF8E53 90%)",
+    borderRadius: "4px",
+    minWidth: "70px",
+    minHeight: "70px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
   },
-  leagueCard: {
+  timeContainer: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-around",
     maxWidth: "500px",
-    opacity: 0.9,
-    boxShadow: 2,
-    // marginLeft: "3rem",
-    marginTop: "2rem",
-  },
-
-  schedule: {
-    marginTop: "2rem",
-  },
-  chart: {
-    marginTop: "2rem",
   },
 }));
 
 const Home = () => {
-  const loadedImage = useProgressiveImage(bgImage);
-  const [backgroundImage, setBackgroundImage] = useState(null);
-  const [backgroundLoaded, setBackgroundLoaded] = useState(false);
-  // useEffect(() => {
-  //   document.title = "Trang chủ";
+  const loadedBGImage = useProgressiveImage(bgImage);
+  const loadedPlayerImage = useProgressiveImage(footballPlayer);
+  const loadedPlayerImage2 = useProgressiveImage(footballPlayer2);
 
-  //     .then((image) => {
-  //       setBackgroundLoaded(true);
-  //       setBackgroundImage(image.default);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Failed to load background image:", error);
-  //     });
-  // }, []);
-
-  // const [allTournament, setAllTournament] = useState(listItem);
-  const tournament = {
-    id: 1,
-    name: "V-League 2021",
-    logo: "https://upload.wikimedia.org/wikipedia/vi/0/0f/V.League_1_2021_logo.png",
-    start: "2021-01-01",
-  };
-  const [selectedTournament, setSelectedTournament] = useState(tournament);
-  const handleSelectTour = (id) => {
-    setSelectedTournament(id);
-  };
-  useEffect(() => {
-    console.log(selectedTournament);
-  }, [selectedTournament]);
   const classes = useStyles();
+  const { remainingTime, hasPassed, setTargetDate } = useCountdown();
+  const { currentLeague } = useCurrentLeague();
 
+  useEffect(() => {
+    if (currentLeague) {
+      // console.log(currentLeague);
+      // setTargetDate(currentLeague.thoiDiemBatDau);
+      setTargetDate("2023-06-18");
+    }
+    // console.log(remainingTime);
+  }, [currentLeague]);
   return (
     <DefaultLayout>
       <Box>
         <Box
           sx={{
-            display: loadedImage ? "none" : "flex",
+            display: loadedBGImage ? "none" : "flex",
             justifyContent: "center",
             alignItems: "center",
             height: "100vh",
@@ -111,55 +79,125 @@ const Home = () => {
         >
           <Loader size="5rem"></Loader>
         </Box>
-        <Box sx={{ display: loadedImage ? "block" : "none" }}>
+        <Box
+          sx={{
+            display: loadedBGImage && loadedPlayerImage ? "block" : "none",
+          }}
+        >
           <Box
             style={{
               ...backgroundStyle,
-              backgroundImage: `url(${loadedImage})`,
+              backgroundImage: `url(${loadedBGImage})`,
             }}
           ></Box>
           <Box style={contentStyle}>
-            <CurrentLeagueProvider>
-              <Box>
-                <Grid container spacing={0} justifyContent="space-around">
-                  {/* <Grid item xs={12} sm={6} md={4} lg={3}>
-            
-                    <League></League>
+            <Box>
+              <Grid container spacing={0} justifyContent="space-around">
+                <Grid item xs={12} sm={3}>
+                  <League />
+                </Grid>
+
+                <Grid item xs={12} sm={7} container>
+                  <Grid item sm={7}>
+                    {currentLeague && !hasPassed && (
+                      <Grow in={true} timeout={1000}>
+                        <Box
+                          sx={{
+                            color: "white",
+                            display: "flex",
+                            flexDirection: "column",
+                            // alignItems: "center",
+                          }}
+                        >
+                          <Typography variant="h1" sx={{ margin: "1rem" }}>
+                            Mùa giải sẽ bắt đầu sau:
+                          </Typography>
+                          <Box className={classes.timeContainer}>
+                            <Box className={classes.timeBox}>
+                              <Typography variant="h1">
+                                {remainingTime?.days}
+                              </Typography>
+                            </Box>
+
+                            <Typography variant="h1">ngày </Typography>
+                            <Box className={classes.timeBox}>
+                              <Typography variant="h1">
+                                {remainingTime?.hours}
+                              </Typography>
+                            </Box>
+
+                            <Typography variant="h1">giờ </Typography>
+                            <Box className={classes.timeBox}>
+                              <Typography variant="h1">
+                                {remainingTime?.minutes}
+                              </Typography>
+                            </Box>
+
+                            <Typography variant="h1">phút </Typography>
+                          </Box>
+                        </Box>
+                      </Grow>
+                    )}
+                    <Box
+                      sx={{
+                        mt: "2rem",
+                        // background:
+                        //   "linear-gradient(135deg, #FE6B8B 30%, #FF8E53 90%)",
+                        backgroundColor: "primary.main",
+                        borderRadius: "4px",
+                        padding: "1rem",
+                      }}
+                    >
+                      <Typography variant="h2" sx={{ color: "white" }}>
+                        Some long text here to test the text overflow of the box
+                      </Typography>
+                    </Box>
                   </Grid>
-
-                  <Grid item xs={12} sm={6} md={4} lg={4}>
-           
-                    <Scheduler></Scheduler>
-                  </Grid>
-
-                  <Grid item xs={12} sm={6} md={4} lg={4}>
-                    <Ranking></Ranking>
-                  </Grid> */}
-                  <Grid item xs={12} sm={3}>
-                    {/* Your component */}
-                    {/* Replace the `YourComponent` with your actual component */}
-                    <League />
-                  </Grid>
-
-                  {/* Second Column */}
-                  <Grid item xs={12} sm={7} container>
-                    {/* First half of the second column */}
-                    <Grid item xs={12} sx={{ mb: "2rem" }}>
-                      {/* Your component */}
-                      {/* Replace the `YourFirstComponent` with your actual component */}
-                      <Scheduler />
-                    </Grid>
-
-                    {/* Second half of the second column */}
-                    <Grid item xs={12}>
-                      {/* Your component */}
-                      {/* Replace the `YourSecondComponent` with your actual component */}
-                      <Ranking />
-                    </Grid>
+                  <Grid item sm={3}>
+                    <Box sx={{ zIndex: 0, height: "90vh" }}>
+                      <Slide
+                        in={currentLeague ? true : false}
+                        timeout={1000}
+                        easing={{
+                          enter: "cubic-bezier(0, 0, 0.2, 1)",
+                          exit: "linear",
+                        }}
+                        direction="left"
+                      >
+                        <img
+                          style={{
+                            height: "50vh",
+                            position: "absolute",
+                            bottom: "1.1rem",
+                          }}
+                          src={loadedPlayerImage}
+                        ></img>
+                      </Slide>
+                      <Slide
+                        in={currentLeague ? true : false}
+                        timeout={1200}
+                        easing={{
+                          enter: "cubic-bezier(0, 0.4, 0.3, 1)",
+                          exit: "linear",
+                        }}
+                        direction="left"
+                      >
+                        <img
+                          style={{
+                            height: "50vh",
+                            position: "absolute",
+                            // top: "1rem",
+                            right: "0.5rem",
+                            bottom: "1rem",
+                          }}
+                          src={loadedPlayerImage2}
+                        ></img>
+                      </Slide>
+                    </Box>
                   </Grid>
                 </Grid>
-              </Box>
-            </CurrentLeagueProvider>
+              </Grid>
+            </Box>
           </Box>
         </Box>
       </Box>

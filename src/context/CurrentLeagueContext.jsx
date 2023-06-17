@@ -5,7 +5,7 @@ const CurrentLeagueContext = createContext({});
 export const CurrentLeagueProvider = ({ children }) => {
   const [currentLeague, setCurrentLeague] = useState();
   const [currentSchedule, setCurrentSchedule] = useState();
-
+  const [currentMatchDay, setCurrentMatchDay] = useState();
   return (
     <CurrentLeagueContext.Provider
       value={{
@@ -13,6 +13,8 @@ export const CurrentLeagueProvider = ({ children }) => {
         setCurrentLeague,
         currentSchedule,
         setCurrentSchedule,
+        currentMatchDay,
+        setCurrentMatchDay,
       }}
     >
       {children}

@@ -15,7 +15,8 @@ import teamLogo from "../../../data/GlobalConstant";
 import { List, ListItem } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import Helper from "../../../utils/Helper";
-import { set } from "date-fns";
+import Match from "./Match";
+
 const useStyles = makeStyles((theme) => ({
   matchDayContainer: {
     display: "flex",
@@ -43,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 const MatchDay = () => {
   const classes = useStyles();
-  const { currentSchedule } = useCurrentLeague();
+  const { currentSchedule, setCurrentMatchDay } = useCurrentLeague();
   const showedItem = 6;
   const [isShowItem, setIsShowItem] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
@@ -52,17 +53,22 @@ const MatchDay = () => {
   useEffect(() => {
     if (currentSchedule) {
       setSelectedMatchDay(currentSchedule[0]?.id);
-      setIsShowItem(true);
-      setIsLoading(false);
+      setIsLoading(true);
     }
   }, [currentSchedule]);
 
-  const handleNexPage = async () => {
+  useEffect(() => {
+    setIsLoading(false);
+  }, [isLoading]);
+
+  const handleNexPage = () => {
+    setIsLoading(true);
     if (currentPage + 1 < currentSchedule.length / showedItem) {
       setCurrentPage((prv) => prv + 1);
     }
   };
-  const handlePrevPage = async () => {
+  const handlePrevPage = () => {
+    setIsLoading(true);
     if (currentPage > 0) {
       setCurrentPage((prv) => prv - 1);
     }
@@ -75,6 +81,11 @@ const MatchDay = () => {
       setSelectedMatchDay(currentSchedule[0]?.id);
     }
   }, [currentPage]);
+  useEffect(() => {
+    if (currentSchedule && selectedMatchDay) {
+      setCurrentMatchDay(currentSchedule.find((x) => x.id == selectedMatchDay));
+    }
+  }, [selectedMatchDay]);
   let theme = useTheme();
   return (
     <Box sx={{}}>
@@ -111,9 +122,11 @@ const MatchDay = () => {
             )
             .map((matchDay, index) => (
               <Collapse
-                in={isShowItem}
-                timeout={300 * index}
-                key={index}
+                in={!isLoading}
+                {...(!isLoading
+                  ? { timeout: index == 0 ? 200 : index * 300 }
+                  : {})}
+                key={JSON.stringify(currentSchedule + index + selectedMatchDay)}
                 orientation="horizontal"
               >
                 <Box
@@ -158,180 +171,7 @@ const MatchDay = () => {
         </IconButton>
       </Paper>
       {/* Matchs */}
-      <List
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          backgroundColor: "blueBackground.light",
-          borderRadius: "0 0 4px 4px",
-        }}
-      >
-        {currentSchedule &&
-          currentSchedule
-            .find((matchDay) => matchDay.id == selectedMatchDay)
-            ?.cacTranDau.map((match, index) => {
-              return (
-                <ListItem key={index} sx={{}}>
-                  <Grow
-                    in={!isLoading}
-                    {...{ timeout: index === 0 ? 500 : 1000 }}
-                  >
-                    <Paper key={index} elevation={3} sx={{ width: "100%" }}>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          margin: "0",
-                          // padding: "1rem",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          position: "relative", // Ensure the parent Box is positioned relatively
-                          overflow: "hidden", // Clip the overflowed content
-                        }}
-                      >
-                        {match?.ketQuaTranDau?.trangThai == "Đã kết thúc" && (
-                          <Box
-                            sx={{
-                              position: "absolute",
-                              top: "0",
-                              right: "0",
-                              borderRadius: "2px",
-                              outline: "2px solid gray",
-                              mt: "0.2rem",
-                              mr: "0.2rem",
-                            }}
-                          >
-                            <Typography
-                              variant="body3"
-                              sx={{ padding: "0.1rem", color: "gray" }}
-                            >
-                              Đã kết thúc
-                            </Typography>
-                          </Box>
-                        )}
-                        <Box>
-                          <Typography variant="h5">
-                            {match.doiNha.ten}
-                          </Typography>
-                        </Box>
-                        <Box sx={{ padding: "1rem" }}>
-                          <img
-                            style={{ width: "50px" }}
-                            src={match.doiNha.hinhAnh}
-                          ></img>
-                        </Box>
-                        <Box
-                          sx={{
-                            backgroundColor: "primary.main",
-                            width: "50px",
-                            height: "50px",
-                            mr: "0.5rem",
-                            borderRadius: "4px",
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            boxShadow:
-                              match?.ketQuaTranDau?.sbtDoiNha >
-                              match?.ketQuaTranDau?.sbtDoiKhach
-                                ? `inset 0px -5px 0px 0px ${theme.palette.success.main}`
-                                : "none",
-                          }}
-                        >
-                          <Typography variant="h2" sx={{ color: "white" }}>
-                            {match?.ketQuaTranDau?.sbtDoiNha !== null
-                              ? match?.ketQuaTranDau?.sbtDoiNha
-                              : "-"}
-                          </Typography>
-                        </Box>
-                        <Box
-                          sx={{
-                            backgroundColor: "primary.main",
-                            width: "50px",
-                            height: "50px",
-                            ml: "0.5rem",
-                            borderRadius: "4px",
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            boxShadow:
-                              match?.ketQuaTranDau?.sbtDoiKhach >
-                              match?.ketQuaTranDau?.sbtDoiNha
-                                ? `inset 0px -5px 0px 0px ${theme.palette.success.main}`
-                                : "none",
-                          }}
-                        >
-                          <Typography variant="h2" sx={{ color: "white" }}>
-                            {match?.ketQuaTranDau?.sbtDoiKhach !== null
-                              ? match?.ketQuaTranDau?.sbtDoiKhach
-                              : "-"}
-                          </Typography>
-                        </Box>
-                        <Box sx={{ padding: "1rem" }}>
-                          <img
-                            style={{ width: "50px" }}
-                            src={match.doiKhach.hinhAnh}
-                          ></img>
-                        </Box>
-                        <Box>
-                          <Typography variant="h5">
-                            {match.doiKhach.ten}
-                          </Typography>
-                        </Box>
-                      </Box>
-                      <Grid container spacing={0} justifyContent="space-around">
-                        <Grid
-                          sx={{ justifyContent: "center", display: "flex" }}
-                          item
-                          xs={12}
-                        >
-                          <Typography>
-                            {Helper.formatDateToLocal(match.thoiGian)}
-                          </Typography>
-                        </Grid>
-                        <Grid
-                          item
-                          xs={6}
-                          sx={{ display: "flex", justifyContent: "flex-end" }}
-                        >
-                          <Box sx={{ mr: "4rem" }}>
-                            {match?.ketQuaTranDau?.dsBanThang &&
-                              match?.ketQuaTranDau?.dsBanThang.map(
-                                (goal, index) => (
-                                  <Typography key={index}>
-                                    {goal?.idDoi ===
-                                    match?.ketQuaTranDau?.idDoiNha
-                                      ? `${goal?.tenCauThu} - ${goal?.thoiDiemGhiBan}'`
-                                      : null}
-                                  </Typography>
-                                )
-                              )}
-                          </Box>
-                        </Grid>
-                        <Grid
-                          item
-                          xs={6}
-                          sx={{ display: "flex", justifyContent: "flex-start" }}
-                        >
-                          <Box sx={{ ml: "4rem" }}>
-                            {match?.ketQuaTranDau?.dsBanThang &&
-                              match?.ketQuaTranDau?.dsBanThang.map(
-                                (goal, index) => (
-                                  <Typography key={index}>
-                                    {goal?.idDoi ===
-                                    match?.ketQuaTranDau?.idDoiKhach
-                                      ? `${goal?.tenCauThu} - ${goal?.thoiDiemGhiBan}'`
-                                      : null}
-                                  </Typography>
-                                )
-                              )}
-                          </Box>
-                        </Grid>
-                      </Grid>
-                    </Paper>
-                  </Grow>
-                </ListItem>
-              );
-            })}{" "}
-      </List>
+      <Match />
     </Box>
   );
 };

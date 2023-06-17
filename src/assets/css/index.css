@@ -18,6 +18,7 @@ a:hover {
   color: #212685;
 }
 
+
 body {
   margin: 0;
   place-items: center;
@@ -63,8 +64,8 @@ button:focus-visible {
 } */
 
 a {
-  font-weight: 500;
-  color: white;
+  /* font-weight: 500;
+  color: white; */
   text-decoration: inherit;
 }
 :root {
