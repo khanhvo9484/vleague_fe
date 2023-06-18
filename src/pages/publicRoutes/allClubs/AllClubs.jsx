@@ -9,7 +9,7 @@ import {
   List,
   ListItem,
   Pagination,
-  TextField,
+  Grow,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 
@@ -21,7 +21,6 @@ import Loader from "@mui/material/CircularProgress";
 import Helper from "../../../utils/Helper";
 import Filter from "../../../components/ui/Filter";
 import { useNavigate } from "react-router-dom";
-import { set } from "date-fns";
 const backgroundStyle = {
   backgroundSize: "cover",
   backgroundPosition: "center",
@@ -71,7 +70,7 @@ const AllClubs = () => {
   const [notify, setNotify] = useState({ message: "", type: "" });
   const numberPerPage = 4;
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPage, setTotalPage] = useState(0);
+  const [totalPage, setTotalPage] = useState(1);
   const [imageList, setImageList] = useState([]);
   const [filterValue, setFilterValue] = useState("");
 
@@ -81,38 +80,42 @@ const AllClubs = () => {
   useEffect(() => {
     if (clubs && filterValue) {
       setFilteredClubs(
-        clubs.filter((club) => {
-          try {
-            let name = club?.ten.toLowerCase();
-            if (name && name.includes(filterValue.toLowerCase())) {
-              return club;
+        clubs
+          .filter((club) => {
+            try {
+              let name = club?.ten.toLowerCase();
+              if (name && name.includes(filterValue.toLowerCase())) {
+                return club;
+              }
+            } catch (err) {
+              return {};
             }
-          } catch (err) {
-            return {};
-          }
-        })
+          })
+          .slice(0, numberPerPage)
       );
     } else if (!filterValue) {
-      setFilteredClubs(clubs);
+      setFilteredClubs(
+        clubs.slice(
+          (currentPage - 1) * numberPerPage,
+          currentPage * numberPerPage
+        )
+      );
       setCurrentPage(1);
-      setTotalPage(clubs?.totalPage);
+      setTotalPage(Math.ceil(clubs.length / numberPerPage));
     }
   }, [filterValue]);
 
-  const fetchClubs = async (page, limit) => {
+  const fetchClubs = async () => {
     try {
       setFilteredClubs([]);
       setClubs([]);
       setIsLoading(true);
       setNotify({ message: "", type: "" });
       const response = await MyAxios.get(`/doibong`, {
-        params: { page: page, limit: limit },
+        params: { page: 1, limit: 100 },
       });
       if (response?.data?.data?.listResult) {
         setClubs(response.data.data.listResult);
-        setFilteredClubs(response.data.data.listResult);
-        setTotalPage(response.data.data.totalPage);
-        setCurrentPage(response.data.data.page);
       }
       setIsLoading(false);
     } catch (err) {
@@ -122,11 +125,18 @@ const AllClubs = () => {
     }
   };
   useEffect(() => {
-    fetchClubs(currentPage, numberPerPage);
+    fetchClubs();
   }, []);
   useEffect(() => {
     if (clubs) {
       try {
+        setTotalPage(Math.ceil(clubs.length / numberPerPage));
+        setFilteredClubs(
+          clubs.slice(
+            (currentPage - 1) * numberPerPage,
+            currentPage * numberPerPage
+          )
+        );
         const tempImageList = clubs.map((club) => {
           return { id: club?.id, image: club?.hinhAnh };
         });
@@ -143,11 +153,15 @@ const AllClubs = () => {
     }
   }, [filteredClubs]);
   const handlePageChange = (event, value) => {
-    console.log(value);
     setCurrentPage(value);
   };
   useEffect(() => {
-    fetchClubs(currentPage, numberPerPage);
+    setFilteredClubs(
+      clubs.slice(
+        (currentPage - 1) * numberPerPage,
+        currentPage * numberPerPage
+      )
+    );
   }, [currentPage]);
 
   return (
@@ -218,7 +232,7 @@ const AllClubs = () => {
                 ) : null}
                 {clubs && (
                   <List>
-                    {filteredClubs.map((club) => {
+                    {filteredClubs.map((club, index) => {
                       return (
                         <ListItem
                           className={classes.rowItem}
@@ -227,72 +241,74 @@ const AllClubs = () => {
                             navigate(`/clubs/${club.id}`);
                           }}
                         >
-                          <Paper elevation={3} sx={{ width: "100%" }}>
-                            <Grid
-                              container
-                              sx={{
-                                display: "flex",
-                                justifyContent: "flex-start",
-                              }}
-                            >
+                          <Grow in={true} timeout={index * 1000}>
+                            <Paper elevation={3} sx={{ width: "100%" }}>
                               <Grid
-                                xs={4}
-                                item
-                                className={classes.allCenter}
+                                container
                                 sx={{
-                                  justifyContent: "flex-start",
-                                  padding: "1rem",
-                                }}
-                              >
-                                <img
-                                  style={{ width: "35px" }}
-                                  src={
-                                    imageList.find((image) => {
-                                      return image.id === club.id;
-                                    })?.image
-                                  }
-                                ></img>
-                                <Typography variant="h6" sx={{ ml: "1rem" }}>
-                                  {club.ten}
-                                </Typography>
-                              </Grid>
-                              <Grid
-                                xs={4}
-                                item
-                                className={classes.allCenter}
-                                sx={{
+                                  display: "flex",
                                   justifyContent: "flex-start",
                                 }}
                               >
-                                <Typography
-                                  variant="subtitle1"
+                                <Grid
+                                  xs={4}
+                                  item
+                                  className={classes.allCenter}
                                   sx={{
-                                    color: "primary.dark",
+                                    justifyContent: "flex-start",
+                                    padding: "1rem",
                                   }}
                                 >
-                                  Năm thành lập: {club.namThanhLap}
-                                </Typography>
-                              </Grid>
-                              <Grid
-                                xs={4}
-                                item
-                                className={classes.allCenter}
-                                sx={{
-                                  justifyContent: "flex-start",
-                                }}
-                              >
-                                <Typography
-                                  variant="subtitle1"
+                                  <img
+                                    style={{ width: "35px" }}
+                                    src={
+                                      imageList.find((image) => {
+                                        return image.id === club.id;
+                                      })?.image
+                                    }
+                                  ></img>
+                                  <Typography variant="h6" sx={{ ml: "1rem" }}>
+                                    {club.ten}
+                                  </Typography>
+                                </Grid>
+                                <Grid
+                                  xs={4}
+                                  item
+                                  className={classes.allCenter}
                                   sx={{
-                                    color: "primary.dark",
+                                    justifyContent: "flex-start",
                                   }}
                                 >
-                                  Số lượng cầu thủ:{" "}
-                                  {club?.danhSachCauThuDangThiDau?.length}
-                                </Typography>
+                                  <Typography
+                                    variant="subtitle1"
+                                    sx={{
+                                      color: "primary.dark",
+                                    }}
+                                  >
+                                    Năm thành lập: {club.namThanhLap}
+                                  </Typography>
+                                </Grid>
+                                <Grid
+                                  xs={4}
+                                  item
+                                  className={classes.allCenter}
+                                  sx={{
+                                    justifyContent: "flex-start",
+                                  }}
+                                >
+                                  <Typography
+                                    variant="subtitle1"
+                                    sx={{
+                                      color: "primary.dark",
+                                    }}
+                                  >
+                                    Số lượng cầu thủ:{" "}
+                                    {club?.danhSachCauThuDangThiDau?.length}
+                                  </Typography>
+                                </Grid>
                               </Grid>
-                            </Grid>
-                          </Paper>
+                            </Paper>
+                          </Grow>
                         </ListItem>
                       );
                     })}

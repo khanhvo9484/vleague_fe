@@ -18,6 +18,7 @@ const Filter = (props) => {
 
   const handleClearSearch = () => {
     setSearchValue("");
+    onFilterChange("");
   };
   return (
     <Box sx={{ display: "flex" }}>

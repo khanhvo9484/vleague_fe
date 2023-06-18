@@ -4,6 +4,8 @@ import Login from "../pages/publicRoutes/login/Login";
 import Dashboard from "../pages/dashboard/Dashboard";
 // import PlayerInfor from "../pages/playerInfor/PlayerInfor";
 import Player from "../pages/publicRoutes/player/Player";
+import AllPlayers from "../pages/publicRoutes/allPlayers/AllPlayers";
+
 import Club from "../pages/publicRoutes/club/Club";
 import AllClubs from "../pages/publicRoutes/allClubs/AllClubs";
 import Standings from "../pages/publicRoutes/standings/Standings";
@@ -22,6 +24,7 @@ const App = () => {
         <Route exact path="/login" element={<Login />} />
         <Route path="/clubs/:id" element={<Club />} />
         <Route path="/clubs" exact element={<AllClubs />} />
+        <Route path="/players" exact element={<AllPlayers />} />
         <Route path="/players/:id" element={<Player />} />
         <Route exact path="/standings" element={<Standings />} />
         <Route exact path="/schedule" element={<Schedule />} />
