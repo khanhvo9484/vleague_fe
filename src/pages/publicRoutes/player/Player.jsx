@@ -18,7 +18,7 @@ import { useParams } from "react-router-dom";
 import MyAxios from "../../../api/MyAxios";
 import { footballPosition, country } from "../../../data/GlobalConstant";
 import Helper from "../../../utils/Helper";
-
+import Pattern from "../../../assets/patterns/playerBGPatterns.png";
 const numberStyle = {
   fontWeight: 500,
   fontSize: "15rem",
@@ -69,6 +69,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Player = () => {
+  const pattern = useProgressiveImage(Pattern);
   const loadedBGImage = useProgressiveImage(bgImage);
   const classes = useStyles();
   const { id } = useParams();
@@ -163,7 +164,14 @@ const Player = () => {
                 </Typography>
               </Box>
 
-              <Paper elevation={8} className={classes.paperContainer}>
+              <Paper
+                elevation={8}
+                className={classes.paperContainer}
+                style={{
+                  backgroundImage: `url(${pattern})`,
+                  backgroundRepeat: "no-repeat",
+                }}
+              >
                 {loading ? (
                   <Box
                     sx={{

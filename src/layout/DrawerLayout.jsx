@@ -30,8 +30,8 @@ const useStyles = makeStyles((theme) => ({
   drawerPaper: {
     width: drawerWidth,
     border: "none",
-    boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px!important",
-    backgroundColor: theme.palette.primary.light,
+    // boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px!important",
+    backgroundColor: theme.palette.blueBackground.main,
     marginTop: theme.mixins.toolbar.minHeight,
   },
 }));
@@ -49,8 +49,13 @@ const DrawerLayout = ({ children, menuItems }) => {
         classes={{ paper: classes.drawerPaper }}
         variant="permanent"
         anchor="left"
+        sx={{
+          "& > .MuiBackdrop-root": {
+            display: "none",
+          },
+        }}
         PaperProps={{
-          sx: { backgroundColor: "primary.light" },
+          sx: { backgroundColor: "blueBackground.main", boxShadow: "none" },
         }}
       >
         <List sx={{ paddingTop: "2rem", paddingBottom: "2rem" }}>
@@ -59,9 +64,15 @@ const DrawerLayout = ({ children, menuItems }) => {
               <ListItem key={item.text}>
                 <ListItemButton
                   sx={{
-                    border: "1px solid",
                     borderRadius: "4px",
-                    boxShadow: 1,
+                    boxShadow: (theme) => theme.shadows[7],
+                    backgroundColor: "white",
+                    color: "primary.main",
+                    "&:hover": {
+                      backgroundColor: "primary.dark",
+                      outline: "2px solid white",
+                      color: "white",
+                    },
                   }}
                 >
                   <ListItemIcon>{item.icon}</ListItemIcon>

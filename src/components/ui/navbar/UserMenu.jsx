@@ -32,17 +32,16 @@ const UserMenu = () => {
     handleMenuClose();
   };
   const handleGoToDashboard = () => {
-    navigate("/dashboard", { replace: true });
+    if (AuthContext?.auth?.role === "QLDB") {
+      navigate("/manager/dashboard", { replace: true });
+    } else if (AuthContext?.auth?.role === "QLGD") {
+      navigate("/organizer/dashboard", { replace: true });
+    }
     handleMenuClose();
   };
   return (
     <>
       <Box sx={{ display: "flex", alignItems: "center" }}>
-        {/* {AuthContext?.auth?.username && (
-          <Typography sx={{ marginRight: "0.5rem" }}>
-            Xin chào, {AuthContext?.auth?.username}
-          </Typography>
-        )} */}
         <Avatar
           onClick={handleAvatarClick}
           sx={{ cursor: "pointer", "&:hover": { scale: "1.1" } }}

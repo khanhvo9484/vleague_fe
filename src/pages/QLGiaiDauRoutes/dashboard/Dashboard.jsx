@@ -1,8 +1,8 @@
 import React from "react";
-import DrawerLayout from "../../layout/DrawerLayout";
+import DrawerLayout from "../../../layout/DrawerLayout";
 import { useEffect } from "react";
 import { DashboardOutlined } from "@mui/icons-material";
-import useAuth from "../../hooks/useAuth";
+import useAuth from "../../../hooks/useAuth";
 const Dashboard = () => {
   const authContext = useAuth();
   useEffect(() => {

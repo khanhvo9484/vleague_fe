@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import Home from "../pages/publicRoutes/home/Home";
 import Login from "../pages/publicRoutes/login/Login";
-import Dashboard from "../pages/dashboard/Dashboard";
+import Dashboard from "../pages/QLGiaiDauRoutes/dashboard/Dashboard";
 // import PlayerInfor from "../pages/playerInfor/PlayerInfor";
 import Player from "../pages/publicRoutes/player/Player";
 import AllPlayers from "../pages/publicRoutes/allPlayers/AllPlayers";
@@ -10,6 +10,9 @@ import Club from "../pages/publicRoutes/club/Club";
 import AllClubs from "../pages/publicRoutes/allClubs/AllClubs";
 import Standings from "../pages/publicRoutes/standings/Standings";
 import Schedule from "../pages/publicRoutes/schedule/Schedule";
+
+import GDDashboard from "../pages/QLGiaiDauRoutes/dashboard/Dashboard";
+import DBDashboard from "../pages/QLDoiBongRoutes/dashboard/Dashboard";
 
 import { baselightTheme } from "../theme/DefaultTheme";
 import { ThemeProvider } from "@mui/material/styles";
@@ -30,12 +33,12 @@ const App = () => {
         <Route exact path="/schedule" element={<Schedule />} />
         {/* Private routes for manager*/}
         <Route element={<RequiredAuth allowedRoles={["QLDB"]} />}>
-          <Route exact path="/dashboard" element={<Dashboard />} />
+          <Route exact path="/manager/dashboard" element={<DBDashboard />} />
         </Route>
 
         {/* Protected route for admin */}
-        <Route element={<RequiredAuth allowedRoles={["ADMIN"]} />}>
-          <Route exact path="/dashboard/admin" />
+        <Route element={<RequiredAuth allowedRoles={["QLGD"]} />}>
+          <Route exact path="/organizer/dashboard" element={<GDDashboard />} />
         </Route>
         <Route
           exact

@@ -71,6 +71,11 @@ export default function Login() {
       setNotify({ message: "Đăng nhập thành công", status: "success" });
       setIsFirstLogin(true);
       setTimeout(() => {
+        // if (role === "QLGD") {
+        //   navigate("/organizer/dashboard", { replace: true });
+        // } else if(role==="QLDB") {
+        //   navigate("/manager/dashboard", { replace: true });
+        // }
         navigate("/");
       }, 1500);
     } catch (error) {
