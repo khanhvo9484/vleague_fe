@@ -32,8 +32,8 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: "10px",
     backgroundColor: "white",
     minWidth: "300px!important",
-    marginLeft: "auto!important",
-    marginRight: "auto!important",
+    // marginLeft: "auto!important",
+    marginRight: "5rem",
   },
 }));
 

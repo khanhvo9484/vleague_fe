@@ -2,8 +2,13 @@ import { Routes, Route } from "react-router-dom";
 import Home from "../pages/home/Home";
 import Login from "../pages/login/Login";
 import Dashboard from "../pages/dashboard/Dashboard";
-import PlayerInfor from "../pages/playerInfor/PlayerInfor";
-import TeamInfor from "../pages/teamInfor/TeamInfor";
+// import PlayerInfor from "../pages/playerInfor/PlayerInfor";
+import Player from "../pages/player/Player";
+import Club from "../pages/club/Club";
+
+import Standings from "../pages/standings/Standings";
+import Schedule from "../pages/schedule/Schedule";
+
 import { baselightTheme } from "../theme/DefaultTheme";
 import { ThemeProvider } from "@mui/material/styles";
 import RequiredAuth from "../utils/RequiredAuth";
@@ -15,8 +20,10 @@ const App = () => {
         {/* Public routes */}
         <Route exact path="/" element={<Home />} />
         <Route exact path="/login" element={<Login />} />
-        <Route exact path="/teamInfo" element={<TeamInfor />} />
-        <Route exact path="/playerInfo" element={<PlayerInfor />} />
+        <Route path="/clubs/:id" element={<Club />} />
+        <Route path="/players/:id" element={<Player />} />
+        <Route exact path="/standings" element={<Standings />} />
+        <Route exact path="/schedule" element={<Schedule />} />
         {/* Private routes for manager*/}
         <Route element={<RequiredAuth allowedRoles={["QLDB"]} />}>
           <Route exact path="/dashboard" element={<Dashboard />} />

@@ -2,13 +2,13 @@ import React, { useState, useEffect } from "react";
 import { makeStyles } from "@mui/styles";
 import { Paper, List, ListItem, Box, Typography, Button } from "@mui/material";
 import MyAxios from "../../../api/MyAxios";
-import teamLogo from "../../../data/GlobalConstant";
 import Helper from "../../../utils/Helper";
 import { CircularProgress, Grow, IconButton } from "@mui/material";
 import {
   ExpandLess as ShowLess,
   ExpandMore as ShowMore,
 } from "@mui/icons-material";
+import useCurrentLeague from "../../../hooks/useCurrentLeague";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -64,6 +64,7 @@ const League = () => {
   const [listItem, setListItem] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [currentSelected, setCurrentSelected] = useState(null);
+  const { currentLeague, setCurrentLeague } = useCurrentLeague();
 
   useEffect(() => {
     const fetchListItems = async () => {
@@ -99,9 +100,16 @@ const League = () => {
     }
   };
   const handleSelect = (e) => {
-    console.log("id", e.currentTarget.id);
     setCurrentSelected(e.currentTarget.id);
   };
+  useEffect(() => {
+    setCurrentLeague(
+      listItem.find((item) => {
+        return item.id == currentSelected;
+      }) || null
+    );
+  }, [currentSelected]);
+
   return (
     <Paper elevation={3}>
       <Typography className={classes.title} variant="h3">
@@ -158,7 +166,7 @@ const League = () => {
                               marginRight: "0.5rem",
                               marginLeft: "0.5rem",
                             }}
-                            src={teamLogo?.logo1}
+                            src={item.hinhAnh}
                             alt=""
                           ></img>
                           <Typography variant="h5">{item.ten}</Typography>
@@ -166,7 +174,7 @@ const League = () => {
                         <Box sx={{ display: "flex" }}>
                           <Typography variant="body1">
                             {Helper.formatDateToLocal(item.thoiDiemBatDau)} -{" "}
-                            {Helper.formatDateToLocal(item.thoiDiemBatDau)}
+                            {Helper.formatDateToLocal(item.thoiDiemKetThuc)}
                           </Typography>
                         </Box>
                       </Box>

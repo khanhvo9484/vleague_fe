@@ -1,6 +1,10 @@
-import React from "react";
 import { makeStyles } from "@mui/styles";
-import { Paper, Typography } from "@mui/material";
+import { Paper, Typography, Box, CircularProgress } from "@mui/material";
+import useCurrentLeague from "../../../hooks/useCurrentLeague";
+import MyAxios from "../../../api/MyAxios";
+import { useState, useEffect } from "react";
+import MatchDay from "./MatchDay";
+
 const useStyles = makeStyles((theme) => ({
   title: {
     display: "flex",
@@ -18,11 +22,39 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    minHeight: "40vh",
+    minHeight: "20vh",
   },
 }));
 
 const Scheduler = () => {
+  const { currentLeague, setCurrentSchedule } = useCurrentLeague();
+  const [isLoading, setIsLoading] = useState(true);
+  const [notify, setNotify] = useState("");
+
+  useEffect(() => {
+    if (!currentLeague) return;
+    const fetchScheduler = async () => {
+      setIsLoading(true);
+      setNotify("");
+      try {
+        const response = await MyAxios.get(
+          `/lichthidau/${currentLeague.id}`,
+          {}
+        );
+        if (response.status === 200 && response?.data?.data?.cacVongDau) {
+          let data = response.data.data.cacVongDau;
+          setCurrentSchedule(data);
+        }
+        setIsLoading(false);
+      } catch (error) {
+        setIsLoading(false);
+        console.log(error);
+        if (error.response.status === 404) setNotify("Không tìm thấy dữ liệu");
+      }
+    };
+
+    fetchScheduler();
+  }, [currentLeague]);
   const classes = useStyles();
   return (
     <>
@@ -30,6 +62,18 @@ const Scheduler = () => {
         <Typography className={classes.title} variant="h3">
           Lịch thi đấu
         </Typography>
+
+        {isLoading && (
+          <Box className={classes.loadingBox}>
+            <CircularProgress />
+          </Box>
+        )}
+        {!isLoading && notify && (
+          <Box className={classes.loadingBox}>
+            <Typography variant="subtitle1">{notify}</Typography>
+          </Box>
+        )}
+        {!isLoading && !notify && <MatchDay />}
       </Paper>
     </>
   );

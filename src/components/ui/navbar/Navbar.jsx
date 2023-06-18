@@ -16,6 +16,8 @@ import useAuth from "../../../hooks/useAuth";
 import UserMenu from "./UserMenu";
 import SearchBar from "./SearchBar";
 import useProgressiveImage from "../../../hooks/useProgressiveImage";
+import { NavLink, useNavigate } from "react-router-dom";
+import logo from "../../../assets/football1.png";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,13 +31,34 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: "auto!important",
     marginRight: "auto!important",
   },
+  activeLink: {
+    color: theme.palette.blueBackground.activeLink,
+  },
+  inActiveLink: {
+    color: "white",
+    textDecoration: "none",
+    "&:hover": {
+      textDecoration: "underline",
+    },
+  },
+  functionLink: {
+    display: "flex",
+    alignItems: "center",
+    userSelect: "none",
+    "&:hover": {
+      textDecoration: "underline",
+    },
+    cursor: "pointer",
+    color: "white",
+    textDecoration: "none",
+  },
 }));
 
 const Navbar = ({ drawerWidth }) => {
+  const navigate = useNavigate();
   const authContext = useAuth();
   const [isLogin, setIsLogin] = useState(false);
   useEffect(() => {
-    console.log(authContext);
     if (authContext?.auth?.username) {
       setIsLogin(true);
     } else {
@@ -44,7 +67,7 @@ const Navbar = ({ drawerWidth }) => {
   }, [authContext]);
   const theme = useTheme();
   const classes = useStyles();
-  const loadedLogo = useProgressiveImage("./src/assets/football1.png");
+  const loadedLogo = useProgressiveImage(logo);
 
   return (
     <header>
@@ -68,7 +91,12 @@ const Navbar = ({ drawerWidth }) => {
               alignItems: "center",
             }}
           >
-            <Link to="/" style={{ maxWidth: "6rem" }}>
+            <Box
+              style={{ minWidth: "6rem" }}
+              onClick={() => {
+                navigate("/", { replace: true });
+              }}
+            >
               <img
                 className="navbar-logo"
                 src={loadedLogo}
@@ -78,8 +106,50 @@ const Navbar = ({ drawerWidth }) => {
                   cursor: "pointer",
                   userSelect: "none",
                 }}
-              />{" "}
-            </Link>
+              />
+            </Box>
+            <Box sx={{ display: "flex", marginLeft: "auto" }}>
+              <Typography variant="h6" sx={{ margin: "1rem" }}>
+                <NavLink
+                  to="/schedule"
+                  className={(navData) =>
+                    navData.isActive ? classes.activeLink : classes.inActiveLink
+                  }
+                >
+                  Lịch thi đấu
+                </NavLink>
+              </Typography>
+              <Typography variant="h6" sx={{ margin: "1rem" }}>
+                <NavLink
+                  to="/standings"
+                  className={(navData) =>
+                    navData.isActive ? classes.activeLink : classes.inActiveLink
+                  }
+                >
+                  Bảng xếp hạng
+                </NavLink>
+              </Typography>
+              <Typography variant="h6" sx={{ margin: "1rem" }}>
+                <NavLink
+                  to="/clubs"
+                  className={(navData) =>
+                    navData.isActive ? classes.activeLink : classes.inActiveLink
+                  }
+                >
+                  Đội bóng
+                </NavLink>
+              </Typography>
+              <Typography variant="h6" sx={{ margin: "1rem" }}>
+                <NavLink
+                  to="/players"
+                  className={(navData) =>
+                    navData.isActive ? classes.activeLink : classes.inActiveLink
+                  }
+                >
+                  Cầu thủ
+                </NavLink>
+              </Typography>
+            </Box>
             <SearchBar />
             <Box
               sx={{
@@ -90,19 +160,7 @@ const Navbar = ({ drawerWidth }) => {
             >
               {!isLogin && (
                 <Link to="/login">
-                  <Typography
-                    variant="body1"
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      userSelect: "none",
-                      "&:hover": {
-                        color: theme.palette.secondary.main,
-                        textDecoration: "underline",
-                      },
-                      cursor: "pointer",
-                    }}
-                  >
+                  <Typography variant="h6" className={classes.functionLink}>
                     <LoginIcon sx={{ margin: "5px" }} />
                     Đăng nhập
                   </Typography>
