@@ -10,7 +10,7 @@ import footballPlayer from "../../../assets/football_player1.png";
 import footballPlayer2 from "../../../assets/football_player2.png";
 
 import League from "../../../components/ui/league/League";
-import useCountdown from "../../../hooks/useCountDown";
+import useCountdown from "./../../../hooks/useCountDown";
 import useCurrentLeague from "../../../hooks/useCurrentLeague";
 
 const backgroundStyle = {
