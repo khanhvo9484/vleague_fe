@@ -10,7 +10,7 @@ import footballPlayer from "../../../assets/football_player1.png";
 import footballPlayer2 from "../../../assets/football_player2.png";
 
 import League from "../../../components/ui/league/League";
-import useCountdown from "./../../../hooks/useCountDown";
+// import useCountdown from "./../../../hooks/useCountDown";
 import useCurrentLeague from "../../../hooks/useCurrentLeague";
 
 const backgroundStyle = {
@@ -53,15 +53,15 @@ const Home = () => {
   const loadedPlayerImage2 = useProgressiveImage(footballPlayer2);
 
   const classes = useStyles();
-  const { remainingTime, hasPassed, setTargetDate } = useCountdown();
+  // const { remainingTime, hasPassed, setTargetDate } = useCountdown();
   const { currentLeague } = useCurrentLeague();
 
-  useEffect(() => {
-    if (currentLeague) {
-      setTargetDate("2023-06-19");
-    }
-    // console.log(remainingTime);
-  }, [currentLeague]);
+  // useEffect(() => {
+  //   if (currentLeague) {
+  //     setTargetDate("2023-06-19");
+  //   }
+  //   // console.log(remainingTime);
+  // }, [currentLeague]);
   return (
     <DefaultLayout>
       <Box>
@@ -96,7 +96,7 @@ const Home = () => {
 
                 <Grid item xs={12} sm={7} container>
                   <Grid item sm={7}>
-                    {currentLeague && !hasPassed && (
+                    {currentLeague && (
                       <Grow in={true} timeout={1000}>
                         <Box
                           sx={{
@@ -106,7 +106,7 @@ const Home = () => {
                             // alignItems: "center",
                           }}
                         >
-                          <Typography variant="h1" sx={{ margin: "1rem" }}>
+                          {/* <Typography variant="h1" sx={{ margin: "1rem" }}>
                             Mùa giải sẽ bắt đầu sau:
                           </Typography>
                           <Box className={classes.timeContainer}>
@@ -131,7 +131,7 @@ const Home = () => {
                             </Box>
 
                             <Typography variant="h1">phút </Typography>
-                          </Box>
+                          </Box> */}
                         </Box>
                       </Grow>
                     )}
