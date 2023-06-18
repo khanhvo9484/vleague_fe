@@ -1,13 +1,16 @@
 import React, { useEffect } from "react";
-import DefaultLayout from "../../layout/DefaultLayout";
+import DefaultLayout from "../../../layout/DefaultLayout";
 import Loader from "@mui/material/CircularProgress";
 
 import { Box, Grid } from "@mui/material";
-import useProgressiveImage from "../../hooks/useProgressiveImage";
-import bgImage from "../../assets/background1.jpg";
-import Scheduler from "../../components/ui/scheduler/Scheduler";
-import League from "../../components/ui/league/League";
-import { CurrentLeagueProvider } from "../../context/CurrentLeagueContext";
+import { makeStyles } from "@mui/styles";
+
+import { useState } from "react";
+import useProgressiveImage from "../../../hooks/useProgressiveImage";
+import bgImage from "../../../assets/background1.jpg";
+import Ranking from "../../../components/ui/ranking/Ranking";
+import League from "../../../components/ui/league/League";
+import { CurrentLeagueProvider } from "../../../context/CurrentLeagueContext";
 
 const backgroundStyle = {
   backgroundSize: "cover",
@@ -26,7 +29,7 @@ const contentStyle = {
   paddingTop: "80px",
 };
 
-const Schedule = () => {
+const Standings = () => {
   const loadedImage = useProgressiveImage(bgImage);
 
   return (
@@ -56,8 +59,9 @@ const Schedule = () => {
                 <Grid item xs={3} sm={3}>
                   <League />
                 </Grid>
-                <Grid item xs={7} sm={7}>
-                  <Scheduler />
+
+                <Grid item xs={6} sm={6}>
+                  <Ranking />
                 </Grid>
               </Grid>
             </Box>
@@ -68,4 +72,4 @@ const Schedule = () => {
   );
 };
 
-export default Schedule;
+export default Standings;

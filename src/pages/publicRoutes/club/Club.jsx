@@ -9,12 +9,12 @@ import {
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { useParams } from "react-router-dom";
-import bgImage from "../../assets/background1.jpg";
-import MyAxios from "../../api/MyAxios";
-import DefaultLayout from "../../layout/DefaultLayout";
-import useProgressiveImage from "../../hooks/useProgressiveImage";
+import bgImage from "../../../assets/background1.jpg";
+import MyAxios from "../../../api/MyAxios";
+import DefaultLayout from "../../../layout/DefaultLayout";
+import useProgressiveImage from "../../../hooks/useProgressiveImage";
 import Loader from "@mui/material/CircularProgress";
-import Helper from "../../utils/Helper";
+import Helper from "../../../utils/Helper";
 import PlayerList from "./PlayerList";
 
 const backgroundStyle = {
@@ -158,7 +158,7 @@ const Club = () => {
                     container
                     spacing={0}
                     justifyContent="space-between"
-                    sx={{ color: "black" }}
+                    sx={{ color: "primary.main" }}
                   >
                     <Grid item sm={9} container>
                       <Grid item lg={12} xs={12}>
@@ -343,6 +343,7 @@ const Club = () => {
                                 container
                                 item
                                 xs={3}
+                                sm={3}
                                 className={classes.allCenter}
                               >
                                 <Box
@@ -353,7 +354,7 @@ const Club = () => {
                                 >
                                   <img
                                     style={{
-                                      width: "150px",
+                                      width: "8rem",
                                       borderRadius: "4px",
                                     }}
                                     src={

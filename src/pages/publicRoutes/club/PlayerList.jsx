@@ -96,31 +96,23 @@ const PlayerList = (props) => {
                       <Typography variant="h6">{index}</Typography>
                     </TableCell>
                     <TableCell>
-                      <Typography variant="subtitle1">
-                        {player?.hoTen}
-                      </Typography>
+                      <Typography variant="h6">{player?.hoTen}</Typography>
                     </TableCell>
                     <TableCell>
-                      <Typography variant="subtitle1">
-                        {player?.ngaySinh}
-                      </Typography>
+                      <Typography variant="h6">{player?.ngaySinh}</Typography>
                     </TableCell>
                     <TableCell>
-                      <Typography variant="subtitle1">
-                        {player?.quocTich}
-                      </Typography>
+                      <Typography variant="h6">{player?.quocTich}</Typography>
                     </TableCell>
                     <TableCell>
-                      <Typography variant="subtitle1">
+                      <Typography variant="h6">
                         {player?.viTri.map((item, index) => {
                           return item + " ";
                         })}
                       </Typography>
                     </TableCell>
                     <TableCell>
-                      <Typography variant="subtitle1">
-                        {player?.soAo}
-                      </Typography>
+                      <Typography variant="h6">{player?.soAo}</Typography>
                     </TableCell>
                   </TableRow>
                 );

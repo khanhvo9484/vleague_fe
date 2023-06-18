@@ -1,17 +1,17 @@
-import DefaultLayout from "../../layout/DefaultLayout";
+import DefaultLayout from "../../../layout/DefaultLayout";
 import Loader from "@mui/material/CircularProgress";
 
 import { Box, Grid, Grow, Typography, Collapse, Slide } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { useState, useEffect } from "react";
-import useProgressiveImage from "../../hooks/useProgressiveImage";
-import bgImage from "../../assets/background1.jpg";
-import footballPlayer from "../../assets/football_player1.png";
-import footballPlayer2 from "../../assets/football_player2.png";
+import useProgressiveImage from "../../../hooks/useProgressiveImage";
+import bgImage from "../../../assets/background1.jpg";
+import footballPlayer from "../../../assets/football_player1.png";
+import footballPlayer2 from "../../../assets/football_player2.png";
 
-import League from "../../components/ui/league/League";
-import useCountdown from "../../hooks/useCountDown";
-import useCurrentLeague from "../../hooks/useCurrentLeague";
+import League from "../../../components/ui/league/League";
+import useCountdown from "../../../hooks/useCountDown";
+import useCurrentLeague from "../../../hooks/useCurrentLeague";
 
 const backgroundStyle = {
   backgroundSize: "cover",

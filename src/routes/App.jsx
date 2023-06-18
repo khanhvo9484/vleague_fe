@@ -1,18 +1,18 @@
 import { Routes, Route } from "react-router-dom";
-import Home from "../pages/home/Home";
-import Login from "../pages/login/Login";
+import Home from "../pages/publicRoutes/home/Home";
+import Login from "../pages/publicRoutes/login/Login";
 import Dashboard from "../pages/dashboard/Dashboard";
 // import PlayerInfor from "../pages/playerInfor/PlayerInfor";
-import Player from "../pages/player/Player";
-import Club from "../pages/club/Club";
-
-import Standings from "../pages/standings/Standings";
-import Schedule from "../pages/schedule/Schedule";
+import Player from "../pages/publicRoutes/player/Player";
+import Club from "../pages/publicRoutes/club/Club";
+import AllClubs from "../pages/publicRoutes/allClubs/AllClubs";
+import Standings from "../pages/publicRoutes/standings/Standings";
+import Schedule from "../pages/publicRoutes/schedule/Schedule";
 
 import { baselightTheme } from "../theme/DefaultTheme";
 import { ThemeProvider } from "@mui/material/styles";
 import RequiredAuth from "../utils/RequiredAuth";
-import Unauthorized from "../pages/unauthorized/Unauthorized";
+import Unauthorized from "../pages/publicRoutes/unauthorized/Unauthorized";
 const App = () => {
   return (
     <ThemeProvider theme={baselightTheme}>
@@ -21,6 +21,7 @@ const App = () => {
         <Route exact path="/" element={<Home />} />
         <Route exact path="/login" element={<Login />} />
         <Route path="/clubs/:id" element={<Club />} />
+        <Route path="/clubs" exact element={<AllClubs />} />
         <Route path="/players/:id" element={<Player />} />
         <Route exact path="/standings" element={<Standings />} />
         <Route exact path="/schedule" element={<Schedule />} />

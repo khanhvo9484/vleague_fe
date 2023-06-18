@@ -1,4 +1,4 @@
-import DefaultLayout from "../../layout/DefaultLayout";
+import DefaultLayout from "../../../layout/DefaultLayout";
 import Loader from "@mui/material/CircularProgress";
 
 import {
@@ -12,12 +12,12 @@ import {
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { useState, useEffect } from "react";
-import useProgressiveImage from "../../hooks/useProgressiveImage";
-import bgImage from "../../assets/background1.jpg";
+import useProgressiveImage from "../../../hooks/useProgressiveImage";
+import bgImage from "../../../assets/background1.jpg";
 import { useParams } from "react-router-dom";
-import MyAxios from "../../api/MyAxios";
-import { footballPosition, country } from "../../data/GlobalConstant";
-import Helper from "../../utils/Helper";
+import MyAxios from "../../../api/MyAxios";
+import { footballPosition, country } from "../../../data/GlobalConstant";
+import Helper from "../../../utils/Helper";
 
 const numberStyle = {
   fontWeight: 500,
