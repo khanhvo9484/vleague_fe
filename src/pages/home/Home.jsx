@@ -58,9 +58,7 @@ const Home = () => {
 
   useEffect(() => {
     if (currentLeague) {
-      // console.log(currentLeague);
-      // setTargetDate(currentLeague.thoiDiemBatDau);
-      setTargetDate("2023-06-18");
+      setTargetDate("2023-06-19");
     }
     // console.log(remainingTime);
   }, [currentLeague]);

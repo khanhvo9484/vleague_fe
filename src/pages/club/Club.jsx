@@ -52,12 +52,12 @@ const Club = () => {
   const classes = useStyles();
 
   const { id } = useParams();
-  const [club, setClub] = useState({});
-  const [players, setPlayers] = useState([]);
+  const [club, setClub] = useState();
+  const [players, setPlayers] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [notify, setNotify] = useState({ message: "", type: "" });
-  const [manager, setManager] = useState({});
-  const [homeStadium, setHomeStadium] = useState({});
+  const [manager, setManager] = useState();
+  const [homeStadium, setHomeStadium] = useState();
   useEffect(() => {
     setIsLoading(true);
     setNotify({ message: "", type: "" });
@@ -81,6 +81,7 @@ const Club = () => {
   useEffect(() => {
     if (club) {
       setPlayers(club?.danhSachCauThuDangThiDau);
+      console.log(club?.danhSachCauThuDangThiDau);
       setManager(club?.quanLy);
       setHomeStadium(club?.sanNha);
     }
@@ -152,7 +153,7 @@ const Club = () => {
                     </Typography>
                   </Box>
                 ) : null}
-                {club && (
+                {club && manager && homeStadium && (
                   <Grid
                     container
                     spacing={0}
@@ -161,7 +162,12 @@ const Club = () => {
                   >
                     <Grid item sm={9} container>
                       <Grid item lg={12} xs={12}>
-                        <Typography variant="h2">{club?.ten}</Typography>
+                        <Typography
+                          variant="h2"
+                          sx={{ mb: "0.5rem", color: "primary.dark" }}
+                        >
+                          {club?.ten}
+                        </Typography>
                       </Grid>
                       <Paper
                         elevation={0}
@@ -251,9 +257,8 @@ const Club = () => {
                                 <Box>
                                   <img
                                     style={{ height: "150px" }}
-                                    src={manager.hinhAnh}
+                                    src={manager?.hinhAnh}
                                     alt="manager"
-                                    // src="hehe"
                                   ></img>
                                 </Box>
                               </Grid>
@@ -361,11 +366,24 @@ const Club = () => {
                           </Grid>
                         </Box>
                       </Paper>
-                      <Box sx={{ mt: "1rem" }}>
+                      <Box sx={{ mt: "1rem", width: "100%" }}>
                         <Typography variant="h6">
                           Danh sách cầu thủ:{" "}
                         </Typography>
-                        {/* <PlayerList playerList={players}></PlayerList> */}
+                        {players.length > 0 ? (
+                          <Box
+                            sx={{
+                              paddingTop: "1rem",
+                              mt: "1rem",
+                            }}
+                          >
+                            <PlayerList playerList={players}></PlayerList>
+                          </Box>
+                        ) : (
+                          <Typography variant="subtitle1">
+                            Không có dữ liệu{" "}
+                          </Typography>
+                        )}
                       </Box>
                     </Grid>
                     <Grid item sm={3}>
