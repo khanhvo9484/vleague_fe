@@ -104,6 +104,15 @@ const useStyles = makeStyles((theme) => ({
         paddingTop: "15px",
         paddingRight: "15px",
     },
+    detailBoxRow: {
+        display: "flex",
+        justifyItems: 'self-start',
+        marginBottom: "10px",
+        color:theme.palette.primary.dark,
+        fontStyle:"italic",
+        fontSize: "0.9rem!important",
+        lineHeight: "0.9rem!important",
+    }
 }));
 
 const Squad = () => {
@@ -173,7 +182,7 @@ const Squad = () => {
                                     <Box>
                                         {
                                             squad?.map((item, index) => (
-                                                item.id != player.id ?
+                                                item?.id != player?.id ?
                                                     <Box key={index} id={index} className={classes.boxContainer}
                                                         onClick={handleBoxClick}
                                                     >
@@ -181,18 +190,18 @@ const Squad = () => {
                                                             <img
                                                                 // src={item.hinhAnh}
                                                                 src="https://firebasestorage.googleapis.com/v0/b/myleague-c54ab.appspot.com/o/Kevin%20de%20bruyne.png?alt=media&token=30f9739a-f6a4-4ad2-9b98-f76026b82e22"
-                                                                alt={`${item.hoTen}`}
+                                                                alt={`${item?.hoTen}`}
                                                                 // width={60}
                                                                 height={100}
                                                             />
                                                         </Box>
                                                         <Box>
                                                             <Typography variant="body1" className={classes.firstName}>
-                                                                {item?.hoTen.split(" ").filter((str, index) => index != item?.hoTen.split(" ").length - 1).join(" ")}
+                                                                {item?.hoTen?.split(" ").filter((str, index) => index != item?.hoTen?.split(" ").length - 1).join(" ")}
                                                             </Typography>
                                                             <Typography variant="h6" className={classes.lastName}>
                                                                 {
-                                                                    item?.hoTen.split(" ")[item?.hoTen.split(" ").length - 1]
+                                                                    item?.hoTen?.split(" ")[item?.hoTen?.split(" ").length - 1]
                                                                 }
                                                             </Typography>
                                                             <Box sx={{ minWidth: 200, marginTop: "10px" }}>
@@ -202,7 +211,7 @@ const Squad = () => {
                                                                             Tuổi
                                                                         </Typography>
                                                                         <Typography variant="body1" className={classes.subText}>
-                                                                            {item.age}
+                                                                            {item?.age}
                                                                         </Typography>
                                                                     </Grid>
                                                                     <Grid item xs={11} sm={5} lg={5}>
@@ -210,7 +219,7 @@ const Squad = () => {
                                                                             Quốc tịch
                                                                         </Typography>
                                                                         <Typography variant="body1" className={classes.subText}>
-                                                                            {item.quocTich}
+                                                                            {item?.quocTich}
                                                                         </Typography>
                                                                     </Grid>
                                                                     <Grid item xs={11} sm={4} lg={4}>
@@ -218,7 +227,7 @@ const Squad = () => {
                                                                             Vị Trí
                                                                         </Typography>
                                                                         <Typography variant="body1" className={classes.subText}>
-                                                                            {item.viTri.join(', ')}
+                                                                            {item?.viTri?.join(', ')}
                                                                         </Typography>
                                                                     </Grid>
                                                                 </Grid>
@@ -226,7 +235,7 @@ const Squad = () => {
                                                         </Box>
                                                         <Box sx={{ maxWidth: 50, alignSelf: "start", marginTop: "-15px" }}>
                                                             <Typography variant="h6" className={classes.soAoNumber}>
-                                                                {item.soAo}
+                                                                {item?.soAo}
                                                             </Typography>
                                                         </Box>
                                                     </Box>
@@ -238,18 +247,18 @@ const Squad = () => {
                                                             <img
                                                                 // src={item.hinhAnh}
                                                                 src="https://firebasestorage.googleapis.com/v0/b/myleague-c54ab.appspot.com/o/Kevin%20de%20bruyne.png?alt=media&token=30f9739a-f6a4-4ad2-9b98-f76026b82e22"
-                                                                alt={`${item.hoTen}`}
+                                                                alt={`${item?.hoTen}`}
                                                                 // width={60}
                                                                 height={100}
                                                             />
                                                         </Box>
                                                         <Box>
                                                             <Typography variant="body1" className={classes.firstName} sx={{ color: "#ECF2FF" }}>
-                                                                {item?.hoTen.split(" ").filter((str, index) => index != item?.hoTen.split(" ").length - 1).join(" ")}
+                                                                {item?.hoTen?.split(" ").filter((str, index) => index != item?.hoTen?.split(" ").length - 1).join(" ")}
                                                             </Typography>
                                                             <Typography variant="h6" className={classes.lastName} sx={{ color: "#EBF3FE" }}>
                                                                 {
-                                                                    item?.hoTen.split(" ")[item?.hoTen.split(" ").length - 1]
+                                                                    item?.hoTen?.split(" ")[item?.hoTen?.split(" ").length - 1]
                                                                 }
                                                             </Typography>
                                                             <Box sx={{ minWidth: 200, marginTop: "10px" }}>
@@ -259,7 +268,7 @@ const Squad = () => {
                                                                             Tuổi
                                                                         </Typography>
                                                                         <Typography variant="body1" className={classes.subText}>
-                                                                            {item.age}
+                                                                            {item?.age}
                                                                         </Typography>
                                                                     </Grid>
                                                                     <Grid item xs={11} sm={5} lg={5}>
@@ -267,7 +276,7 @@ const Squad = () => {
                                                                             Quốc tịch
                                                                         </Typography>
                                                                         <Typography variant="body1" className={classes.subText}>
-                                                                            {item.quocTich}
+                                                                            {item?.quocTich}
                                                                         </Typography>
                                                                     </Grid>
                                                                     <Grid item xs={11} sm={4} lg={4}>
@@ -275,7 +284,7 @@ const Squad = () => {
                                                                             Vị Trí
                                                                         </Typography>
                                                                         <Typography variant="body1" className={classes.subText}>
-                                                                            {item.viTri.join(', ')}
+                                                                            {item?.viTri?.join(', ')}
                                                                         </Typography>
                                                                     </Grid>
                                                                 </Grid>
@@ -283,7 +292,7 @@ const Squad = () => {
                                                         </Box>
                                                         <Box sx={{ maxWidth: 50, alignSelf: "start", marginTop: "-15px" }}>
                                                             <Typography variant="h6" className={classes.soAoNumber}>
-                                                                {item.soAo}
+                                                                {item?.soAo}
                                                             </Typography>
                                                         </Box>
                                                     </Box>
@@ -306,7 +315,7 @@ const Squad = () => {
                                         {...(!isLoading ? { timeout: 2 * 800 } : {})}
                                     >
                                         <Box className={classes.detailBox} sx={{ marginTop: `${topPosition != 0 ? topPosition - 20 : topPosition}px` }}>
-                                            <Box sx={{ display: "flex", justifyContent:"space-between", alignItems: "center" }}>
+                                            <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                                                 <Box sx={{ alignSelf: "end", marginTop: "50px" }}>
                                                     <img
                                                         // src={player.hinhAnh}
@@ -316,56 +325,111 @@ const Squad = () => {
                                                         height={200}
                                                     />
                                                 </Box>
-                                                <Box sx={{justifyItems:"self-start"}}>
-                                                    <Typography variant="body1" sx={{color: "#ECF2FF", fontSize: "1.2rem", lineHeight: "1.2rem", paddingBottom:"5px"}}>
-                                                        {player?.hoTen.split(" ").filter((str, index) => index != player?.hoTen.split(" ").length - 1).join(" ")}
+                                                <Box sx={{ justifyItems: "self-start" }}>
+                                                    <Typography variant="body1" sx={{ color: "#ECF2FF", fontSize: "1.2rem", lineHeight: "1.2rem", paddingBottom: "5px" }}>
+                                                        {player?.hoTen?.split(" ").filter((str, index) => index != player?.hoTen?.split(" ").length - 1).join(" ")}
                                                     </Typography>
-                                                    <Typography variant="h6" sx={{ color: "#EBF3FE", fontSize: "1.5rem", lineHeight: "1.5rem",}}>
+                                                    <Typography variant="h6" sx={{ color: "#EBF3FE", fontSize: "1.5rem", lineHeight: "1.5rem", }}>
                                                         {
-                                                            player?.hoTen.split(" ")[player?.hoTen.split(" ").length - 1]
+                                                            player?.hoTen?.split(" ")[player?.hoTen.split(" ").length - 1]
                                                         }
                                                     </Typography>
                                                 </Box>
-                                                <Box sx={{ maxWidth: 120, alignSelf: "start"}}>
+                                                <Box sx={{ maxWidth: 120, alignSelf: "start" }}>
                                                     <Typography variant="h6" className={classes.soAoNumber1}>
-                                                        {/* {player.soAo} */}23
+                                                        {player?.soAo}
                                                     </Typography>
                                                 </Box>
                                             </Box>
-                                            <Paper sx={{ borderRadius: "0px 0px 18px 18px", padding: "15px 25px" }}>
-                                                <Typography>
-                                                    Ngày sinh
-                                                </Typography>
-                                                <Typography>
-                                                    Tuổi
-                                                </Typography>
-                                                <Typography>
-                                                    Quốc tịch
-                                                </Typography>
-                                                <Typography>
-                                                    Quê quán
-                                                </Typography>
-                                                <Typography>
-                                                    Mã định danh
-                                                </Typography>
-                                                <Typography>
-                                                    Trạng thái
-                                                </Typography>
-                                                <Typography>
-                                                    Loại cầu thủ
-                                                </Typography>
-                                                <Typography>
-                                                    Vị trí
-                                                </Typography>
-                                                <Typography>
-                                                    Tổng số bàn thắng
-                                                </Typography>
-                                                <Typography>
-                                                    Thời điểm bắt đầu
-                                                </Typography>
-                                                <Typography>
-                                                    Thời điểm kết thúc
-                                                </Typography>
+                                            <Paper sx={{ borderRadius: "0px 0px 18px 18px", padding: "15px 30px" }}>
+                                                <Box className={classes.detailBoxRow}>
+                                                    <Typography variant="body1">
+                                                        Ngày sinh:
+                                                    </Typography>
+                                                    <Typography variant="body1" sx={{marginLeft:"5px", fontStyle:"normal", fontWeight:"bold", color:"#07b696"}}>
+                                                        {player?.ngaySinh}
+                                                    </Typography>
+                                                </Box>
+                                                <Box className={classes.detailBoxRow}>
+                                                    <Typography variant="body1">
+                                                        Tuổi:
+                                                    </Typography>
+                                                    <Typography variant="body1" sx={{marginLeft:"5px", fontStyle:"normal", fontWeight:"bold", color:"#07b696"}}>
+                                                        {player?.age}
+                                                    </Typography>
+                                                </Box>
+                                                <Box className={classes.detailBoxRow}>
+                                                    <Typography variant="body1">
+                                                        Quốc tịch:
+                                                    </Typography>
+                                                    <Typography variant="body1" sx={{marginLeft:"5px", fontStyle:"normal", fontWeight:"bold", color:"#07b696"}}>
+                                                        {player?.quocTich}
+                                                    </Typography>
+                                                </Box>
+                                                <Box className={classes.detailBoxRow}>
+                                                    <Typography variant="body1">
+                                                        Quê quán:
+                                                    </Typography>
+                                                    <Typography variant="body1" sx={{marginLeft:"5px", fontStyle:"normal", fontWeight:"bold", color:"#07b696"}}>
+                                                        {player?.queQuan}
+                                                    </Typography>
+                                                </Box>
+                                                <Box className={classes.detailBoxRow}>
+                                                    <Typography variant="body1">
+                                                        Mã định danh:
+                                                    </Typography>
+                                                    <Typography variant="body1" sx={{marginLeft:"5px", fontStyle:"normal", fontWeight:"bold", color:"#07b696"}}>
+                                                        {player?.maDinhDanh}
+                                                    </Typography>
+                                                </Box>
+                                                <Box className={classes.detailBoxRow}>
+                                                    <Typography variant="body1">
+                                                        Trạng thái:
+                                                    </Typography>
+                                                    <Typography variant="body1" sx={{marginLeft:"5px", fontStyle:"normal", fontWeight:"bold", color:"#07b696"}}>
+                                                        {player?.trangThai}
+                                                    </Typography>
+                                                </Box>
+                                                <Box className={classes.detailBoxRow}>
+                                                    <Typography variant="body1">
+                                                        Loại cầu thủ:
+                                                    </Typography>
+                                                    <Typography variant="body1" sx={{marginLeft:"5px", fontStyle:"normal", fontWeight:"bold", color:"#07b696"}}>
+                                                        {player?.loaiCauThu}
+                                                    </Typography>
+                                                </Box>
+                                                <Box className={classes.detailBoxRow}>
+                                                    <Typography variant="body1">
+                                                        Vị trí:
+                                                    </Typography>
+                                                    <Typography variant="body1" sx={{marginLeft:"5px", fontStyle:"normal", fontWeight:"bold", color:"#07b696"}}>
+                                                        {player?.viTri?.join(", ")}
+                                                    </Typography>
+                                                </Box>
+                                                <Box className={classes.detailBoxRow}>
+                                                    <Typography variant="body1">
+                                                        Tổng số bàn thắng:
+                                                    </Typography>
+                                                    <Typography variant="body1" sx={{marginLeft:"5px", fontStyle:"normal", fontWeight:"bold", color:"#07b696"}}>
+                                                        {player?.tongSoBanThang}
+                                                    </Typography>
+                                                </Box>
+                                                <Box className={classes.detailBoxRow}>
+                                                    <Typography variant="body1">
+                                                        Thời điểm bắt đầu:
+                                                    </Typography>
+                                                    <Typography variant="body1" sx={{marginLeft:"5px", fontStyle:"normal", fontWeight:"bold", color:"#07b696"}}>
+                                                        {player?.thoiDiemBatDau}
+                                                    </Typography>
+                                                </Box>
+                                                <Box className={classes.detailBoxRow}>
+                                                    <Typography variant="body1">
+                                                        Thời điểm kết thúc:
+                                                    </Typography>
+                                                    <Typography variant="body1" sx={{marginLeft:"5px", fontStyle:"normal", fontWeight:"bold", color:"#07b696"}}>
+                                                        {player?.thoiDiemKetThuc}
+                                                    </Typography>
+                                                </Box>
                                             </Paper>
                                         </Box>
                                     </Grow>

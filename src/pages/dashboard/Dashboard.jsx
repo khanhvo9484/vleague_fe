@@ -142,28 +142,13 @@ const Dashboard = () => {
   const classes = useStyles();
 
   const { currentLeague } = useCurrentLeague()
-  const [isStart, setIsStart] = useState(false)
+  const [isStart, setIsStart] = useState(true)
   const [ranking, setRanking] = useState([])
   const [currentPosition, setCurrentPosition] = useState({})
   const [schedule, setSchedule] = useState([])
   const [nextGame, setNextGame] = useState({})
   const [notify, setNotify] = useState([])
-  const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    const getStatus = async () => {
-      try {
-        const res = await MyAxios.get(`/muagiai?page=1&limit=2&keyword&trangthai=1`)
-        const temp = res.data.data.listResult.filter(item => item.id == currentLeague?.id)
-        setIsStart(!(temp.length == 0))
-      } catch (error) {
-        setNotify(() => [...error.response.data.message])
-      }
-    }
-    if (currentLeague) {
-      getStatus()
-    }
-  }, [currentLeague])
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     setNotify([])
@@ -181,6 +166,21 @@ const Dashboard = () => {
     }
     if (currentLeague) {
       getRanking()
+    }
+  }, [currentLeague])
+
+  useEffect(() => {
+    const getStatus = async () => {
+      try {
+        const res = await MyAxios.get(`/muagiai?page=1&limit=2&keyword&trangthai=1`)
+        const temp = res.data.data.listResult.filter(item => item.id == currentLeague?.id)
+        setIsStart(!(temp.length == 0))
+      } catch (error) {
+        setNotify(() => [...error.response.data.message])
+      }
+    }
+    if (currentLeague) {
+      getStatus()
     }
   }, [currentLeague])
 
