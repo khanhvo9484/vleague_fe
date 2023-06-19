@@ -11,10 +11,12 @@ import {
   TableHead,
   TableRow,
   Grow,
+  Pagination,
 } from "@mui/material";
 import { useState, useEffect } from "react";
-import MyAxios from "../../../api/MyAxios";
 import { useTheme } from "@mui/material/styles";
+import Helper from "../../utils/Helper";
+import useCurrentLeague from "../../hooks/useCurrentLeague";
 const useStyles = makeStyles((theme) => ({
   title: {
     display: "flex",
@@ -70,115 +72,135 @@ const useStyles = makeStyles((theme) => ({
       borderBottomRightRadius: "4px",
     },
   },
+  playerSelected: {
+    borderColor: theme.palette.primary.light,
+    backgroundColor: theme.palette.primary.main,
+
+    "& .MuiTableCell-root .MuiTypography-root": {
+      // Styles for the Typography component inside the TableCell
+      color: "white",
+      // Other typography styles if needed
+    },
+  },
 }));
 
 const PlayerTable = (props) => {
-  const { playersList } = props;
+  const { data, headerSize, bgColor, alignHeader, number, isNavigatable } =
+    props;
+
   const theme = useTheme();
   const classes = useStyles();
-  const [notify, setNotify] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
+  const { currentPlayer, setCurrentPlayer } = useCurrentLeague();
+  const numberPerPage = number ? number : 12;
+  const [page, setPage] = useState(1);
+  console.log(data);
+  console.log(data.length, number, page);
   return (
     <>
-      <Paper elevation={3} sx={{ minWidth: "40vw" }}>
-        <Typography variant="h3" className={classes.title}>
+      <Paper elevation={0} sx={{ minWidth: "40vw" }}>
+        <Typography
+          variant={headerSize ? headerSize : "h3"}
+          className={classes.title}
+          justifyContent={alignHeader ? "flex-start" : "center"}
+          paddingLeft={alignHeader ? "1rem" : "0"}
+        >
           Danh sách cầu thủ
         </Typography>
-        {isLoading && (
-          <Box className={classes.loadingBox}>
-            <CircularProgress />
-          </Box>
-        )}
-        {!isLoading && notify && (
-          <Box className={classes.loadingBox}>
-            <Typography variant="subtitle1">{notify}</Typography>
-          </Box>
-        )}
-        {!isLoading && !notify && (
-          <TableContainer
+
+        <TableContainer
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            backgroundColor: `${bgColor ? bgColor : "blueBackground.manage"}`,
+            borderRadius: "0 0 4px 4px",
+          }}
+        >
+          <Table
             sx={{
-              display: "flex",
-              flexDirection: "column",
-              backgroundColor: "blueBackground.main",
-              borderRadius: "0 0 4px 4px",
+              borderCollapse: "separate",
+              borderSpacing: "0 0.5em",
+              padding: "1rem",
+              paddingTop: "0",
             }}
           >
-            <Table
+            <TableHead>
+              <TableRow className={classes.tableHeadRow}>
+                <TableCell align="center">
+                  <Typography variant="h6" sx={{}}>
+                    Họ tên
+                  </Typography>
+                </TableCell>
+                <TableCell align="center">
+                  <Typography sx={{ ml: "1rem" }} variant="h6">
+                    Ngày sinh
+                  </Typography>
+                </TableCell>
+                <TableCell align="center">
+                  <Typography variant="h6">Quốc tịch</Typography>
+                </TableCell>
+                <TableCell align="center">
+                  <Typography variant="h6">Vị trí</Typography>
+                </TableCell>
+                <TableCell align="center">
+                  <Typography variant="h6">Số áo</Typography>
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody
               sx={{
-                borderCollapse: "separate",
-                borderSpacing: "0 0.5em",
-                padding: "1rem",
-                paddingTop: "0",
+                backgroundColor: "blueBackground.light",
               }}
             >
-              <TableHead>
-                <TableRow className={classes.tableHeadRow}>
-                  <TableCell align="center">
-                    <Typography
-                      variant="h6"
-                      sx={{
-                        backgroundColor: "primary.main",
-                        color: "white",
-                        padding: "0.5rem",
-                        borderRadius: "4px",
-                        margin: "0.5rem",
+              {data
+                .slice((page - 1) * numberPerPage, page * numberPerPage)
+                .map((item, index) => (
+                  <Grow
+                    in={true}
+                    {...(true ? { timeout: index * 500 } : {})}
+                    key={item?.id}
+                  >
+                    <TableRow
+                      key={index}
+                      className={`${classes.row} ${
+                        item?.id == currentPlayer ? classes.playerSelected : ""
+                      }`}
+                      onClick={() => {
+                        setCurrentPlayer(item?.id);
                       }}
                     >
-                      Họ tên
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="left">
-                    <Typography sx={{ ml: "1rem" }} variant="h6">
-                      Ngày sinh
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="center">
-                    <Typography variant="h6">Quốc tịch</Typography>
-                  </TableCell>
-                  <TableCell align="center">
-                    <Typography variant="h6">Vị trí</Typography>
-                  </TableCell>
-                  <TableCell align="center">
-                    <Typography variant="h6">Số áo</Typography>
-                  </TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody
-                sx={{
-                  backgroundColor: "blueBackground.light",
-                }}
-              >
-                {data.map((item, index) => (
-                  <Grow
-                    in={!isLoading}
-                    {...(!isLoading ? { timeout: index * 1000 } : {})}
-                    key={index}
-                  >
-                    <TableRow key={index} className={classes.row}>
                       <TableCell align="center" sx={{ padding: "8px" }}>
-                        <Typography variant="h6"> {item?.hoTen}</Typography>
+                        <Typography
+                          variant="h6"
+                          sx={{ color: "primary.lightGray" }}
+                        >
+                          {" "}
+                          {item?.hoTen}
+                        </Typography>
                       </TableCell>
                       <TableCell align="center" sx={{ padding: "8px" }}>
-                        <Box
-                          sx={{
-                            display: "flex",
-                            justifyContent: "flex-start",
-                            alignItems: "center",
-                          }}
+                        <Typography
+                          variant="subtitle1"
+                          sx={{ color: "primary.lightGray" }}
                         >
-                          <Typography variant="h6">
-                            {" "}
-                            {item?.ngaySinh}
-                          </Typography>
-                        </Box>
+                          {" "}
+                          {Helper.formatDateToLocal(item?.ngaySinh)}
+                        </Typography>
                       </TableCell>
 
                       <TableCell align="center" sx={{ padding: "8px" }}>
-                        <Typography variant="h6"> {item?.quocTich}</Typography>
+                        <Typography
+                          variant="subtitle1"
+                          sx={{ color: "primary.lightGray" }}
+                        >
+                          {" "}
+                          {item?.quocTich}
+                        </Typography>
                       </TableCell>
                       <TableCell align="center" sx={{ padding: "8px" }}>
-                        <Typography variant="h6">
+                        <Typography
+                          variant="subtitle1"
+                          sx={{ color: "primary.lightGray" }}
+                        >
                           {" "}
                           {item?.viTri.map((vt) => {
                             return vt;
@@ -186,15 +208,38 @@ const PlayerTable = (props) => {
                         </Typography>
                       </TableCell>
                       <TableCell align="center" sx={{ padding: "8px" }}>
-                        <Typography variant="h6"> {item?.soAo}</Typography>
+                        <Typography
+                          variant="subtitle1"
+                          sx={{ color: "primary.lightGray" }}
+                        >
+                          {" "}
+                          {item?.soAo}
+                        </Typography>
                       </TableCell>
                     </TableRow>
                   </Grow>
                 ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        )}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            mt: "1rem",
+            paddingBottom: "1rem",
+          }}
+        >
+          <Pagination
+            page={page}
+            count={
+              Array.isArray(data) ? Math.ceil(data.length / numberPerPage) : 0
+            }
+            onChange={(e, value) => {
+              setPage(value);
+            }}
+          ></Pagination>
+        </Box>
       </Paper>
     </>
   );

@@ -15,7 +15,6 @@ import DefaultLayout from "../../../layout/DefaultLayout";
 import useProgressiveImage from "../../../hooks/useProgressiveImage";
 import Loader from "@mui/material/CircularProgress";
 import Helper from "../../../utils/Helper";
-import PlayerList from "./PlayerList";
 import ClubInfo from "../../../components/ui/clubInfo/ClubInfo";
 
 const backgroundStyle = {
@@ -82,7 +81,6 @@ const Club = () => {
   useEffect(() => {
     if (club) {
       setPlayers(club?.danhSachCauThuDangThiDau);
-      console.log(club?.danhSachCauThuDangThiDau);
       setManager(club?.quanLy);
       setHomeStadium(club?.sanNha);
     }

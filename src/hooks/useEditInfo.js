@@ -5,10 +5,14 @@ const useCurrentLeague = () => {
   const {
     setCurrentStadium,
     setCurrentClub,
+    // set currentStadium,
     currentStadium,
     currentClub,
+    // Edit section
     isEditable,
     setIsEditable,
+    // End edit section
+    // Image section
     isFireUpload,
     setIsFireUpload,
     imageUrl,
@@ -17,6 +21,7 @@ const useCurrentLeague = () => {
     setIsUploadingImage,
     hasImageOnQueue,
     setHasImageOnQueue,
+    // End image section
   } = useContext(EditInfoContext);
 
   return {

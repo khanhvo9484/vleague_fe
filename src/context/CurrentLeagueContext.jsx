@@ -6,6 +6,10 @@ export const CurrentLeagueProvider = ({ children }) => {
   const [currentLeague, setCurrentLeague] = useState();
   const [currentSchedule, setCurrentSchedule] = useState();
   const [currentMatchDay, setCurrentMatchDay] = useState();
+  const [currentPlayer, setCurrentPlayer] = useState();
+  const [currentClub, setCurrentClub] = useState();
+  const [currentStadium, setCurrentStadium] = useState();
+  const [currentManager, setCurrentManager] = useState();
   return (
     <CurrentLeagueContext.Provider
       value={{
@@ -15,6 +19,14 @@ export const CurrentLeagueProvider = ({ children }) => {
         setCurrentSchedule,
         currentMatchDay,
         setCurrentMatchDay,
+        currentPlayer,
+        setCurrentPlayer,
+        currentClub,
+        setCurrentClub,
+        currentStadium,
+        setCurrentStadium,
+        currentManager,
+        setCurrentManager,
       }}
     >
       {children}

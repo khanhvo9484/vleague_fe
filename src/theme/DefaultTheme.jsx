@@ -9,12 +9,14 @@ const baselightTheme = createTheme({
       main: "#181823",
       light: "#ECF2FF",
       dark: "#0c3ba9b1",
+      lightGray: "#4141a3",
     },
     blueBackground: {
       light: "#e4f0f9",
       main: "#c9deef",
       dark: "#a3c9e8",
       activeLink: "#78c8f6",
+      manage: "#608dff41",
     },
     disabledBackground: {
       main: "#d6d6d6",

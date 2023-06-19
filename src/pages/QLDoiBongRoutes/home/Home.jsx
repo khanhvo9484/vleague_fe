@@ -13,29 +13,15 @@ import MyAxios from "../../../api/MyAxios";
 import { Paper, Box, Button, Typography, Grid } from "@mui/material";
 import LoadingBox from "../../../components/ui/LoadingBox";
 import useEditInfo from "../../../hooks/useEditInfo";
-
-const menuItems = [
-  { text: "Trang chủ", icon: <HomeRounded />, path: "/manager/home" },
-  {
-    text: "Quản lý đội bóng",
-    icon: <Groups3Rounded />,
-    path: "/manager/manage",
-  },
-  { text: "Đăng ký giải đấu", icon: <AddToPhotos />, path: "/dashboard" },
-  {
-    text: "Danh sách hồ sơ đăng ký",
-    icon: <DescriptionRounded />,
-    path: "/dashboard",
-  },
-];
+import ManagerLayout from "../../../layout/ManagerLayout";
+import useLoading from "../../../hooks/useLoading";
 const Dashboard = () => {
   const authContext = useAuth();
   const [club, setClub] = useState();
   const [manager, setManager] = useState();
   const [homeStadium, setHomeStadium] = useState();
-  const [isLoading, setIsLoading] = useState(true);
-  const [notify, setNotify] = useState({ message: "", type: "" });
-  const [localIsFireUpload, setLocalIsFireUpload] = useState();
+  const { isLoading, setIsLoading, notify, setNotify } = useLoading();
+
   const {
     setIsEditable,
     isEditable,
@@ -47,9 +33,7 @@ const Dashboard = () => {
     isFireUpload,
     hasImageOnQueue,
   } = useEditInfo();
-  useEffect(() => {
-    setLocalIsFireUpload(isFireUpload);
-  }, [isFireUpload]);
+
   const fetchClub = async () => {
     setIsLoading(true);
     setNotify({ message: "", type: "" });
@@ -83,8 +67,11 @@ const Dashboard = () => {
   useEffect(async () => {
     if (!isFireUpload) return;
     if (hasImageOnQueue) {
+      count = 0;
       while (!imageUrl) {
+        if (count == 10) break;
         await new Promise((resolve) => setTimeout(resolve, 1000));
+        count++;
       }
     }
     try {
@@ -96,7 +83,7 @@ const Dashboard = () => {
           ten: currentClub ? currentClub?.ten : club?.ten,
           idSanNha: currentStadium ? currentStadium : homeStadium.id,
           namThanhLap: currentClub ? currentClub.namThanhLap : club.namThanhLap,
-          hinhAnh: imageUrl ? imageUrl : club.hinhAnh,
+          hinhAnh: imageUrl ? imageUrl : club?.hinhAnh,
         }),
         {
           headers: { "Content-Type": "application/json" },
@@ -104,6 +91,7 @@ const Dashboard = () => {
       );
     } catch (err) {
       console.log(err);
+      setNotify({ message: err.message, type: "error" });
     } finally {
       fetchClub();
       setIsEditable(false);
@@ -112,88 +100,67 @@ const Dashboard = () => {
     }
   }, [isFireUpload]);
   return (
-    <DrawerLayout menuItems={menuItems}>
-      <Paper
-        elevation={3}
-        sx={{ margin: "2rem 1rem 0 1rem", height: "100%", maxHeight: "85vh" }}
-      >
-        {isLoading && <LoadingBox></LoadingBox>}
-        {!isLoading && notify.message && (
-          <Box sx={{ padding: "1rem" }}>
-            <Typography variant="h6" color={notify.type}>
-              {notify.message}
-            </Typography>
-          </Box>
-        )}
-        {!isLoading && !notify.message && (
-          <Box
-            sx={{
-              paddingLeft: "1rem",
-              paddingRight: "1rem",
-              paddingTop: "1rem",
-            }}
-          >
-            <ClubInfo
-              club={club}
-              manager={manager}
-              homeStadium={homeStadium}
-              verticalLayout={true}
-            ></ClubInfo>
-          </Box>
-        )}
+    <ManagerLayout>
+      <Box sx={{ ml: "2rem", paddingTop: "2rem" }}>
+        <ClubInfo
+          club={club}
+          manager={manager}
+          homeStadium={homeStadium}
+          verticalLayout={true}
+        ></ClubInfo>
+      </Box>
 
-        <Grid container spacing={0}>
-          <Grid item xs={8} md={8}>
-            {!isLoading && !notify.message && (
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "flex-end",
-                }}
-              >
-                {!isEditable && (
+      <Grid container spacing={0}>
+        <Grid item xs={8} md={8}>
+          {!isLoading && !notify.message && (
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "flex-end",
+              }}
+            >
+              {!isEditable && (
+                <Button
+                  variant="contained"
+                  onClick={() => {
+                    setIsEditable(true);
+                  }}
+                  color="primary"
+                >
+                  <Typography variant="h6"> Sửa thông tin</Typography>
+                </Button>
+              )}
+              {isEditable && (
+                <>
                   <Button
                     variant="contained"
                     onClick={() => {
-                      setIsEditable(true);
+                      handleUpdateClubInfo();
                     }}
-                    color="primary"
+                    color="secondary"
+                    sx={{ marginRight: "1rem" }}
                   >
-                    <Typography variant="h6"> Sửa thông tin</Typography>
+                    <Typography variant="h6" color={"white"}>
+                      {" "}
+                      Cập nhật
+                    </Typography>
                   </Button>
-                )}
-                {isEditable && (
-                  <>
-                    <Button
-                      variant="contained"
-                      onClick={() => {
-                        handleUpdateClubInfo();
-                      }}
-                      color="secondary"
-                      sx={{ marginRight: "1rem" }}
-                    >
-                      <Typography variant="h6" color={"white"}>
-                        {" "}
-                        Cập nhật
-                      </Typography>
-                    </Button>
-                    <Button
-                      variant="contained"
-                      onClick={() => {
-                        setIsEditable(false);
-                      }}
-                      color="error"
-                    >
-                      <Typography variant="h6"> Hủy</Typography>
-                    </Button>
-                  </>
-                )}
-              </Box>
-            )}
-          </Grid>
+                  <Button
+                    variant="contained"
+                    onClick={() => {
+                      setIsEditable(false);
+                    }}
+                    color="error"
+                  >
+                    <Typography variant="h6"> Hủy</Typography>
+                  </Button>
+                </>
+              )}
+            </Box>
+          )}
         </Grid>
-      </Paper>
-    </DrawerLayout>
+      </Grid>
+    </ManagerLayout>
   );
 };
 

@@ -1,45 +1,45 @@
 import React from "react";
-import {
-  Box,
-  Paper,
-  Typography,
-  Button,
-  List,
-  ListItem,
-  IconButton,
-  CircularProgress,
-} from "@mui/material";
-import PlayerList from "../../publicRoutes/club/PlayerList";
+import { Box, Grid } from "@mui/material";
+import PlayersList from "../../../components/form/PlayersList";
 import MyAxios from "../../../api/MyAxios";
 import { useState, useEffect } from "react";
 import useAuth from "../../../hooks/useAuth";
 import { makeStyles } from "@mui/styles";
-import { fi } from "date-fns/locale";
-import { set } from "date-fns";
+import useLoading from "../../../hooks/useLoading";
+import ManagerLayout from "../../../layout/ManagerLayout";
 const useStyles = makeStyles((theme) => ({}));
 
 const ManageTeam = () => {
   const { auth } = useAuth();
-  const [isLoading, setIsLoading] = useState(false);
+  const { setIsLoading, setNotify } = useLoading();
   const [players, setPlayers] = useState([]);
   const [clubs, setClubs] = useState([]);
-  useEffect(async () => {
-    setIsLoading(true);
-    setNotify({ message: "", type: "" });
 
+  useEffect(async () => {
     try {
-      const response = await MyAxios.get(`/api/doibong/${auth?.teamId}`);
+      setIsLoading(true);
+      const response = await MyAxios.get(`/doibong/${auth?.teamId}`);
       setClubs(response.data?.data);
       setPlayers(response.data?.data?.danhSachCauThuDangThiDau);
     } catch (err) {
+      setNotify({
+        message: "Không thể lấy danh sách cầu thủ",
+        type: "error",
+      });
     } finally {
       setIsLoading(false);
     }
   }, []);
   return (
-    <Paper>
-      <Box></Box>
-    </Paper>
+    <ManagerLayout>
+      <Box sx={{ margin: "0 2rem 0 2rem", paddingTop: "2rem" }}>
+        <Grid container spacing={2}>
+          <Grid item xs={8} sm={8}>
+            <PlayersList data={players} />
+          </Grid>
+        </Grid>
+      </Box>
+    </ManagerLayout>
   );
 };
 

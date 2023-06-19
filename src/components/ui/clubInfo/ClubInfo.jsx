@@ -2,13 +2,12 @@ import React from "react";
 import { Paper, Box, Grid, Typography, TextField } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import Helper from "../../../utils/Helper";
-import PlayerList from "../../../pages/publicRoutes/club/PlayerList";
 import { useEffect, useState, useRef } from "react";
 import MangerCard from "./MangerCard";
 import StadiumCard from "./StadiumCard";
 import useEditInfo from "../../../hooks/useEditInfo";
 import UploadImageSection from "../UploadImageSection";
-import { set } from "date-fns";
+import PlayersList from "../../../components/form/PlayersList";
 
 const useStyles = makeStyles((theme) => ({
   paperContainer: {
@@ -104,14 +103,18 @@ const ClubInfo = (props) => {
           <Box sx={{ mt: "1rem", width: "100%" }}>
             {players && players.length > 0 ? (
               <>
-                <Typography variant="h6">Danh sách cầu thủ: </Typography>
                 <Box
                   sx={{
-                    paddingTop: "1rem",
                     mt: "1rem",
                   }}
                 >
-                  <PlayerList playerList={players}></PlayerList>
+                  <PlayersList
+                    data={players}
+                    headerSize={"h5"}
+                    alignHeader={"left"}
+                    bgColor={"blueBackground.light"}
+                    number={6}
+                  ></PlayersList>
                 </Box>
               </>
             ) : null}
