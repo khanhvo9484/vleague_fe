@@ -19,6 +19,7 @@ import MyAxios from "../../../api/MyAxios";
 import { footballPosition, country } from "../../../data/GlobalConstant";
 import Helper from "../../../utils/Helper";
 import Pattern from "../../../assets/patterns/playerBGPatterns.png";
+import { defaultImage } from "../../../data/GlobalConstant";
 const numberStyle = {
   fontWeight: 500,
   fontSize: "15rem",

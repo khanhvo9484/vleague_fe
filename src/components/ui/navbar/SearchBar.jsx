@@ -10,7 +10,6 @@ import { Clear as ClearIcon, Search as SearchIcon } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import { Autocomplete } from "@mui/material";
 import MyAxios from "../../../api/MyAxios";
-import { v4 as uuidv4 } from "uuid";
 import { styled } from "@mui/system";
 import { CircularProgress } from "@mui/material";
 import { SportsSoccer, DirectionsRun } from "@mui/icons-material";
@@ -72,7 +71,6 @@ const SearchBar = () => {
             name: item.ten,
             image: item.hinhAnh,
             type: "team",
-            uuid: uuidv4(),
           };
         });
 
@@ -91,7 +89,6 @@ const SearchBar = () => {
             name: item.hoTen,
             image: item.hinhAnh,
             type: "player",
-            uuid: uuidv4(),
           };
         });
         setAllPlayers(mappedArr);

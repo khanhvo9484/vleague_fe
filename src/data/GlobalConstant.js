@@ -1,9 +1,10 @@
-export const teamLogo = {
-  logo1:
-    "https://upload.wikimedia.org/wikipedia/vi/1/1d/Manchester_City_FC_logo.svg",
-  logo2: "https://upload.wikimedia.org/wikipedia/vi/a/a1/Man_Utd_FC_.svg",
+export const defaultImage = {
+  image:
+    "https://firebasestorage.googleapis.com/v0/b/myleague-c54ab.appspot.com/o/default-image.png?alt=media&token=eb39e4f2-8ba1-4b3f-8c08-147869969e18",
+  team: "https://firebasestorage.googleapis.com/v0/b/myleague-c54ab.appspot.com/o/defaultTeamLogo.png?alt=media&token=b8dcf72f-14e3-482d-a164-88ae9fbbd898",
+  player:
+    "https://firebasestorage.googleapis.com/v0/b/myleague-c54ab.appspot.com/o/soccer-player.png?alt=media&token=a26f3bff-94a0-40d2-a9ae-e902f5381759",
 };
-
 export const footballPosition = {
   AM: "Tiền vệ tấn công",
   CM: "Tiền vệ trung tâm",

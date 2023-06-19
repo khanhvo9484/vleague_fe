@@ -12,12 +12,13 @@ import Standings from "../pages/publicRoutes/standings/Standings";
 import Schedule from "../pages/publicRoutes/schedule/Schedule";
 
 import GDDashboard from "../pages/QLGiaiDauRoutes/dashboard/Dashboard";
-import DBDashboard from "../pages/QLDoiBongRoutes/dashboard/Dashboard";
+import DBHome from "../pages/QLDoiBongRoutes/home/Home";
 
 import { baselightTheme } from "../theme/DefaultTheme";
 import { ThemeProvider } from "@mui/material/styles";
 import RequiredAuth from "../utils/RequiredAuth";
 import Unauthorized from "../pages/publicRoutes/unauthorized/Unauthorized";
+
 const App = () => {
   return (
     <ThemeProvider theme={baselightTheme}>
@@ -33,7 +34,7 @@ const App = () => {
         <Route exact path="/schedule" element={<Schedule />} />
         {/* Private routes for manager*/}
         <Route element={<RequiredAuth allowedRoles={["QLDB"]} />}>
-          <Route exact path="/manager/dashboard" element={<DBDashboard />} />
+          <Route exact path="/manager/home" element={<DBHome />} />
         </Route>
 
         {/* Protected route for admin */}

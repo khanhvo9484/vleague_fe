@@ -54,12 +54,12 @@ export default function Login() {
       );
       const data = response?.data?.data;
       const accessToken = data.token;
-      const role = data.role;
-      const name = data.hoTen;
+      const role = data?.role;
+      const name = data?.hoTen;
       const token = { accessToken, status: "OK" };
-      const dob = data.ngaySinh;
-      const image = data.hinhAnh;
-      const teamId = data.id_doibong;
+      const dob = data?.ngaySinh;
+      const image = data?.hinhAnh;
+      const teamId = data?.id_doibong;
       let storageOption = "cookieStorage";
       if (isRemember === "remember") {
         storageOption = "localStorage";

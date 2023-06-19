@@ -21,6 +21,7 @@ import Loader from "@mui/material/CircularProgress";
 import Helper from "../../../utils/Helper";
 import Filter from "../../../components/ui/Filter";
 import { useNavigate } from "react-router-dom";
+import { defaultImage } from "../../../data/GlobalConstant";
 const backgroundStyle = {
   backgroundSize: "cover",
   backgroundPosition: "center",
@@ -138,11 +139,11 @@ const AllClubs = () => {
           )
         );
         const tempImageList = clubs.map((club) => {
-          return { id: club?.id, image: club?.hinhAnh };
+          return { id: club?.id, image: useProgressiveImage(club?.hinhAnh) };
         });
         setImageList(tempImageList);
       } catch (err) {
-        console.log(err);
+        // console.log(err);
       }
     }
   }, [clubs]);
@@ -263,7 +264,7 @@ const AllClubs = () => {
                                     src={
                                       imageList.find((image) => {
                                         return image.id === club.id;
-                                      })?.image || ""
+                                      })?.image || defaultImage?.player
                                     }
                                   ></img>
                                   <Typography variant="h6" sx={{ ml: "1rem" }}>
