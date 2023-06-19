@@ -2,6 +2,8 @@ import { Routes, Route } from "react-router-dom";
 import Home from "../pages/home/Home";
 import Login from "../pages/login/Login";
 import Dashboard from "../pages/dashboard/Dashboard";
+
+import Squad from "../pages/squad/Squad";
 // import PlayerInfor from "../pages/playerInfor/PlayerInfor";
 import Player from "../pages/player/Player";
 import Club from "../pages/club/Club";
@@ -27,6 +29,7 @@ const App = () => {
         {/* Private routes for manager*/}
         <Route element={<RequiredAuth allowedRoles={["QLDB"]} />}>
           <Route exact path="/dashboard" element={<Dashboard />} />
+          <Route exact path="/dashboard/squad" element={<Squad />} />
         </Route>
 
         {/* Protected route for admin */}

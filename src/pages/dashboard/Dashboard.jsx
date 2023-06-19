@@ -153,11 +153,9 @@ const Dashboard = () => {
   useEffect(() => {
     const getStatus = async () => {
       try {
-        setIsLoading(true)
         const res = await MyAxios.get(`/muagiai?page=1&limit=2&keyword&trangthai=1`)
         const temp = res.data.data.listResult.filter(item => item.id == currentLeague?.id)
         setIsStart(!(temp.length == 0))
-        setIsLoading(false)
       } catch (error) {
         setNotify(() => [...error.response.data.message])
       }
@@ -174,7 +172,6 @@ const Dashboard = () => {
         setIsLoading(true)
         const res = await MyAxios.get(`/muagiai/${currentLeague?.id}/ranking`)
         setRanking(res.data.data)
-
         const res1 = await MyAxios.get(`/lichthidau/${currentLeague?.id}`)
         setSchedule(res1.data.data)
         setIsLoading(false)
@@ -182,25 +179,27 @@ const Dashboard = () => {
         setNotify(() => [...error.response.data.message])
       }
     }
-    if (currentLeague && isStart) {
+    if (currentLeague) {
       getRanking()
     }
   }, [currentLeague])
 
   useEffect(() => {
-    if (currentLeague && isStart) {
-      setCurrentPosition(ranking.filter(item => item.id_doibong == authContext?.auth?.teamId)[0])
+    if (currentLeague) {
+      setCurrentPosition(ranking?.filter(item => item.id_doibong == authContext?.auth?.teamId)[0])
     }
   }, [ranking])
 
   useEffect(() => {
-    if (currentLeague && isStart) {
+    if (currentLeague) {
       let vong = []
-      schedule.cacVongDau.map(item => vong.push(...item.cacTranDau))
+      schedule?.cacVongDau?.map(item => vong.push(...item.cacTranDau))
       const games = vong.filter(item => item.doiNha.id == authContext?.auth?.teamId || item.doiKhach.id == authContext?.auth?.teamId)
       setNextGame(games[currentPosition.tranThang + currentPosition.tranHoa + currentPosition.tranThua])
     }
   }, [schedule])
+
+  console.log(ranking)
 
   const menuItems = [
     { text: "Dashboard", icon: <DashboardOutlined />, path: "/dashboard" },
@@ -225,9 +224,8 @@ const Dashboard = () => {
                       Mùa giải chưa bắt đầu
                     </Typography>
                   </Box>
-                ) : null}
-                {
-                  isStart && <>
+                ) :
+                  (<>
                     <Box className={classes.boxContainer}>
                       <Typography variant="h5" className={classes.title1}>
                         Trận đấu tiếp theo
@@ -490,7 +488,8 @@ const Dashboard = () => {
                         }
                       </Box>
                     </Box>
-                  </>}
+                  </>
+                  )}
               </Grid>
             </Grid>
           </Box>
