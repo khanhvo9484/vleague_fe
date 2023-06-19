@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import { DashboardOutlined } from "@mui/icons-material";
 
 import League from "../../components/ui/league/League";
+import versus from "../../assets/vs.png";
 
 import MyAxios from "../../api/MyAxios";
 
@@ -46,9 +47,44 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "15px",
     padding: "15px",
     border: "2px solid #ffffffff",
-    borderRadius: "10px",
+    borderRadius: "15px",
     display: "flex",
     justifyContent: "space-around",
+  },
+  totalBox: {
+    borderRight: "2px solid #ffffffff",
+    paddingRight: "30px!important",
+  },
+  statisticContentBox: {
+    textTransform: "uppercase",
+    textAlign: "center",
+    padding: "10px",
+  },
+  statisticNumber: {
+    paddingTop: "10px",
+    fontSize: "1.5rem!important",
+  },
+  title1: {
+    color: theme.palette.secondary.main,
+  },
+  nextGameBox: {
+    textAlign: "center",
+  },
+  nextGameRow: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  nextGameImageBox: {
+    backgroundColor: theme.palette.secondary.light,
+    border: "2px solid #ffffffff",
+    borderRadius: "15px",
+    padding: "5px",
+    width: "70px",
+    height: "70px",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
   }
 }));
 
@@ -60,9 +96,11 @@ const Dashboard = () => {
 
   const classes = useStyles();
 
+  const { currentLeague } = useCurrentLeague()
   const [ranking, setRanking] = useState([])
   const [currentPosition, setCurrentPosition] = useState({})
-  const { currentLeague } = useCurrentLeague()
+  const [schedule, setSchedule] = useState([])
+  const [nextGame, setNextGame] = useState({})
   const [notify, setNotify] = useState([])
   const [isLoading, setIsLoading] = useState(false);
   // console.log(authContext?.auth?.teamId)
@@ -73,7 +111,10 @@ const Dashboard = () => {
       try {
         setIsLoading(true)
         const res = await MyAxios.get(`/muagiai/${currentLeague?.id}/ranking`)
-        setRanking(res.data.data);
+        setRanking(res.data.data)
+
+        const res1 = await MyAxios.get(`/lichthidau/${currentLeague?.id}`)
+        setSchedule(res1.data.data)
         setIsLoading(false)
       } catch (error) {
         setNotify(() => [...error.response.data.message])
@@ -85,14 +126,28 @@ const Dashboard = () => {
   }, [currentLeague])
 
   useEffect(() => {
-    setCurrentPosition(ranking.filter(item => item.id_doibong == authContext?.auth?.teamId)[0])
+    if (currentLeague)
+    {
+      setCurrentPosition(ranking.filter(item => item.id_doibong == authContext?.auth?.teamId)[0])
+    }
   }, [ranking])
+
+  useEffect(() => {
+    if (currentLeague) {
+      let vong = []
+      schedule.cacVongDau.map(item => vong.push(...item.cacTranDau))
+      const games = vong.filter(item => item.doiNha.id == authContext?.auth?.teamId || item.doiKhach.id == authContext?.auth?.teamId)
+      setNextGame(games[currentPosition.tranThang + currentPosition.tranHoa + currentPosition.tranThua])
+    }
+  }, [schedule])
 
   console.log(ranking)
   console.log(currentPosition)
+  console.log(nextGame)
 
   const menuItems = [
     { text: "Dashboard", icon: <DashboardOutlined />, path: "/dashboard" },
+    // { text: "cauthu", icon: <DashboardOutlined />, path: "/dscauthu" },
   ];
   return (
     <DrawerLayout menuItems={menuItems}>
@@ -108,7 +163,7 @@ const Dashboard = () => {
               </Grid>
               <Grid item xs={12} sm={6} lg={8}>
                 <Box className={classes.boxContainer}>
-                  <Typography variant="h5">
+                  <Typography variant="h5" className={classes.title1}>
                     Trận đấu tiếp theo
                   </Typography>
                   <Box>
@@ -117,10 +172,50 @@ const Dashboard = () => {
                         <CircularProgress />
                       </Box>
                     ) : null}
+                    {
+                      !isLoading &&
+                      <Box className={classes.nextGameBox}>
+                        <Box className={classes.nextGameRow}>
+                          <Typography>
+                            {nextGame?.tenVong}
+                          </Typography>
+                          <Typography>
+                            {nextGame?.thoiGianVietNam}
+                          </Typography>
+                        </Box>
+                        <Box className={classes.nextGameRow}>
+                          <Typography>
+                            {nextGame?.doiNha?.ten}
+                          </Typography>
+                          <Box className={classes.nextGameImageBox}>
+                            <img
+                              height={60}
+                              src={nextGame?.doiNha?.hinhAnh}
+                              alt={`${nextGame?.doiNha?.ten}`}
+                            />
+                          </Box>
+                          <img
+                              height={40}
+                              src={versus}
+                              alt="vs"
+                            />
+                          <Box className={classes.nextGameImageBox}>
+                            <img
+                              height={60}
+                              src={nextGame?.doiKhach?.hinhAnh}
+                              alt={`${nextGame?.doiKhach?.ten}`}
+                            />
+                          </Box>                          
+                          <Typography>
+                            {nextGame?.doiKhach?.ten}
+                          </Typography>                           
+                        </Box>
+                      </Box>
+                    }
                   </Box>
                 </Box>
                 <Box className={classes.boxContainer}>
-                  <Typography variant="h5">
+                  <Typography variant="h5" className={classes.title1}>
                     Thống kê
                   </Typography>
                   <Box>
@@ -132,36 +227,36 @@ const Dashboard = () => {
                     {
                       !isLoading &&
                       <Box className={classes.statisticBox}>
-                        <Box>
+                        <Box className={`${classes.statisticContentBox} ${classes.totalBox}`}>
                           <Typography variant="body1">
                             Tổng
                           </Typography>
-                          <Typography variant="h6">
-                            {currentPosition? currentPosition.tranThang + currentPosition.tranHoa + currentPosition.tranThua : <>Không</>}
+                          <Typography variant="h6" className={classes.statisticNumber}>
+                            {currentPosition ? currentPosition.tranThang + currentPosition.tranHoa + currentPosition.tranThua : <>Không</>}
                           </Typography>
                         </Box>
-                        <Box>
+                        <Box className={classes.statisticContentBox}>
                           <Typography variant="body1">
                             Thắng
                           </Typography>
-                          <Typography variant="h6">
-                            {currentPosition? currentPosition.tranThang : <>Không</>}
+                          <Typography variant="h6" className={classes.statisticNumber}>
+                            {currentPosition ? currentPosition.tranThang : <>Không</>}
                           </Typography>
                         </Box>
-                        <Box>
+                        <Box className={classes.statisticContentBox}>
                           <Typography variant="body1">
                             Hoà
                           </Typography>
-                          <Typography variant="h6">
-                            {currentPosition? currentPosition.tranHoa : <>Không</>}
+                          <Typography variant="h6" className={classes.statisticNumber}>
+                            {currentPosition ? currentPosition.tranHoa : <>Không</>}
                           </Typography>
                         </Box>
-                        <Box>
+                        <Box className={classes.statisticContentBox}>
                           <Typography variant="body1">
                             Thua
                           </Typography>
-                          <Typography variant="h6">
-                            {currentPosition? currentPosition.tranThua : <>Không</>}
+                          <Typography variant="h6" className={classes.statisticNumber}>
+                            {currentPosition ? currentPosition.tranThua : <>Không</>}
                           </Typography>
                         </Box>
                       </Box>
@@ -169,7 +264,7 @@ const Dashboard = () => {
                   </Box>
                 </Box>
                 <Box className={classes.boxContainer}>
-                  <Typography variant="h5">
+                  <Typography variant="h5" className={classes.title1}>
                     Bảng xếp hạng
                   </Typography>
                   <Box>
@@ -178,7 +273,7 @@ const Dashboard = () => {
                         <CircularProgress />
                       </Box>
                     ) : null}
-                    {!isLoading && ranking.map((item) => {
+                    {!isLoading && ranking?.map((item) => {
                       return (
                         <li key={item.id_doibong}>{item.ten_doi}</li>
                       )
