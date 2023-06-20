@@ -648,9 +648,7 @@ const Player = () => {
                         >
                           <img
                             style={{ width: "20rem" }}
-                            src={
-                              "https://firebasestorage.googleapis.com/v0/b/myleague-c54ab.appspot.com/o/Kevin%20de%20bruyne.png?alt=media&token=30f9739a-f6a4-4ad2-9b98-f76026b82e22"
-                            }
+                            src={player.hinhAnh}
                           ></img>
                         </Box>
                       </Grid>
