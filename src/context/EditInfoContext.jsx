@@ -10,6 +10,8 @@ export const EditClubProvider = ({ children }) => {
   const [imageUrl, setImageUrl] = useState(false);
   const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [hasImageOnQueue, setHasImageOnQueue] = useState(false);
+  const [openNotiBox, setOpenNotiBox] = useState(false);
+  const [isAccept, setIsAccept] = useState("");
   return (
     <EditClubContext.Provider
       value={{
@@ -27,6 +29,10 @@ export const EditClubProvider = ({ children }) => {
         setIsUploadingImage,
         hasImageOnQueue,
         setHasImageOnQueue,
+        openNotiBox,
+        setOpenNotiBox,
+        isAccept,
+        setIsAccept,
       }}
     >
       {children}

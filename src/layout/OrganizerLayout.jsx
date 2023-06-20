@@ -7,13 +7,18 @@ import {
   DescriptionRounded,
   AddToPhotos,
   BarChart,
+  CalendarMonth,
+  CheckList,
+  EmojiEvents,
+  EmojiFlags,
+  LibraryAddCheck,
 } from "@mui/icons-material";
 import { Paper, Box, Button, Typography, Grid } from "@mui/material";
 import LoadingBox from "../components/ui/LoadingBox";
 import useLoading from "../hooks/useLoading";
 
 const menuItems = [
-  { text: "Trang chủ", icon: <HomeRounded />, path: "/manager/home" },
+  { text: "Danh sách mùa giải", icon: <EmojiFlags />, path: "/manager/home" },
   {
     text: "Quản lý đội bóng",
     icon: <Groups3Rounded />,

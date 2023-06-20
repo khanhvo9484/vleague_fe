@@ -91,6 +91,7 @@ const PlayerTable = (props) => {
   const theme = useTheme();
   const classes = useStyles();
   const { currentPlayer, setCurrentPlayer } = useCurrentLeague();
+  console.log(currentPlayer, "hehe");
   const numberPerPage = number ? number : 12;
   const [page, setPage] = useState(1);
   console.log(data);
@@ -125,6 +126,11 @@ const PlayerTable = (props) => {
           >
             <TableHead>
               <TableRow className={classes.tableHeadRow}>
+                <TableCell align="center">
+                  <Typography variant="h6" sx={{}}>
+                    #
+                  </Typography>
+                </TableCell>
                 <TableCell align="center">
                   <Typography variant="h6" sx={{}}>
                     Họ tên
@@ -174,6 +180,15 @@ const PlayerTable = (props) => {
                           sx={{ color: "primary.lightGray" }}
                         >
                           {" "}
+                          {index}
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="center" sx={{ padding: "8px" }}>
+                        <Typography
+                          variant="h6"
+                          sx={{ color: "primary.lightGray" }}
+                        >
+                          {" "}
                           {item?.hoTen}
                         </Typography>
                       </TableCell>
@@ -202,9 +217,7 @@ const PlayerTable = (props) => {
                           sx={{ color: "primary.lightGray" }}
                         >
                           {" "}
-                          {item?.viTri.map((vt) => {
-                            return vt;
-                          })}
+                          {item?.viTri.join(", ")}
                         </Typography>
                       </TableCell>
                       <TableCell align="center" sx={{ padding: "8px" }}>

@@ -22,6 +22,10 @@ const useCurrentLeague = () => {
     hasImageOnQueue,
     setHasImageOnQueue,
     // End image section
+    openNotiBox,
+    setOpenNotiBox,
+    isAccept,
+    setIsAccept,
   } = useContext(EditInfoContext);
 
   return {
@@ -39,6 +43,10 @@ const useCurrentLeague = () => {
     setIsUploadingImage,
     hasImageOnQueue,
     setHasImageOnQueue,
+    openNotiBox,
+    setOpenNotiBox,
+    isAccept,
+    setIsAccept,
   };
 };
 export default useCurrentLeague;

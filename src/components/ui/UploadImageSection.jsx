@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Box, Button } from "@mui/material";
+import { Box, Button, TextField } from "@mui/material";
 import { AddPhotoAlternate } from "@mui/icons-material";
 import { defaultImage } from "../../data/GlobalConstant";
 import { storage } from "../../firebase/FirebaseConfig";
@@ -41,12 +41,10 @@ const UploadImageSection = () => {
     const image = selectedImageFile;
     if (image) {
       try {
-        console.log("I upload");
         const imageRef = refs(storage, `${image.name} ${v4()}`);
         const snapshot = await uploadBytes(imageRef, image);
         const url = await getDownloadURL(snapshot.ref);
         setImageUrl(url);
-        console.log(url);
       } catch (error) {}
     }
   };
@@ -60,22 +58,32 @@ const UploadImageSection = () => {
       sx={{ display: "flex", flexDirection: "column", alignContent: "center" }}
     >
       <Box textAlign={"center"}>
-        <img
-          style={{ width: "200px" }}
-          src={selectedImage || defaultImage.image}
-          alt="Selected Image"
-        />
-      </Box>
-      <Box textAlign={"center"}>
-        <Button component="label" startIcon={<AddPhotoAlternate />}>
+        <Button
+          component="label"
+          sx={{ display: "flex", flexDirection: "column" }}
+        >
           <input
             type="file"
             hidden
             onChange={handleImageChange}
             accept="image/*"
           />
-          Tải lên ảnh
+          <Box textAlign={"center"}>
+            <img
+              style={{ width: "200px", borderRadius: "4px" }}
+              src={selectedImage || defaultImage.image}
+              alt="Selected Image"
+            />
+          </Box>
         </Button>
+        <TextField
+          onChange={(e) => {
+            setImageUrl(e.target.value);
+          }}
+          placeholder="Nhập link hình ảnh"
+          size="small"
+          sx={{ " & fieldset": { backgroundColor: "white" } }}
+        ></TextField>
       </Box>
     </Box>
   );

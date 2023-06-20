@@ -8,7 +8,9 @@ import StadiumCard from "./StadiumCard";
 import useEditInfo from "../../../hooks/useEditInfo";
 import UploadImageSection from "../UploadImageSection";
 import PlayersList from "../../../components/form/PlayersList";
-
+import useProgressiveImage from "../../../hooks/useProgressiveImage";
+import clubImagePatterns from "../../../assets/patterns/clubImagePatterns.png";
+import clubImagePatterns2 from "../../../assets/patterns/clubImagePatterns2.png";
 const useStyles = makeStyles((theme) => ({
   paperContainer: {
     padding: "20px",
@@ -30,7 +32,8 @@ const ClubInfo = (props) => {
   const { isEditable, setCurrentClub } = useEditInfo();
   const [clubName, setClubName] = useState("");
   const [clubFoundedYear, setClubFoundedYear] = useState("");
-
+  const loadLogoImagePatterns = useProgressiveImage(clubImagePatterns);
+  const loadLogoImagePatterns2 = useProgressiveImage(clubImagePatterns2);
   useEffect(() => {
     if (clubName && clubFoundedYear) {
       setCurrentClub({ ten: clubName, namThanhLap: clubFoundedYear });
@@ -112,7 +115,6 @@ const ClubInfo = (props) => {
                     data={players}
                     headerSize={"h5"}
                     alignHeader={"left"}
-                    bgColor={"blueBackground.light"}
                     number={6}
                   ></PlayersList>
                 </Box>
@@ -120,28 +122,37 @@ const ClubInfo = (props) => {
             ) : null}
           </Box>
         </Grid>
-        <Grid item sm={3}>
+        <Grid
+          item
+          sm={3}
+          sx={{
+            backgroundImage: `url(${loadLogoImagePatterns2})`,
+            backgroundSize: "cover",
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center",
+          }}
+        >
           {isEditable ? (
             <Box sx={{ display: "flex", flexDirection: "column" }}>
               <UploadImageSection />
-              <Typography textAlign={"center"}>Hoặc</Typography>
-              <TextField
-                size="small"
-                sx={{ minWidth: "5rem" }}
-                placeholder="Điền link ảnh"
-                onChange={(e) => {
-                  setImageUrl(e.target.value);
-                }}
-              ></TextField>
             </Box>
           ) : (
-            <Box className={classes.allCenter}>
+            <Box className={classes.allCenter} sx={{ paddingTop: "2rem" }}>
               <img style={{ width: "200px" }} src={club?.hinhAnh}></img>
             </Box>
           )}
 
           <Box className={classes.allCenter} sx={{ mt: "1rem" }}>
-            <Typography variant="h6">Năm thành lập: </Typography>
+            <Typography
+              variant="h6"
+              sx={{
+                boxShadow: (theme) => {
+                  theme.shadows[2];
+                },
+              }}
+            >
+              Năm thành lập:{" "}
+            </Typography>
             {isEditable ? (
               <TextField
                 sx={{
@@ -153,7 +164,7 @@ const ClubInfo = (props) => {
                 onChange={(e) => setClubFoundedYear(e.target.value)}
               ></TextField>
             ) : (
-              <Typography variant="subtitle1" sx={{ ml: "0.5rem" }}>
+              <Typography variant="h6" sx={{ ml: "0.5rem" }}>
                 {club?.namThanhLap}{" "}
               </Typography>
             )}
