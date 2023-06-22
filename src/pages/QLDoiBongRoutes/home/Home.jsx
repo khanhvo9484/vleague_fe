@@ -15,18 +15,19 @@ const Dashboard = () => {
   const [club, setClub] = useState();
   const [manager, setManager] = useState();
   const [homeStadium, setHomeStadium] = useState();
-  const { isLoading, setIsLoading, notify, setNotify } = useLoading();
+
+  const [isLoading, setIsLoading] = useState(true);
+  const [notify, setNotify] = useState({ message: "", type: "" });
+  const [isEditable, setIsEditable] = useState(false);
 
   const {
-    setIsEditable,
-    isEditable,
     currentStadium,
     currentClub,
-    setIsFireUpload,
     imageUrl,
-    setImageUrl,
     isFireUpload,
     hasImageOnQueue,
+    setIsFireUpload,
+    setImageUrl,
   } = useEditInfo();
 
   const fetchClub = async () => {
@@ -95,13 +96,14 @@ const Dashboard = () => {
     }
   }, [isFireUpload]);
   return (
-    <ManagerLayout>
+    <ManagerLayout isLoading={isLoading} notify={notify}>
       <Box sx={{ ml: "2rem", paddingTop: "2rem" }}>
         <ClubInfo
           club={club}
           manager={manager}
           homeStadium={homeStadium}
           verticalLayout={true}
+          isEditable={isEditable}
         ></ClubInfo>
       </Box>
 

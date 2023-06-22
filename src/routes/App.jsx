@@ -43,7 +43,7 @@ const App = () => {
             element={<DBManageTeam></DBManageTeam>}
           ></Route>
           <Route
-            path="/manager/register-club"
+            path="/manager/register-league"
             element={<DBRegister></DBRegister>}
           ></Route>
         </Route>

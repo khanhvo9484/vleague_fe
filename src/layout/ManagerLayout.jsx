@@ -10,7 +10,6 @@ import {
 } from "@mui/icons-material";
 import { Paper, Box, Button, Typography, Grid } from "@mui/material";
 import LoadingBox from "../components/ui/LoadingBox";
-import useLoading from "../hooks/useLoading";
 
 const menuItems = [
   { text: "Trang chủ", icon: <HomeRounded />, path: "/manager/home" },
@@ -19,7 +18,11 @@ const menuItems = [
     icon: <Groups3Rounded />,
     path: "/manager/manage-club",
   },
-  { text: "Đăng ký giải đấu", icon: <AddToPhotos />, path: "/dashboard" },
+  {
+    text: "Đăng ký giải đấu",
+    icon: <AddToPhotos />,
+    path: "/manager/register-league",
+  },
   {
     text: "Danh sách hồ sơ đăng ký",
     icon: <DescriptionRounded />,
@@ -31,8 +34,7 @@ const menuItems = [
     path: "/dashboard",
   },
 ];
-const Dashboard = ({ children }) => {
-  const { isLoading, setIsLoading, notify } = useLoading();
+const Dashboard = ({ children, isLoading, notify }) => {
   return (
     <DrawerLayout menuItems={menuItems}>
       <Paper elevation={0} sx={{ margin: "1rem 1rem 0 1rem", height: "100%" }}>

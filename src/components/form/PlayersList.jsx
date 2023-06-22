@@ -2,7 +2,6 @@ import { makeStyles } from "@mui/styles";
 import {
   Paper,
   Typography,
-  CircularProgress,
   Box,
   Table,
   TableBody,
@@ -12,6 +11,9 @@ import {
   TableRow,
   Grow,
   Pagination,
+  Checkbox,
+  Button,
+  Snackbar,
 } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useTheme } from "@mui/material/styles";
@@ -60,6 +62,30 @@ const useStyles = makeStyles((theme) => ({
       borderBottomRightRadius: "4px",
     },
   },
+  rowNotHover: {
+    cursor: "pointer",
+    // "&:hover": {
+    //   backgroundColor: theme.palette.primary.dark,
+    //   "& h6": {
+    //     color: "white",
+    //   },
+    //   outline: "2px solid white",
+    // },
+    boxShadow: theme.shadows[3],
+    borderRadius: "4px",
+    backgroundColor: "white",
+    minHeight: "1rem",
+    padding: "0.5rem",
+    margin: "5rem",
+    "& td:first-child": {
+      borderTopLeftRadius: "4px",
+      borderBottomLeftRadius: "4px",
+    },
+    "& td:last-child": {
+      borderTopRightRadius: "4px",
+      borderBottomRightRadius: "4px",
+    },
+  },
   tableHeadRow: {
     // backgroundColor: theme.palette.blueBackground.dark,
     // color: "white",
@@ -85,19 +111,42 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const PlayerTable = (props) => {
-  const { data, headerSize, bgColor, alignHeader, number, isNavigatable } =
-    props;
+  const {
+    data,
+    headerSize,
+    title,
+    bgColor,
+    alignHeader,
+    number,
+    isNavigatable,
+    hasCheckbox,
+    addToList,
+    hoverEffect,
+  } = props;
 
   const theme = useTheme();
   const classes = useStyles();
   const { currentPlayer, setCurrentPlayer } = useCurrentLeague();
-  console.log(currentPlayer, "hehe");
+
   const numberPerPage = number ? number : 12;
   const [page, setPage] = useState(1);
-  console.log(data);
-  console.log(data.length, number, page);
+  const [selectedList, setSelectedList] = useState([]);
+
+  const handleAddToList = (id) => {
+    data.filter((player) => player.id !== id);
+  };
+  const handleRegisterList = (itemId) => {
+    if (selectedList.includes(itemId)) {
+      setSelectedList(selectedList.filter((id) => id !== itemId));
+    } else {
+      setSelectedList([...selectedList, itemId]);
+    }
+  };
+  useEffect(() => {
+    console.log(selectedList);
+  }, [selectedList]);
   return (
-    <>
+    <Box>
       <Paper elevation={0} sx={{ minWidth: "40vw" }}>
         <Typography
           variant={headerSize ? headerSize : "h3"}
@@ -105,7 +154,7 @@ const PlayerTable = (props) => {
           justifyContent={alignHeader ? "flex-start" : "center"}
           paddingLeft={alignHeader ? "1rem" : "0"}
         >
-          Danh sách cầu thủ
+          {title ? title : "Danh sách cầu thủ"}
         </Typography>
 
         <TableContainer
@@ -126,6 +175,7 @@ const PlayerTable = (props) => {
           >
             <TableHead>
               <TableRow className={classes.tableHeadRow}>
+                {hasCheckbox && <TableCell align="center"></TableCell>}
                 <TableCell align="center">
                   <Typography variant="h6" sx={{}}>
                     #
@@ -150,6 +200,7 @@ const PlayerTable = (props) => {
                 <TableCell align="center">
                   <Typography variant="h6">Số áo</Typography>
                 </TableCell>
+                {addToList && <TableCell align="center"></TableCell>}
               </TableRow>
             </TableHead>
             <TableBody
@@ -167,13 +218,27 @@ const PlayerTable = (props) => {
                   >
                     <TableRow
                       key={index}
-                      className={`${classes.row} ${
-                        item?.id == currentPlayer ? classes.playerSelected : ""
+                      className={`${
+                        hoverEffect === false
+                          ? classes.rowNotHover
+                          : classes.row
+                      } ${
+                        item?.id == currentPlayer && hoverEffect !== false
+                          ? classes.playerSelected
+                          : ""
                       }`}
                       onClick={() => {
                         setCurrentPlayer(item?.id);
                       }}
                     >
+                      {hasCheckbox && (
+                        <TableCell align="center" sx={{ padding: "8px" }}>
+                          <Checkbox
+                            checked={selectedList.includes(item.id)}
+                            onChange={() => handleRegisterList(item.id)}
+                          ></Checkbox>
+                        </TableCell>
+                      )}
                       <TableCell align="center" sx={{ padding: "8px" }}>
                         <Typography
                           variant="h6"
@@ -229,6 +294,16 @@ const PlayerTable = (props) => {
                           {item?.soAo}
                         </Typography>
                       </TableCell>
+                      {addToList && (
+                        <TableCell align="center" sx={{ padding: "8px" }}>
+                          <Button
+                            onClick={() => handleAddToList(item.id)}
+                            variant="outlined"
+                          >
+                            Thêm vào đội
+                          </Button>
+                        </TableCell>
+                      )}
                     </TableRow>
                   </Grow>
                 ))}
@@ -254,7 +329,8 @@ const PlayerTable = (props) => {
           ></Pagination>
         </Box>
       </Paper>
-    </>
+      <Box />
+    </Box>
   );
 };
 

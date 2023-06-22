@@ -21,11 +21,15 @@ export const AuthProvider = ({ children }) => {
   };
 
   const getCookie = (name) => {
+    // console.log(document.cookie);
     const cookies = document.cookie.split("; ");
     for (let i = 0; i < cookies.length; i++) {
-      const cookie = cookies[i].split("=");
-      if (cookie[0] === name) {
-        return cookie[1];
+      const equalsIndex = cookies[i].indexOf("=");
+      if (equalsIndex !== -1) {
+        const cookieName = cookies[i].substring(0, equalsIndex);
+        if (cookieName === name) {
+          return cookies[i].substring(equalsIndex + 1);
+        }
       }
     }
     return null;
@@ -40,6 +44,7 @@ export const AuthProvider = ({ children }) => {
 
   const getStoredAuth = () => {
     const storedAuth = getCookie("auth");
+    // console.log(storedAuth);
     return storedAuth ? JSON.parse(storedAuth) : null;
   };
 

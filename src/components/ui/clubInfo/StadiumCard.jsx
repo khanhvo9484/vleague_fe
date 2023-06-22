@@ -26,8 +26,7 @@ const useStyles = makeStyles((theme) => ({
 
 const StadiumCard = (props) => {
   const classes = useStyles();
-  const { homeStadium, verticalLayout, hasEditPermit } = props;
-  const { isEditable, setCurrentStadium } = useEditClubInfo();
+  const { homeStadium, verticalLayout, isEditable, setCurrentStadium } = props;
   const [isLoading, setIsLoading] = useState(false);
   const [stadiums, setStadiums] = useState([]);
   const [newStadium, setNewStadium] = useState("");
@@ -44,7 +43,6 @@ const StadiumCard = (props) => {
   }, [isEditable]);
   useEffect(() => {
     if (newStadium) {
-      console.log("newstd", newStadium);
       setCurrentStadium(newStadium);
     }
   }, [newStadium]);

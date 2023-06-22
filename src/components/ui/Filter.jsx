@@ -6,7 +6,6 @@ import {
   Box,
   Typography,
 } from "@mui/material";
-import { makeStyles } from "@mui/styles";
 import { Clear as ClearIcon, Search as SearchIcon } from "@mui/icons-material";
 const Filter = (props) => {
   const { placeholder, width, onFilterChange } = props;

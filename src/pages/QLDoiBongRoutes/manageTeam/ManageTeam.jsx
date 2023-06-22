@@ -5,11 +5,44 @@ import MyAxios from "../../../api/MyAxios";
 import { useState, useEffect } from "react";
 import useAuth from "../../../hooks/useAuth";
 import { makeStyles } from "@mui/styles";
-import useLoading from "../../../hooks/useLoading";
 import ManagerLayout from "../../../layout/ManagerLayout";
 import PlayerLargeCard from "../../../components/ui/PlayerLargeCard";
 import { styled } from "@mui/material/styles";
-import { Tabs, Tab, Paper } from "@mui/material";
+import { Tabs, Tab, Paper, Typography } from "@mui/material";
+import PropTypes from "prop-types";
+import AddNewPlayerToClub from "./AddNewPlayerToClub";
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          <Box>{children}</Box>
+        </Box>
+      )}
+    </div>
+  );
+}
+
+TabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.number.isRequired,
+  value: PropTypes.number.isRequired,
+};
+
+function a11yProps(index) {
+  return {
+    id: `simple-tab-${index}`,
+    "aria-controls": `simple-tabpanel-${index}`,
+  };
+}
 
 const useStyles = makeStyles((theme) => ({}));
 const StyledTabs = styled((props) => (
@@ -49,13 +82,26 @@ import useCurrentLeague from "../../../hooks/useCurrentLeague";
 import useEditInfo from "../../../hooks/useEditInfo";
 const ManageTeam = () => {
   const { auth } = useAuth();
-  const { setIsLoading, setNotify } = useLoading();
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [notify, setNotify] = useState({
+    isOpen: false,
+    message: "",
+    type: "",
+  });
+  const [isEditable, setIsEditable] = useState(false);
+
   const [players, setPlayers] = useState([]);
   const [clubs, setClubs] = useState([]);
   const { setCurrentPlayer, currentPlayer } = useCurrentLeague();
   const [player, setPlayer] = useState({});
-  const { isEditable } = useEditInfo();
-
+  const [currentTab, setCurrentTab] = useState(0);
+  const handleChangeTab = (event, newValue) => {
+    if (newValue == 1) {
+      // setIsLoadingComponent(true);
+    }
+    setCurrentTab(newValue);
+  };
   useEffect(() => {
     players.find((item) => item.id == currentPlayer && setPlayer(item));
   }, [currentPlayer]);
@@ -78,7 +124,7 @@ const ManageTeam = () => {
     }
   }, []);
   return (
-    <ManagerLayout>
+    <ManagerLayout isLoading={isLoading} notify={notify}>
       <Box sx={{ margin: "0 2rem 0 2rem", paddingTop: "1rem" }}>
         <Paper
           elevation={0}
@@ -87,30 +133,41 @@ const ManageTeam = () => {
           }}
         >
           <StyledTabs
-            value={1}
-            // onChange={handleChange}
+            value={currentTab}
+            onChange={handleChangeTab}
             aria-label="styled tabs example"
           >
-            <StyledTab label="Danh sách" />
-            <StyledTab label="Thêm cầu thủ" />
-            <StyledTab label="Connections" />
+            <StyledTab value={0} label="Danh sách"></StyledTab>
+            <StyledTab value={1} label="Thêm cầu thủ"></StyledTab>
           </StyledTabs>
-        </Paper>
-        <Grid
-          container
-          spacing={0}
-          justifyContent={isEditable ? "flex-start" : "space-between"}
-        >
-          {!isEditable && (
-            <Grid item xs={8} sm={8} lg={8}>
-              <PlayersList data={players} />
-            </Grid>
-          )}
+          <TabPanel value={currentTab} index={0}>
+            <Grid
+              container
+              spacing={0}
+              justifyContent={isEditable ? "flex-start" : "space-between"}
+            >
+              {!isEditable && (
+                <Grid item xs={8} sm={8} lg={8}>
+                  <PlayersList data={players} isEditable={isEditable} />
+                </Grid>
+              )}
 
-          <Grid item xs={isEditable ? 12 : 3} sm={isEditable ? 12 : 3}>
-            <PlayerLargeCard player={player}></PlayerLargeCard>
-          </Grid>
-        </Grid>
+              <Grid item xs={isEditable ? 12 : 3} sm={isEditable ? 12 : 3}>
+                <PlayerLargeCard
+                  isEditable={isEditable}
+                  setIsEditable={setIsEditable}
+                  player={player}
+                ></PlayerLargeCard>
+              </Grid>
+            </Grid>
+          </TabPanel>
+
+          <TabPanel value={currentTab} index={1}>
+            <Box>
+              <AddNewPlayerToClub></AddNewPlayerToClub>
+            </Box>
+          </TabPanel>
+        </Paper>
       </Box>
     </ManagerLayout>
   );

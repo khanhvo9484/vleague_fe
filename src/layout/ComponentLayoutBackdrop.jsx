@@ -1,8 +1,14 @@
-import { Box, Paper, Backdrop, CircularProgress } from "@mui/material";
-import useLoading from "../hooks/useLoading";
+import {
+  Box,
+  Paper,
+  Backdrop,
+  CircularProgress,
+  Typography,
+} from "@mui/material";
 import LoadingBox from "../components/ui/LoadingBox";
-const ComponentLayout = () => {
-  const { isLoading, notify, setIsLoading } = useLoading();
+const ComponentLayout = (props) => {
+  const { isLoading, notify } = props;
+  const { children, componentName } = props;
   return (
     <Paper elevation={0} sx={{ margin: "0rem 0rem 0 0rem", height: "100%" }}>
       {isLoading && (
@@ -13,7 +19,7 @@ const ComponentLayout = () => {
           <LoadingBox></LoadingBox>
         </Backdrop>
       )}
-      {!isLoading && notify.message && (
+      {!isLoading && notify?.message && (
         <Box
           sx={{
             padding: "1rem",
@@ -33,12 +39,12 @@ const ComponentLayout = () => {
               borderRadius: "4px",
             }}
           >
-            {notify.message}
+            {notify?.message}
           </Typography>
         </Box>
       )}
 
-      {!isLoading && !notify.message && <Box>{children}</Box>}
+      {!isLoading && !notify?.message && <Box>{children}</Box>}
     </Paper>
   );
 };

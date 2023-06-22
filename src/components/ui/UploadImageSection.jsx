@@ -6,22 +6,16 @@ import { storage } from "../../firebase/FirebaseConfig";
 import { getDownloadURL, ref as refs, uploadBytes } from "firebase/storage";
 import { v4 } from "uuid";
 import useEditInfo from "../../hooks/useEditInfo";
-import { set } from "date-fns";
 const UploadImageSection = () => {
-  const {
-    isFireUpload,
-    setIsUploadingImage,
-    setImageUrl,
-    imageUrl,
-    setHasImageOnQueue,
-  } = useEditInfo();
+  const { setImageUrl, setHasImageOnQueue, isFireUpload, imageUrl } =
+    useEditInfo();
   const [selectedImage, setSelectedImage] = useState("");
   const [selectedImageFile, setSelectedImageFile] = useState(null);
+
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     if (file) {
       setSelectedImageFile(file);
-      console.log("I added to queue");
       setHasImageOnQueue(true);
       const reader = new FileReader();
       reader.onload = (e) => {
@@ -70,7 +64,11 @@ const UploadImageSection = () => {
           />
           <Box textAlign={"center"}>
             <img
-              style={{ width: "200px", borderRadius: "4px" }}
+              style={{
+                width: "200px",
+                borderRadius: "4px",
+                maxHeight: "200px",
+              }}
               src={selectedImage || defaultImage.image}
               alt="Selected Image"
             />
@@ -82,7 +80,10 @@ const UploadImageSection = () => {
           }}
           placeholder="Nhập link hình ảnh"
           size="small"
-          sx={{ " & fieldset": { backgroundColor: "white" } }}
+          sx={{
+            input: { color: "primary.main", backgroundColor: "white" },
+          }}
+          value={imageUrl}
         ></TextField>
       </Box>
     </Box>

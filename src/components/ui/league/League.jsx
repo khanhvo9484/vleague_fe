@@ -58,7 +58,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 const showedItem = 4;
-const League = () => {
+const League = (props) => {
+  const { background, headerSize } = { ...props };
   const classes = useStyles();
   const [isLoading, setIsLoading] = useState(false);
   const [listItem, setListItem] = useState([]);
@@ -112,10 +113,16 @@ const League = () => {
 
   return (
     <Paper elevation={3}>
-      <Typography className={classes.title} variant="h3">
+      <Typography
+        className={classes.title}
+        variant={headerSize ? headerSize : "h3"}
+      >
         Mùa giải hiện tại
       </Typography>
-      <List className={classes.leagueList}>
+      <List
+        className={classes.leagueList}
+        sx={{ backgroundColor: background ? background : "" }}
+      >
         {isLoading ? (
           <Box className={classes.loadingBox}>
             <CircularProgress />

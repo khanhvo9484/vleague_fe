@@ -7,11 +7,28 @@ export const EditClubProvider = ({ children }) => {
   const [currentClub, setCurrentClub] = useState();
   const [isEditable, setIsEditable] = useState(false);
   const [isFireUpload, setIsFireUpload] = useState(false);
-  const [imageUrl, setImageUrl] = useState(false);
+  const [imageUrl, setImageUrl] = useState("");
   const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [hasImageOnQueue, setHasImageOnQueue] = useState(false);
   const [openNotiBox, setOpenNotiBox] = useState(false);
   const [isAccept, setIsAccept] = useState("");
+  const resetImage = () => {
+    setImageUrl("");
+    setIsUploadingImage(false);
+    setHasImageOnQueue(false);
+    setIsFireUpload(false);
+  };
+  const resetAll = () => {
+    setCurrentStadium();
+    setCurrentClub();
+    setIsEditable(false);
+    setIsFireUpload(false);
+    setImageUrl("");
+    setIsUploadingImage(false);
+    setHasImageOnQueue(false);
+    setOpenNotiBox(false);
+    setIsAccept("");
+  };
   return (
     <EditClubContext.Provider
       value={{
@@ -33,6 +50,8 @@ export const EditClubProvider = ({ children }) => {
         setOpenNotiBox,
         isAccept,
         setIsAccept,
+        resetImage,
+        resetAll,
       }}
     >
       {children}

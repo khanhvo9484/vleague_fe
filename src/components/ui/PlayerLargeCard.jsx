@@ -23,7 +23,6 @@ import MyAxios from "../../api/MyAxios";
 import ConfirmBox from "./ConfirmBox";
 import ComponentLayoutBackdrop from "../../layout/ComponentLayoutBackdrop";
 import useLoading from "../../hooks/useLoading";
-import { is } from "date-fns/locale";
 const useStyles = makeStyles((theme) => ({
   detailBox: {
     border: "2px solid #ffffffff",
@@ -54,12 +53,20 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const currentPlayerLargeCard = (props) => {
-  const { isLoading, setIsLoading, notify, setNotify } = useLoading();
   const classes = useStyles();
-  const { player } = props;
+  const { player, isEditable, setIsEditable } = props;
   const { currentPlayer } = useCurrentLeague();
-  const { isEditable, setIsEditable, setOpenNotiBox, openNotiBox, isAccept } =
-    useEditInfo();
+  const {
+    setOpenNotiBox,
+    openNotiBox,
+    isAccept,
+    hasImageOnQueue,
+    imageUrl,
+    resetAll,
+  } = useEditInfo();
+  const [isLoading, setIsLoading] = useState(false);
+  const [notify, setNotify] = useState({ message: "", type: "" });
+
   const [playerName, setPlayerName] = useState("");
   const [playerNumber, setPlayerNumber] = useState(0);
   const [playerDOB, setPlayerDOB] = useState("");
@@ -106,16 +113,52 @@ const currentPlayerLargeCard = (props) => {
     //   const res = await MyAxios.put(`/cau-thu/${player?.id}`);
     // } catch (err) {}
   };
-  useEffect(() => {
+  useEffect(async () => {
     if (isAccept) {
-      //   setIsLoading(true);
     }
   }, [isAccept]);
+  const handleSubmitChange = async () => {
+    setIsLoading(true);
+    try {
+      if (hasImageOnQueue) {
+        let count = 0;
+        while (imageUrl == "") {
+          if (count > 10) break;
+          await new Promise((r) => setTimeout(r, 500));
+          count++;
+        }
+      }
+      const sendData = JSON.stringify({
+        idDoi: player?.idDoi,
+        id: player?.id,
+        hoTen: playerName ? playerName : player?.hoTen,
+        soAo: playerNumber ? playerNumber : player?.soAo,
+        ngaySinh: playerDOB
+          ? Helper.formatDateToUTC(playerDOB)
+          : player?.ngaySinh,
+        quocTich: playerNationality ? playerNationality : player?.quocTich,
+        queQuan: playerHomeTown ? playerHomeTown : player?.queQuan,
+        maDinhDanh: playerIdentity ? playerIdentity : player?.maDinhDanh,
+        // trangThai: playerStatus? playerStatus: player?.trangThai,
+        loaiCauThu: playerType ? playerType : player?.loaiCauThu,
+        viTri: playerPosition ? playerPosition : player?.viTri,
+        hinhAnh: imageUrl ? imageUrl : player?.hinhAnh,
+      });
+      const res = await MyAxios.put(`/cauthu`, sendData, {
+        headers: { contentType: "application/json" },
+      });
+    } catch (err) {
+      console.log(err);
+      setNotify({ message: err.message, type: "error" });
+    } finally {
+      setIsLoading(false);
+    }
+  };
   return (
-    <ComponentLayoutBackdrop>
+    <ComponentLayoutBackdrop isLoading={isLoading} notify={notify}>
       <Collapse
         key={player?.id}
-        in={currentPlayer}
+        in={true}
         orientation="vertical"
         timeout={1000}
       >
@@ -163,8 +206,8 @@ const currentPlayerLargeCard = (props) => {
             <Grid item xs={isEditable ? 2 : 3} sx={{ alignSelf: "center" }}>
               <Box
                 sx={{
-                  display: "flex",
-                  justifyContent: "flex-end",
+                  // display: "flex",
+                  // justifyContent: "flex-end",
                   height: "200px",
                 }}
               >
@@ -177,7 +220,7 @@ const currentPlayerLargeCard = (props) => {
                       }}
                       sx={{
                         backgroundColor: "white",
-                        marginTop: "-0.5rem",
+                        // marginTop: "-0.5rem",
                         mr: "0.5rem",
                         "&:hover": {
                           backgroundColor: "primary.light",
@@ -362,7 +405,7 @@ const currentPlayerLargeCard = (props) => {
                   disabled={!isEditable}
                   value={playerPosition.join(", ")}
                   onChange={(e) => {
-                    setPlayerPosition(e.target.value);
+                    setPlayerPosition(e.target.value.split(", "));
                   }}
                   sx={{
                     input: { color: "primary.dark", padding: "5px" },
@@ -373,7 +416,7 @@ const currentPlayerLargeCard = (props) => {
             <Grid container className={classes.detailBoxRow}>
               <Typography variant="h6">Tổng số bàn thắng:</Typography>
               <Typography variant="body1" sx={{ ml: "1rem" }}>
-                {currentPlayer.tongSoBanThang || 0}
+                {currentPlayer?.tongSoBanThang || 0}
               </Typography>
             </Grid>
             <Grid container className={classes.detailBoxRow}>
@@ -405,10 +448,18 @@ const currentPlayerLargeCard = (props) => {
                 <Box
                   sx={{ display: "flex", justifyContent: "end", width: "100%" }}
                 >
-                  <IconButton>
+                  <IconButton
+                    onClick={() => {
+                      handleSubmitChange();
+                    }}
+                  >
                     <Check color="success"></Check>
                   </IconButton>
-                  <IconButton>
+                  <IconButton
+                    onClick={() => {
+                      setIsEditable(false);
+                    }}
+                  >
                     <Close color="error"></Close>
                   </IconButton>
                 </Box>

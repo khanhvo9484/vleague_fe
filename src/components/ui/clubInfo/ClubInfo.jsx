@@ -26,12 +26,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 const ClubInfo = (props) => {
-  const { imageUrl, setImageUrl } = useEditInfo();
-  const { club, manager, homeStadium, players, verticalLayout } = props;
+  const { club, manager, homeStadium, players, verticalLayout, isEditable } =
+    props;
+  const {
+    setCurrentClub,
+    setCurrentStadium,
+    setImageUrl,
+    setHasImageOnQueue,
+    isFireUpload,
+  } = useEditInfo();
   const classes = useStyles();
-  const { isEditable, setCurrentClub } = useEditInfo();
   const [clubName, setClubName] = useState("");
   const [clubFoundedYear, setClubFoundedYear] = useState("");
+
   const loadLogoImagePatterns = useProgressiveImage(clubImagePatterns);
   const loadLogoImagePatterns2 = useProgressiveImage(clubImagePatterns2);
   useEffect(() => {
@@ -98,6 +105,8 @@ const ClubInfo = (props) => {
                   <StadiumCard
                     homeStadium={homeStadium}
                     verticalLayout={verticalLayout}
+                    isEditable={isEditable}
+                    setCurrentStadium={setCurrentStadium}
                   ></StadiumCard>
                 </Box>
               </Box>
