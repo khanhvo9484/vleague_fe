@@ -6,10 +6,10 @@ import useAuth from "../../../hooks/useAuth";
 import ClubInfo from "../../../components/ui/clubInfo/ClubInfo";
 import MyAxios from "../../../api/MyAxios";
 import { Paper, Box, Button, Typography, Grid } from "@mui/material";
-import LoadingBox from "../../../components/ui/LoadingBox";
 import useEditInfo from "../../../hooks/useEditInfo";
-import ManagerLayout from "../../../layout/ManagerLayout";
+import OrganizerLayout from "../../../layout/OrganizerLayout";
 import useLoading from "../../../hooks/useLoading";
+import AllLeagues from "../../../components/ui/AllLeagues";
 const Dashboard = () => {
   const authContext = useAuth();
   const [club, setClub] = useState();
@@ -95,67 +95,23 @@ const Dashboard = () => {
     }
   }, [isFireUpload]);
   return (
-    <ManagerLayout>
-      <Box sx={{ ml: "2rem", paddingTop: "2rem" }}>
-        <ClubInfo
-          club={club}
-          manager={manager}
-          homeStadium={homeStadium}
-          verticalLayout={true}
-        ></ClubInfo>
-      </Box>
-
-      <Grid container spacing={0}>
-        <Grid item xs={8} md={8}>
-          {!isLoading && !notify.message && (
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "flex-end",
-              }}
-            >
-              {!isEditable && (
-                <Button
-                  variant="contained"
-                  onClick={() => {
-                    setIsEditable(true);
-                  }}
-                  color="primary"
-                >
-                  <Typography variant="h6"> Sửa thông tin</Typography>
-                </Button>
-              )}
-              {isEditable && (
-                <>
-                  <Button
-                    variant="contained"
-                    onClick={() => {
-                      handleUpdateClubInfo();
-                    }}
-                    color="secondary"
-                    sx={{ marginRight: "1rem" }}
-                  >
-                    <Typography variant="h6" color={"white"}>
-                      {" "}
-                      Cập nhật
-                    </Typography>
-                  </Button>
-                  <Button
-                    variant="contained"
-                    onClick={() => {
-                      setIsEditable(false);
-                    }}
-                    color="error"
-                  >
-                    <Typography variant="h6"> Hủy</Typography>
-                  </Button>
-                </>
-              )}
-            </Box>
-          )}
+    <OrganizerLayout>
+      <AllLeagues></AllLeagues>
+      <Box>
+        <Typography>Quy định mùa giải</Typography>
+        <Grid container>
+          <Grid item xs={12} sm={6}>
+            <Typography> Quy định cầu thủ</Typography>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Typography> Quy định tính điểm</Typography>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Typography> Quy định trọng tài</Typography>
+          </Grid>
         </Grid>
-      </Grid>
-    </ManagerLayout>
+      </Box>
+    </OrganizerLayout>
   );
 };
 

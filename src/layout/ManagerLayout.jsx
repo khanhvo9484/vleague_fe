@@ -39,7 +39,7 @@ const Dashboard = ({ children, isLoading, notify }) => {
     <DrawerLayout menuItems={menuItems}>
       <Paper elevation={0} sx={{ margin: "1rem 1rem 0 1rem", height: "100%" }}>
         {isLoading && <LoadingBox></LoadingBox>}
-        {!isLoading && notify.message && (
+        {!isLoading && notify?.message && (
           <Box
             sx={{
               padding: "1rem",
@@ -64,7 +64,7 @@ const Dashboard = ({ children, isLoading, notify }) => {
           </Box>
         )}
 
-        {!isLoading && !notify.message && <Box>{children}</Box>}
+        {!isLoading && !notify?.message && <Box>{children}</Box>}
       </Paper>
     </DrawerLayout>
   );

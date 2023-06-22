@@ -8,7 +8,6 @@ import {
   AddToPhotos,
   BarChart,
   CalendarMonth,
-  CheckList,
   EmojiEvents,
   EmojiFlags,
   LibraryAddCheck,
@@ -36,13 +35,12 @@ const menuItems = [
     path: "/dashboard",
   },
 ];
-const Dashboard = ({ children }) => {
-  const { isLoading, setIsLoading, notify } = useLoading();
+const Dashboard = ({ children, isLoading, notify }) => {
   return (
     <DrawerLayout menuItems={menuItems}>
       <Paper elevation={0} sx={{ margin: "1rem 1rem 0 1rem", height: "100%" }}>
         {isLoading && <LoadingBox></LoadingBox>}
-        {!isLoading && notify.message && (
+        {!isLoading && notify?.message && (
           <Box
             sx={{
               padding: "1rem",
@@ -67,7 +65,7 @@ const Dashboard = ({ children }) => {
           </Box>
         )}
 
-        {!isLoading && !notify.message && <Box>{children}</Box>}
+        {!isLoading && !notify?.message && <Box>{children}</Box>}
       </Paper>
     </DrawerLayout>
   );

@@ -122,6 +122,8 @@ const PlayerTable = (props) => {
     hasCheckbox,
     addToList,
     hoverEffect,
+    selectedList,
+    setSelectedList,
   } = props;
 
   const theme = useTheme();
@@ -130,7 +132,6 @@ const PlayerTable = (props) => {
 
   const numberPerPage = number ? number : 12;
   const [page, setPage] = useState(1);
-  const [selectedList, setSelectedList] = useState([]);
 
   const handleAddToList = (id) => {
     data.filter((player) => player.id !== id);
