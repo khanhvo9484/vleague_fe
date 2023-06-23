@@ -5,6 +5,11 @@ export const defaultImage = {
   player:
     "https://firebasestorage.googleapis.com/v0/b/myleague-c54ab.appspot.com/o/soccer-player.png?alt=media&token=a26f3bff-94a0-40d2-a9ae-e902f5381759",
 };
+export const status = {
+  0: "Đang đăng ký",
+  1: "Đã bắt đầu",
+  2: "Đã kết thúc",
+};
 export const footballPosition = {
   AM: "Tiền vệ tấn công",
   CM: "Tiền vệ trung tâm",

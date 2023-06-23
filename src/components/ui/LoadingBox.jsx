@@ -1,6 +1,7 @@
 import { Box, CircularProgress } from "@mui/material";
 
-const LoadingBox = () => {
+const LoadingBox = (props) => {
+  const { color } = props;
   return (
     <Box
       sx={{
@@ -11,7 +12,7 @@ const LoadingBox = () => {
         height: "100%",
       }}
     >
-      <CircularProgress></CircularProgress>
+      <CircularProgress sx={{ color: color ? color : "" }}></CircularProgress>
     </Box>
   );
 };

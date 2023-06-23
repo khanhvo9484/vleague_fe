@@ -6,7 +6,7 @@ import {
   Typography,
 } from "@mui/material";
 import LoadingBox from "../components/ui/LoadingBox";
-const ComponentLayout = (props) => {
+const ComponentLayoutBackdrop = (props) => {
   const { isLoading, notify } = props;
   const { children, componentName } = props;
   return (
@@ -16,37 +16,12 @@ const ComponentLayout = (props) => {
           sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer - 1 }}
           open={isLoading}
         >
-          <LoadingBox></LoadingBox>
+          <LoadingBox color={"white"}></LoadingBox>
         </Backdrop>
       )}
-      {!isLoading && notify?.message && (
-        <Box
-          sx={{
-            padding: "1rem",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "100%",
-            opacity: "0.5",
-          }}
-        >
-          <Typography
-            variant="h6"
-            sx={{
-              backgroundColor: `${notify.type}.light`,
-              color: `${notify.type}.main`,
-              padding: "1rem",
-              borderRadius: "4px",
-            }}
-          >
-            {notify?.message}
-          </Typography>
-        </Box>
-      )}
-
-      {!isLoading && !notify?.message && <Box>{children}</Box>}
+      <Box>{children}</Box>
     </Paper>
   );
 };
 
-export default ComponentLayout;
+export default ComponentLayoutBackdrop;

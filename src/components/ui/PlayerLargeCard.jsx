@@ -31,7 +31,6 @@ const useStyles = makeStyles((theme) => ({
   },
   detailBoxRow: {
     display: "flex",
-    // justifyItems: "center",
     alignItems: "center",
     marginBottom: "0.5rem",
     color: theme.palette.primary.dark,

@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import Home from "../pages/publicRoutes/home/Home";
 import Login from "../pages/publicRoutes/login/Login";
-import Dashboard from "../pages/QLGiaiDauRoutes/allLeague/AllLeague";
+import Dashboard from "../pages/QLGiaiDauRoutes/seasonRules/SeasonRules";
 // import PlayerInfor from "../pages/playerInfor/PlayerInfor";
 import Player from "../pages/publicRoutes/player/Player";
 import AllPlayers from "../pages/publicRoutes/allPlayers/AllPlayers";
@@ -11,7 +11,8 @@ import AllClubs from "../pages/publicRoutes/allClubs/AllClubs";
 import Standings from "../pages/publicRoutes/standings/Standings";
 import Schedule from "../pages/publicRoutes/schedule/Schedule";
 
-import GDAllLeague from "../pages/QLGiaiDauRoutes/allLeague/AllLeague";
+import GDSeasonRules from "../pages/QLGiaiDauRoutes/seasonRules/SeasonRules";
+import GDLeaguesList from "../pages/QLGiaiDauRoutes/leaguesList/LeaguesList";
 
 import DBHome from "../pages/QLDoiBongRoutes/home/Home";
 import DBManageTeam from "../pages/QLDoiBongRoutes/manageTeam/ManageTeam";
@@ -50,7 +51,12 @@ const App = () => {
 
         {/* Protected route for admin */}
         <Route element={<RequiredAuth allowedRoles={["QLGD"]} />}>
-          <Route exact path="/organizer/home" element={<GDAllLeague />} />
+          <Route path="/organizer/season-rules" element={<GDSeasonRules />} />
+          <Route
+            exact
+            path="/organizer/all-leagues"
+            element={<GDLeaguesList />}
+          />
         </Route>
         <Route
           exact

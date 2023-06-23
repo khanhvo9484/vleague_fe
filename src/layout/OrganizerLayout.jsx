@@ -11,31 +11,38 @@ import {
   EmojiEvents,
   EmojiFlags,
   LibraryAddCheck,
+  Segment,
+  SportsSoccer,
 } from "@mui/icons-material";
 import { Paper, Box, Button, Typography, Grid } from "@mui/material";
 import LoadingBox from "../components/ui/LoadingBox";
 import useLoading from "../hooks/useLoading";
 
 const menuItems = [
-  { text: "Danh sách mùa giải", icon: <EmojiFlags />, path: "/manager/home" },
+  {
+    text: "Danh sách mùa giải",
+    icon: <EmojiFlags />,
+    path: "/organizer/all-leagues",
+  },
   {
     text: "Quản lý đội bóng",
     icon: <Groups3Rounded />,
     path: "/manager/manage-club",
   },
-  { text: "Đăng ký giải đấu", icon: <AddToPhotos />, path: "/dashboard" },
+  { text: "Quản lý trận đấu", icon: <SportsSoccer />, path: "/manager/match" },
   {
     text: "Danh sách hồ sơ đăng ký",
     icon: <DescriptionRounded />,
     path: "/dashboard",
   },
   {
-    text: "Bảng xếp hạng",
-    icon: <BarChart />,
-    path: "/dashboard",
+    text: "Quy định mùa giải",
+    icon: <Segment />,
+    path: "/organizer/season-rules",
   },
 ];
-const Dashboard = ({ children, isLoading, notify }) => {
+const Dashboard = ({ children, isLoading, notify, title }) => {
+  document.title = title;
   return (
     <DrawerLayout menuItems={menuItems}>
       <Paper elevation={0} sx={{ margin: "1rem 1rem 0 1rem", height: "100%" }}>
@@ -65,7 +72,20 @@ const Dashboard = ({ children, isLoading, notify }) => {
           </Box>
         )}
 
-        {!isLoading && !notify?.message && <Box>{children}</Box>}
+        {!isLoading && !notify?.message && (
+          <Box>
+            <Typography
+              variant="h3"
+              sx={{
+                mb: "0.5rem",
+                // fontFamily: "Source Sans 3",
+              }}
+            >
+              {title}
+            </Typography>
+            {children}
+          </Box>
+        )}
       </Paper>
     </DrawerLayout>
   );
