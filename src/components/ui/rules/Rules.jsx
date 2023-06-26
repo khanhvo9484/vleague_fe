@@ -71,26 +71,31 @@ const Rules = (props) => {
           title={"Số lượng cầu thủ tối đa"}
           value={maxPlayer}
           setValue={setMaxPlayer}
+          isEditable={isEditable}
         ></OneRow>
         <OneRow
           title="Số lượng cầu thủ tối thiểu"
           value={minPlayer}
           setValue={setMinPlayer}
+          isEditable={isEditable}
         ></OneRow>
         <OneRow
           title="Số cầu thủ nước ngoài tối đa"
           value={maxForeignPlayer}
           setValue={setMaxForeignPlayer}
+          isEditable={isEditable}
         ></OneRow>
         <OneRow
           title="Tuổi tối thiểu"
           value={minAge}
           setValue={setMinAge}
+          isEditable={isEditable}
         ></OneRow>
         <OneRow
           title="Tuổi tối đa"
           value={maxAge}
           setValue={setMaxAge}
+          isEditable={isEditable}
         ></OneRow>
       </Grid>
       <Grid item container xs={6} className={classes.ruleSection}>
@@ -103,16 +108,19 @@ const Rules = (props) => {
             title="Thắng"
             value={winPoint}
             setValue={setWinPoint}
+            isEditable={isEditable}
           ></OneRow>
           <OneRow
             title="Hòa"
             value={drawPoint}
             setValue={setDrawPoint}
+            isEditable={isEditable}
           ></OneRow>
           <OneRow
             title="Thua"
             value={losePoint}
             setValue={setLosePoint}
+            isEditable={isEditable}
           ></OneRow>
         </Grid>
         <Grid item xs={12}>
@@ -124,6 +132,7 @@ const Rules = (props) => {
             title="Số lượng đội"
             value={numberOfClubs}
             setValue={setNumberOfClubs}
+            isEditable={isEditable}
           ></OneRow>
         </Grid>
       </Grid>

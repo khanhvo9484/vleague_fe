@@ -13,6 +13,7 @@ import {
   LibraryAddCheck,
   Segment,
   SportsSoccer,
+  EditNote,
 } from "@mui/icons-material";
 import { Paper, Box, Button, Typography, Grid } from "@mui/material";
 import LoadingBox from "../components/ui/LoadingBox";
@@ -25,15 +26,15 @@ const menuItems = [
     path: "/organizer/all-leagues",
   },
   {
-    text: "Quản lý đội bóng",
-    icon: <Groups3Rounded />,
-    path: "/manager/manage-club",
+    text: "Tạo lịch thi đấu",
+    icon: <EditNote />,
+    path: "/organizer/create-schedule",
   },
   { text: "Quản lý trận đấu", icon: <SportsSoccer />, path: "/manager/match" },
   {
     text: "Danh sách hồ sơ đăng ký",
     icon: <DescriptionRounded />,
-    path: "/dashboard",
+    path: "/organizer/league-registration",
   },
   {
     text: "Quy định mùa giải",

@@ -33,9 +33,9 @@ const UserMenu = () => {
   };
   const handleGoToDashboard = () => {
     if (AuthContext?.auth?.role === "QLDB") {
-      navigate("/manager/dashboard", { replace: true });
+      navigate("/manager/home", { replace: true });
     } else if (AuthContext?.auth?.role === "QLGD") {
-      navigate("/organizer/dashboard", { replace: true });
+      navigate("/organizer/all-leagues", { replace: true });
     }
     handleMenuClose();
   };

@@ -60,6 +60,8 @@ export default function Login() {
       const dob = data?.ngaySinh;
       const image = data?.hinhAnh;
       const teamId = data?.id_doibong;
+      const id = data?.id_quanly;
+
       let storageOption = "cookieStorage";
       if (isRemember === "remember") {
         storageOption = "localStorage";
@@ -67,7 +69,17 @@ export default function Login() {
         storageOption = "cookieStorage";
       }
       handleStorageOptionChange(storageOption);
-      updateAuth({ username, password, role, token, teamId, name, dob, image });
+      updateAuth({
+        username,
+        password,
+        role,
+        token,
+        teamId,
+        name,
+        dob,
+        image,
+        id,
+      });
       setNotify({ message: "Đăng nhập thành công", status: "success" });
       setIsFirstLogin(true);
       setTimeout(() => {

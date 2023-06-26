@@ -52,7 +52,7 @@ const OneRow = (props) => {
           }}
           disabled={!isEditable}
           className={!isEditable ? classes.disableTextField : ""}
-          value={value === -1 ? "Không có dữ liệu" : value}
+          value={value === -1 ? "" : value}
           onChange={(e) => setValue(e.target.value)}
         ></TextField>
       </Grid>
