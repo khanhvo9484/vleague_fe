@@ -146,6 +146,7 @@ const PlayerTable = (props) => {
   useEffect(() => {
     console.log(selectedList);
   }, [selectedList]);
+  console.log(data);
   return (
     <Box>
       <Paper elevation={0} sx={{ minWidth: "40vw" }}>
@@ -209,105 +210,119 @@ const PlayerTable = (props) => {
                 backgroundColor: "blueBackground.light",
               }}
             >
-              {data
-                .slice((page - 1) * numberPerPage, page * numberPerPage)
-                .map((item, index) => (
-                  <Grow
-                    in={true}
-                    {...(true ? { timeout: index * 500 } : {})}
-                    key={item?.id}
-                  >
-                    <TableRow
-                      key={index}
-                      className={`${
-                        hoverEffect === false
-                          ? classes.rowNotHover
-                          : classes.row
-                      } ${
-                        item?.id == currentPlayer && hoverEffect !== false
-                          ? classes.playerSelected
-                          : ""
-                      }`}
-                      onClick={() => {
-                        setCurrentPlayer(item?.id);
-                      }}
+              {data.length == 0 && (
+                <TableRow>
+                  <TableCell>
+                    <Box>
+                      {" "}
+                      <Typography sx={{ textAlign: "center" }} variant="h6">
+                        Không có thông tin
+                      </Typography>
+                    </Box>
+                  </TableCell>
+                </TableRow>
+              )}
+              {data &&
+                data
+                  .slice((page - 1) * numberPerPage, page * numberPerPage)
+                  .map((item, index) => (
+                    <Grow
+                      in={true}
+                      {...(true ? { timeout: index * 500 } : {})}
+                      key={item?.id}
                     >
-                      {hasCheckbox && (
+                      <TableRow
+                        key={index}
+                        className={`${
+                          hoverEffect === false
+                            ? classes.rowNotHover
+                            : classes.row
+                        } ${
+                          item?.id == currentPlayer && hoverEffect !== false
+                            ? classes.playerSelected
+                            : ""
+                        }`}
+                        onClick={() => {
+                          setCurrentPlayer(item?.id);
+                        }}
+                      >
+                        {hasCheckbox && (
+                          <TableCell align="center" sx={{ padding: "8px" }}>
+                            <Checkbox
+                              checked={selectedList?.includes(item.id)}
+                              onChange={() => handleRegisterList(item.id)}
+                            ></Checkbox>
+                          </TableCell>
+                        )}
                         <TableCell align="center" sx={{ padding: "8px" }}>
-                          <Checkbox
-                            checked={selectedList.includes(item.id)}
-                            onChange={() => handleRegisterList(item.id)}
-                          ></Checkbox>
-                        </TableCell>
-                      )}
-                      <TableCell align="center" sx={{ padding: "8px" }}>
-                        <Typography
-                          variant="h6"
-                          sx={{ color: "primary.lightGray" }}
-                        >
-                          {" "}
-                          {index}
-                        </Typography>
-                      </TableCell>
-                      <TableCell align="center" sx={{ padding: "8px" }}>
-                        <Typography
-                          variant="h6"
-                          sx={{ color: "primary.lightGray" }}
-                        >
-                          {" "}
-                          {item?.hoTen}
-                        </Typography>
-                      </TableCell>
-                      <TableCell align="center" sx={{ padding: "8px" }}>
-                        <Typography
-                          variant="subtitle1"
-                          sx={{ color: "primary.lightGray" }}
-                        >
-                          {" "}
-                          {Helper.formatDateToLocal(item?.ngaySinh)}
-                        </Typography>
-                      </TableCell>
-
-                      <TableCell align="center" sx={{ padding: "8px" }}>
-                        <Typography
-                          variant="subtitle1"
-                          sx={{ color: "primary.lightGray" }}
-                        >
-                          {" "}
-                          {item?.quocTich}
-                        </Typography>
-                      </TableCell>
-                      <TableCell align="center" sx={{ padding: "8px" }}>
-                        <Typography
-                          variant="subtitle1"
-                          sx={{ color: "primary.lightGray" }}
-                        >
-                          {" "}
-                          {item?.viTri.join(", ")}
-                        </Typography>
-                      </TableCell>
-                      <TableCell align="center" sx={{ padding: "8px" }}>
-                        <Typography
-                          variant="subtitle1"
-                          sx={{ color: "primary.lightGray" }}
-                        >
-                          {" "}
-                          {item?.soAo}
-                        </Typography>
-                      </TableCell>
-                      {addToList && (
-                        <TableCell align="center" sx={{ padding: "8px" }}>
-                          <Button
-                            onClick={() => handleAddToList(item.id)}
-                            variant="outlined"
+                          <Typography
+                            variant="h6"
+                            sx={{ color: "primary.lightGray" }}
                           >
-                            Thêm vào đội
-                          </Button>
+                            {" "}
+                            {index}
+                          </Typography>
                         </TableCell>
-                      )}
-                    </TableRow>
-                  </Grow>
-                ))}
+                        <TableCell align="center" sx={{ padding: "8px" }}>
+                          <Typography
+                            variant="h6"
+                            sx={{ color: "primary.lightGray" }}
+                          >
+                            {" "}
+                            {item?.hoTen}
+                          </Typography>
+                        </TableCell>
+                        <TableCell align="center" sx={{ padding: "8px" }}>
+                          <Typography
+                            variant="subtitle1"
+                            sx={{ color: "primary.lightGray" }}
+                          >
+                            {" "}
+                            {Helper.formatDateToLocal(item?.ngaySinh)}
+                          </Typography>
+                        </TableCell>
+
+                        <TableCell align="center" sx={{ padding: "8px" }}>
+                          <Typography
+                            variant="subtitle1"
+                            sx={{ color: "primary.lightGray" }}
+                          >
+                            {" "}
+                            {item?.quocTich}
+                          </Typography>
+                        </TableCell>
+                        <TableCell align="center" sx={{ padding: "8px" }}>
+                          <Typography
+                            variant="subtitle1"
+                            sx={{ color: "primary.lightGray" }}
+                          >
+                            {" "}
+                            {/* {item?.viTri.join(", ")} */}
+                            {item?.viTri}
+                          </Typography>
+                        </TableCell>
+                        <TableCell align="center" sx={{ padding: "8px" }}>
+                          <Typography
+                            variant="subtitle1"
+                            sx={{ color: "primary.lightGray" }}
+                          >
+                            {" "}
+                            {item?.soAo}
+                          </Typography>
+                        </TableCell>
+                        {addToList && (
+                          <TableCell align="center" sx={{ padding: "8px" }}>
+                            <Button
+                              onClick={() => handleAddToList(item.id)}
+                              variant="outlined"
+                            >
+                              Thêm vào đội
+                            </Button>
+                          </TableCell>
+                        )}
+                      </TableRow>
+                    </Grow>
+                  ))}
             </TableBody>
           </Table>
         </TableContainer>

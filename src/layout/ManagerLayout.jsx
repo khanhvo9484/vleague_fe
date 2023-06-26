@@ -34,7 +34,7 @@ const menuItems = [
     path: "/dashboard",
   },
 ];
-const Dashboard = ({ children, isLoading, notify }) => {
+const Dashboard = ({ children, isLoading, notify, title }) => {
   return (
     <DrawerLayout menuItems={menuItems}>
       <Paper elevation={0} sx={{ margin: "1rem 1rem 0 1rem", height: "100%" }}>
@@ -64,7 +64,20 @@ const Dashboard = ({ children, isLoading, notify }) => {
           </Box>
         )}
 
-        {!isLoading && !notify?.message && <Box>{children}</Box>}
+        {!isLoading && !notify?.message && (
+          <Box>
+            <Typography
+              variant="h3"
+              sx={{
+                mb: "0.5rem",
+                // fontFamily: "Source Sans 3",
+              }}
+            >
+              {title}
+            </Typography>
+            {children}
+          </Box>
+        )}
       </Paper>
     </DrawerLayout>
   );

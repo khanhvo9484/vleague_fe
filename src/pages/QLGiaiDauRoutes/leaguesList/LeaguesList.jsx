@@ -13,6 +13,8 @@ import {
   Grid,
   TextField,
   IconButton,
+  Tabs,
+  Tab,
 } from "@mui/material";
 import { Edit, Check, Close, Add } from "@mui/icons-material";
 import OrganizerLayout from "../../../layout/OrganizerLayout";
@@ -21,6 +23,77 @@ import AllLeaguesSelector from "../../../components/ui/AllLeaguesSelector";
 import { makeStyles } from "@mui/styles";
 import { status } from "../../../data/GlobalConstant";
 import Helper from "../../../utils/Helper";
+import PropTypes from "prop-types";
+import { styled } from "@mui/material/styles";
+import OneLeague from "./OneLeague";
+import CustomSnackbar from "../../../components/ui/CustomSnackbar";
+import AddNewLeague from "./AddNewLeague";
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          <Box>{children}</Box>
+        </Box>
+      )}
+    </div>
+  );
+}
+
+TabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.number.isRequired,
+  value: PropTypes.number.isRequired,
+};
+
+function a11yProps(index) {
+  return {
+    id: `simple-tab-${index}`,
+    "aria-controls": `simple-tabpanel-${index}`,
+  };
+}
+
+const StyledTabs = styled((props) => (
+  <Tabs
+    {...props}
+    TabIndicatorProps={{ children: <span className="MuiTabs-indicatorSpan" /> }}
+  />
+))({
+  "& .MuiTabs-indicator": {
+    display: "flex",
+    justifyContent: "center",
+    backgroundColor: "transparent",
+  },
+  "& .MuiTabs-indicatorSpan": {
+    maxWidth: 40,
+    width: "100%",
+    backgroundColor: "#3834a6",
+  },
+});
+
+const StyledTab = styled((props) => <Tab disableRipple {...props} />)(
+  ({ theme }) => ({
+    textTransform: "none",
+    fontWeight: theme.typography.fontWeightBold,
+    fontSize: theme.typography.pxToRem(15),
+    marginRight: theme.spacing(1),
+    color: theme.palette.primary.main,
+    "&.Mui-selected": {
+      color: theme.palette.primary.dark,
+    },
+    "&.Mui-focusVisible": {
+      backgroundColor: "rgba(100, 95, 228, 0.32)",
+    },
+  })
+);
 const useStyles = makeStyles((theme) => ({
   detailBoxRow: {
     display: "flex",
@@ -55,198 +128,72 @@ const useStyles = makeStyles((theme) => ({
 }));
 const LeaguesList = () => {
   const classes = useStyles();
-  const [AllLeagues, setAllLeagues] = useState([]);
-  const [isEditable, setIsEditable] = useState(false);
+  const [allLeagues, setAllLeagues] = useState([]);
+  const [currentLeague, setCurrentLeague] = useState([]);
 
-  const [maxPlayer, setMaxPlayer] = useState(0);
-  const [maxForeignPlayer, setMaxForeignPlayer] = useState(0);
-  const [maxAge, setMaxAge] = useState(0);
-  const [minAge, setMinAge] = useState(0);
-  const [minPlayer, setMinPlayer] = useState(0);
+  const [isOpenSnackbar, setIsOpenSnackbar] = useState(false);
+  const [snackbarContent, setSnackbarContent] = useState("");
+  const [snackbarType, setSnackbarType] = useState("success");
 
-  const [currentLeague, setCurrentLeague] = useState();
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-
-  const [winPoint, setWinPoint] = useState(0);
-  const [drawPoint, setDrawPoint] = useState(0);
-  const [losePoint, setLosePoint] = useState(0);
-
-  const [numberOfClubs, setNumberOfClubs] = useState(0);
-
-  const [isOpenNotification, setIsOpenNotification] = useState(false);
-  const [notificationContent, setNotificationContent] = useState("");
-  useEffect(() => {
-    setIsEditable(false);
-    if (currentLeague) {
-      setMaxPlayer(currentLeague?.quyDinhCauThu?.soLuongCauThuToiDa);
-      setMinPlayer(currentLeague?.quyDinhCauThu?.soLuongCauThuToiThieu);
-      setMaxForeignPlayer(
-        currentLeague?.quyDinhCauThu?.soLuongCauThuNuocNgoaiToiDa
-      );
-      setMaxAge(currentLeague?.quyDinhCauThu?.tuoiToiDa);
-      setMinAge(currentLeague?.quyDinhCauThu?.tuoiToiThieu);
-      setWinPoint(currentLeague?.quyDinhTinhDiem?.thang);
-      setDrawPoint(currentLeague?.quyDinhTinhDiem?.hoa);
-      setLosePoint(currentLeague?.quyDinhTinhDiem?.thua);
-      setNumberOfClubs(currentLeague?.quyDinhSoLuongDoi?.soLuongDoi);
-    } else {
-      setMaxPlayer(0);
-      setMinPlayer(0);
-      setMaxForeignPlayer(0);
-      setMaxAge(0);
-      setMinAge(0);
-      setWinPoint(0);
-      setDrawPoint(0);
-      setLosePoint(0);
-      setNumberOfClubs(0);
-    }
-  }, [currentLeague]);
-  const handleClickEdit = () => {
-    if (!currentLeague) {
-      setIsOpenNotification(true);
-      setNotificationContent("Vui lòng chọn giải đấu");
-      return;
-    }
-    if (currentLeague?.trangThai == 1 || currentLeague?.trangThai == 2) {
-      setIsOpenNotification(true);
-      setNotificationContent(
-        "Không thể chỉnh sửa quy định giải đấu khi giải đấu đang diễn ra hoặc đã kết thúc"
-      );
-    } else {
-      setIsEditable(true);
-    }
+  const [currentTab, setCurrentTab] = useState(0);
+  const handleChangeTab = (event, newValue) => {
+    setCurrentTab(newValue);
   };
+  useEffect(() => {
+    setCurrentLeague(allLeagues);
+  }, [allLeagues]);
 
   return (
     <OrganizerLayout title={"Mùa giải"}>
-      <AllLeaguesSelector
-        setCurrentLeague={setCurrentLeague}
-        currentLeague={currentLeague}
-        selectFirst={true}
-        AllLeagues={AllLeagues}
-        setAllLeagues={setAllLeagues}
-      ></AllLeaguesSelector>
-      <Box sx={{ color: "primary.main" }}>
-        <Box
-          sx={{
-            mt: "1rem",
-            mb: "0.5rem",
-            display: "flex",
-            justifyContent: "flex-end",
-          }}
-        >
-          <Button startIcon={<Add></Add>} variant="contained">
-            <Typography variant="body1">Thêm mùa giải</Typography>
-          </Button>
+      <StyledTabs
+        value={currentTab}
+        onChange={handleChangeTab}
+        aria-label="styled tabs example"
+      >
+        <StyledTab value={0} label="Danh sách"></StyledTab>
+        <StyledTab value={1} label="Thêm mùa giải"></StyledTab>
+      </StyledTabs>
+      <TabPanel value={currentTab} index={0}>
+        <AllLeaguesSelector
+          setCurrentLeague={setCurrentLeague}
+          currentLeague={currentLeague}
+          AllLeagues={allLeagues}
+          setAllLeagues={setAllLeagues}
+        ></AllLeaguesSelector>
+        <Box sx={{ color: "primary.main" }}>
+          <Box
+            sx={{
+              mt: "1rem",
+              mb: "0.5rem",
+              display: "flex",
+              justifyContent: "flex-end",
+            }}
+          ></Box>
         </Box>
-        <Grid
-          container
-          sx={{ padding: "2rem" }}
-          component={Paper}
-          elevation={3}
-        >
-          <Grid container item xs={12} sm={12} justifyContent={"space-between"}>
-            {currentLeague && (
-              <Grid item container xs={12} sm={12} md={12} sx={{ mb: "1rem" }}>
-                <Grid item xs={4}>
-                  <Box sx={{ display: "flex" }}>
-                    <img
-                      style={{
-                        height: "80px",
-                        marginRight: "1rem",
-                      }}
-                      src={currentLeague?.hinhAnh}
-                      alt={currentLeague?.ten}
-                    ></img>
-                    <Typography variant="h5">{currentLeague?.ten}</Typography>
-                  </Box>
-                </Grid>
+        {currentLeague.map((league) => (
+          <Box sx={{ mb: "1rem" }} key={league?.id}>
+            <OneLeague
+              league={league}
+              snackbarContent={snackbarContent}
+              snackbarType={snackbarType}
+              isOpenSnackbar={isOpenSnackbar}
+              setIsOpenSnackbar={setIsOpenSnackbar}
+              setSnackbarContent={setSnackbarContent}
+              setSnackbarType={setSnackbarType}
+            ></OneLeague>
+          </Box>
+        ))}
+      </TabPanel>
+      <TabPanel value={currentTab} index={1}>
+        <AddNewLeague></AddNewLeague>
+      </TabPanel>
 
-                {/* <Grid item xs={2}></Grid> */}
-                <Grid
-                  item
-                  xs={3}
-                  sx={{ display: "flex", alignItems: "flex-start" }}
-                >
-                  <Typography>Thời điểm bắt đầu:</Typography>
-                  &nbsp; &nbsp;
-                  <Typography variant="h6">
-                    {Helper.formatDateToLocal(currentLeague?.thoiDiemBatDau)}
-                  </Typography>
-                </Grid>
-                <Grid
-                  item
-                  xs={3}
-                  sx={{ display: "flex", alignItems: "flex-start" }}
-                >
-                  <Typography>Thời điểm kết thúc:</Typography>
-                  &nbsp; &nbsp;
-                  <Typography variant="h6">
-                    {Helper.formatDateToLocal(currentLeague?.thoiDiemBatDau)}
-                  </Typography>
-                </Grid>
-                <Grid
-                  item
-                  xs={3}
-                  sx={{ display: "flex", alignItems: "flex-start" }}
-                >
-                  <Typography>Trạng thái:</Typography>
-                  &nbsp; &nbsp;
-                  <Typography
-                    variant="h6"
-                    color={
-                      currentLeague?.trangThai == 0
-                        ? "info.main"
-                        : currentLeague?.trangThai == 1
-                        ? "success.main"
-                        : "error.main"
-                    }
-                  >
-                    {status[currentLeague?.trangThai]}
-                  </Typography>
-                </Grid>
-              </Grid>
-            )}
-
-            <Grid item xs={1} justifyContent={"flex-end"}>
-              <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-                {!isEditable && (
-                  <IconButton
-                    onClick={() => {
-                      handleClickEdit();
-                    }}
-                  >
-                    <Edit></Edit>
-                  </IconButton>
-                )}
-                {isEditable && (
-                  <Box>
-                    <IconButton onClick={() => {}}>
-                      <Check color="success"></Check>
-                    </IconButton>
-                    <IconButton
-                      onClick={() => {
-                        setIsEditable(false);
-                      }}
-                    >
-                      <Close color="error"></Close>
-                    </IconButton>
-                  </Box>
-                )}
-              </Box>
-            </Grid>
-          </Grid>
-        </Grid>
-      </Box>
-      {isOpenNotification && (
-        <NotifiBox
-          isOpenNotification={isOpenNotification}
-          setIsOpenNotification={setIsOpenNotification}
-        >
-          <Typography>{notificationContent}</Typography>
-        </NotifiBox>
-      )}
+      <CustomSnackbar
+        message={snackbarContent}
+        type={snackbarType}
+        isOpen={isOpenSnackbar}
+        setIsOpen={setIsOpenSnackbar}
+      ></CustomSnackbar>
     </OrganizerLayout>
   );
 };

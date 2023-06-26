@@ -63,7 +63,7 @@ const Dashboard = () => {
   useEffect(async () => {
     if (!isFireUpload) return;
     if (hasImageOnQueue) {
-      count = 0;
+      let count = 0;
       while (!imageUrl) {
         if (count == 10) break;
         await new Promise((resolve) => setTimeout(resolve, 1000));

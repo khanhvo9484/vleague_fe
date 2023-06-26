@@ -1,8 +1,7 @@
 import { Snackbar, Box, Alert } from "@mui/material";
 import { useState } from "react";
 const CustomSnackbar = (props) => {
-  const { message, type } = props;
-  const [isOpen, setIsOpen] = useState(true);
+  const { message, type, isOpen, setIsOpen } = props;
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
       return;

@@ -25,6 +25,7 @@ import { status } from "../../../data/GlobalConstant";
 import Helper from "../../../utils/Helper";
 import ComponentLayoutBackdrop from "../../../layout/ComponentLayoutBackdrop";
 import CustomSnackbar from "../../../components/ui/CustomSnackbar";
+import RuleSection from "./RuleSection";
 const useStyles = makeStyles((theme) => ({
   detailBoxRow: {
     display: "flex",
@@ -264,130 +265,21 @@ const Dashboard = () => {
                 </Grid>
               )}
 
-              <Grid item container xs={5} className={classes.ruleSection}>
-                <Grid item xs={12} sx={{ mb: "1rem" }}>
-                  <Typography variant="h6"> Quy định cầu thủ</Typography>
-                </Grid>
-                <Grid item container className={classes.detailBoxRow}>
-                  <Grid item xs={6}>
-                    <Typography variant="subtitle1">
-                      {" "}
-                      Số lượng cầu thủ tối đa
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={6}>
-                    <TextField
-                      sx={{
-                        width: "100%",
-                        input: {
-                          color: "white",
-                          padding: isEditable ? "1rem" : "0 0 0 1rem",
-                          fontWeight: "700",
-                        },
-                      }}
-                      disabled={!isEditable}
-                      className={!isEditable ? classes.disableTextField : ""}
-                      value={maxPlayer === -1 ? "Không có dữ liệu" : maxPlayer}
-                      onChange={(e) => setMaxPlayer(e.target.value)}
-                    ></TextField>
-                  </Grid>
-                </Grid>
-                <Grid item container className={classes.detailBoxRow}>
-                  <Grid item xs={6}>
-                    <Typography variant="subtitle1">
-                      {" "}
-                      Số lượng cầu thủ tối thiểu
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={6}>
-                    <TextField
-                      sx={{
-                        width: "100%",
-                        input: {
-                          color: "white",
-                          padding: isEditable ? "1rem" : "0 0 0 1rem",
-                          fontWeight: "700",
-                        },
-                      }}
-                      disabled={!isEditable}
-                      className={!isEditable ? classes.disableTextField : ""}
-                      value={minPlayer === -1 ? "Không có dữ liệu" : minPlayer}
-                      onChange={(e) => setMinPlayer(e.target.value)}
-                    ></TextField>
-                  </Grid>
-                </Grid>
-                <Grid item container className={classes.detailBoxRow}>
-                  <Grid item xs={6}>
-                    <Typography variant="subtitle1">
-                      <div style={{ flex: 1 }}>Số lượng cầu thủ </div>
-                      <div style={{ flex: 1 }}>nước ngoài tối đa</div>
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={6}>
-                    <TextField
-                      sx={{
-                        width: "100%",
-                        input: {
-                          color: "white",
-                          padding: isEditable ? "1rem" : "0 0 0 1rem",
-                          fontWeight: "700",
-                        },
-                      }}
-                      disabled={!isEditable}
-                      className={!isEditable ? classes.disableTextField : ""}
-                      value={
-                        maxForeignPlayer === -1
-                          ? "Không có dữ liệu"
-                          : maxForeignPlayer
-                      }
-                      onChange={(e) => setMaxForeignPlayer(e.target.value)}
-                    ></TextField>
-                  </Grid>
-                </Grid>
-                <Grid item container className={classes.detailBoxRow}>
-                  <Grid item xs={6}>
-                    <Typography variant="subtitle1"> Tuổi tối thiểu</Typography>
-                  </Grid>
-                  <Grid item xs={6}>
-                    <TextField
-                      sx={{
-                        width: "100%",
-                        input: {
-                          color: "white",
-                          padding: isEditable ? "1rem" : "0 0 0 1rem",
-                          fontWeight: "700",
-                        },
-                      }}
-                      disabled={!isEditable}
-                      className={!isEditable ? classes.disableTextField : ""}
-                      value={minAge === -1 ? "Không có dữ liệu" : minAge}
-                      onChange={(e) => setMinAge(e.target.value)}
-                    ></TextField>
-                  </Grid>
-                </Grid>
-                <Grid item container className={classes.detailBoxRow}>
-                  <Grid item xs={6}>
-                    <Typography variant="subtitle1"> Tuổi tối đa</Typography>
-                  </Grid>
-                  <Grid item xs={6}>
-                    <TextField
-                      sx={{
-                        width: "100%",
-                        input: {
-                          color: "white",
-                          padding: isEditable ? "1rem" : "0 0 0 1rem",
-                          fontWeight: "700",
-                          // fontSize: "1.2rem",
-                        },
-                      }}
-                      disabled={!isEditable}
-                      className={!isEditable ? classes.disableTextField : ""}
-                      value={maxAge === -1 ? "Không có dữ liệu" : maxAge}
-                      onChange={(e) => setMaxAge(e.target.value)}
-                    ></TextField>
-                  </Grid>
-                </Grid>
-              </Grid>
+              <RuleSection
+                header={"Quy định cầu thủ"}
+                maxAge={maxAge}
+                minAge={minAge}
+                maxPlayer={maxPlayer}
+                minPlayer={minPlayer}
+                maxForeignPlayer={maxForeignPlayer}
+                setMaxAge={setMaxAge}
+                setMinAge={setMinAge}
+                setMaxForeignPlayer={setMaxForeignPlayer}
+                setMaxPlayer={setMaxPlayer}
+                setMinPlayer={setMinPlayer}
+                isEditable={isEditable}
+                setIsEditable={setIsEditable}
+              ></RuleSection>
               <Grid item container xs={5} className={classes.ruleSection}>
                 <Grid item xs={12}>
                   <Typography variant="h6" sx={{ mb: "1rem" }}>
@@ -537,13 +429,14 @@ const Dashboard = () => {
           </NotifiBox>
         )}
       </ComponentLayoutBackdrop>
-      {isOpenSnackbar && (
-        <CustomSnackbar
-          // isOpen={isOpenSnackbar}
-          message={snackbarContent}
-          type={snackbarType}
-        ></CustomSnackbar>
-      )}
+
+      <CustomSnackbar
+        // isOpen={isOpenSnackbar}
+        message={snackbarContent}
+        type={snackbarType}
+        isOpen={isOpenSnackbar}
+        setIsOpen={setIsOpenSnackbar}
+      ></CustomSnackbar>
     </OrganizerLayout>
   );
 };
