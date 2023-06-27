@@ -6,12 +6,19 @@ import ComponentLayoutBackdrop from "../../../layout/ComponentLayoutBackdrop";
 import AllLeaguesSelector from "../../../components/ui/AllLeaguesSelector";
 import MyAxios from "../../../api/MyAxios";
 import { Add } from "@mui/icons-material";
-
+import Scheduler from "../../../components/ui/schedulerComponent/Scheduler";
+import useAuth from "../../../hooks/useAuth";
+import CustomSnackbar from "../../../components/ui/CustomSnackbar";
 const CreateSchedule = () => {
   const [currentLeague, setCurrentLeague] = useState("");
   const [currentSchedule, setCurrentSchedule] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [notify, setNotify] = useState({ type: "", message: "" });
+  const { auth } = useAuth();
+  const [isOpenSnackbar, setIsOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarType, setSnackbarType] = useState("success");
+
   useEffect(async () => {
     if (currentLeague) {
       setIsLoading(true);
@@ -23,11 +30,32 @@ const CreateSchedule = () => {
       } catch (err) {
         console.log(err);
         setNotify({ message: err?.data?.message, type: "error" });
+        setCurrentSchedule([]);
       } finally {
         setIsLoading(false);
       }
     }
   }, [currentLeague]);
+  const handleCreateSchedule = async () => {
+    setIsLoading(true);
+    const data = {
+      idMuaGiai: currentLeague?.id,
+      idQuanLy: auth?.id,
+    };
+    try {
+      const res = await MyAxios.post(`/lichthidau`, data);
+      if (res.status === 200) {
+        setSnackbarMessage("Tạo lịch thi đấu thành công");
+        setSnackbarType("success");
+      }
+    } catch (err) {
+      setSnackbarMessage(err?.response?.data?.message);
+      setSnackbarType("error");
+    } finally {
+      setIsOpenSnackbar(true);
+      setIsLoading(false);
+    }
+  };
   return (
     <OrganizerLayout title={"Tạo lịch thi đấu"}>
       <AllLeaguesSelector
@@ -35,16 +63,27 @@ const CreateSchedule = () => {
         setCurrentLeague={setCurrentLeague}
       ></AllLeaguesSelector>
       <ComponentLayoutBackdrop isLoading={isLoading} notify={notify}>
-        <Grid container component={Paper} elevation={3} sx={{ mt: "1rem" }}>
-          {currentLeague && !currentSchedule?.length > 0 && (
+        <Grid
+          container
+          component={Paper}
+          elevation={3}
+          sx={{ mt: "1rem", padding: "0.5rem" }}
+        >
+          {!isLoading && currentLeague && !currentSchedule?.length > 0 && (
             <Box
               sx={{
                 display: "flex",
                 justifyContent: "flex-end",
                 width: "100%",
+                mt: "0.5rem",
+                mb: "1rem",
               }}
             >
-              <Button variant="contained" startIcon={<Add></Add>}>
+              <Button
+                variant="contained"
+                startIcon={<Add></Add>}
+                onClick={handleCreateSchedule}
+              >
                 Tạo lịch thi đấu
               </Button>
             </Box>
@@ -55,13 +94,26 @@ const CreateSchedule = () => {
             xs={12}
             sx={{ padding: "1rem", backgroundColor: "blueBackground.manage" }}
           >
-            {currentLeague && !currentSchedule?.length > 0 && (
+            {!isLoading && currentLeague && !currentSchedule?.length > 0 && (
               <Typography variant="h6" sx={{ textAlign: "center" }}>
                 Hiện chưa có lịch thi đấu của giải đấu này
               </Typography>
             )}
+            {!isLoading && currentLeague && currentSchedule?.length > 0 && (
+              <Scheduler
+                currentSchedule={currentSchedule}
+                setCurrentSchedule={setCurrentSchedule}
+                background={"blueBackground.manage"}
+              ></Scheduler>
+            )}
           </Grid>
         </Grid>
+        <CustomSnackbar
+          isOpen={isOpenSnackbar}
+          setIsOpen={setIsOpenSnackbar}
+          message={snackbarMessage}
+          type={snackbarType}
+        ></CustomSnackbar>
       </ComponentLayoutBackdrop>
     </OrganizerLayout>
   );
