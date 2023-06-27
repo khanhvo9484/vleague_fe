@@ -7,10 +7,11 @@ import {
   DescriptionRounded,
   AddToPhotos,
   BarChart,
+  ArrowForwardIos,
 } from "@mui/icons-material";
 import { Paper, Box, Button, Typography, Grid } from "@mui/material";
 import LoadingBox from "../components/ui/LoadingBox";
-
+import { useNavigate } from "react-router-dom";
 const menuItems = [
   { text: "Trang chủ", icon: <HomeRounded />, path: "/manager/home" },
   {
@@ -26,7 +27,7 @@ const menuItems = [
   {
     text: "Danh sách hồ sơ đăng ký",
     icon: <DescriptionRounded />,
-    path: "/dashboard",
+    path: "/manager/register-list",
   },
   {
     text: "Bảng xếp hạng",
@@ -34,7 +35,15 @@ const menuItems = [
     path: "/dashboard",
   },
 ];
-const Dashboard = ({ children, isLoading, notify, title }) => {
+const Dashboard = ({
+  children,
+  isLoading,
+  notify,
+  title,
+  childLv1,
+  parentLink,
+}) => {
+  const navigate = useNavigate();
   return (
     <DrawerLayout menuItems={menuItems}>
       <Paper elevation={0} sx={{ margin: "1rem 1rem 0 1rem", height: "100%" }}>
@@ -66,15 +75,43 @@ const Dashboard = ({ children, isLoading, notify, title }) => {
 
         {!isLoading && !notify?.message && (
           <Box>
-            <Typography
-              variant="h3"
-              sx={{
-                mb: "0.5rem",
-                // fontFamily: "Source Sans 3",
-              }}
-            >
-              {title}
-            </Typography>
+            {childLv1 && (
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                <Typography
+                  variant="h3"
+                  sx={{
+                    // mb: "0.5rem",
+                    // fontFamily: "Source Sans 3",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => {
+                    navigate(parentLink, { replace: true });
+                  }}
+                >
+                  {title}
+                </Typography>
+
+                <Box sx={{ display: "flex" }}>
+                  <ArrowForwardIos
+                    sx={{ ml: "0.5rem", mr: "0.5rem" }}
+                  ></ArrowForwardIos>
+                  <Typography variant="h3">{childLv1}</Typography>
+                </Box>
+              </Box>
+            )}
+            {!childLv1 && (
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                <Typography
+                  variant="h3"
+                  sx={{
+                    mb: "0.5rem",
+                    // fontFamily: "Source Sans 3",
+                  }}
+                >
+                  {title}
+                </Typography>
+              </Box>
+            )}
             {children}
           </Box>
         )}

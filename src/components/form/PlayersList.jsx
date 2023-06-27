@@ -143,10 +143,7 @@ const PlayerTable = (props) => {
       setSelectedList([...selectedList, itemId]);
     }
   };
-  useEffect(() => {
-    console.log(selectedList);
-  }, [selectedList]);
-  console.log(data);
+
   return (
     <Box>
       <Paper elevation={0} sx={{ minWidth: "40vw" }}>
@@ -210,7 +207,7 @@ const PlayerTable = (props) => {
                 backgroundColor: "blueBackground.light",
               }}
             >
-              {data.length == 0 && (
+              {data?.length == 0 && (
                 <TableRow>
                   <TableCell>
                     <Box>

@@ -43,7 +43,10 @@ const AllLeaguesSelector = (props) => {
   // Function to handle Autocomplete value changes
   const handleAutocompleteChange = (event, value) => {
     setSelectedLeague(value);
-    setCurrentLeague();
+    setCurrentLeague("");
+    setSeasonsStartDate("");
+    setSeasonsEndDate("");
+    setSeasonsStatus("");
   };
 
   useEffect(async () => {

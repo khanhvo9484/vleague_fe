@@ -53,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
 
 const currentPlayerLargeCard = (props) => {
   const classes = useStyles();
-  const { player, isEditable, setIsEditable } = props;
+  const { player, isEditable, setIsEditable, isNotShowEdit } = props;
   const { currentPlayer } = useCurrentLeague();
   const {
     setOpenNotiBox,
@@ -200,7 +200,11 @@ const currentPlayerLargeCard = (props) => {
               xs={isEditable ? 3 : 9}
               sx={{ alignSelf: "center", marginTop: "2rem" }}
             >
-              <img src={player?.hinhAnh} alt={`${player.hoTen}`} height={200} />
+              <img
+                src={player?.hinhAnh}
+                alt={`${player?.hoTen}`}
+                height={200}
+              />
             </Grid>
             <Grid item xs={isEditable ? 2 : 3} sx={{ alignSelf: "center" }}>
               <Box
@@ -211,7 +215,7 @@ const currentPlayerLargeCard = (props) => {
                 }}
               >
                 {isEditable && <UploadImageSection></UploadImageSection>}
-                {!isEditable && (
+                {!isEditable && !isNotShowEdit && (
                   <Box>
                     <IconButton
                       onClick={() => {

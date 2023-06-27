@@ -15,10 +15,14 @@ import GDSeasonRules from "../pages/QLGiaiDauRoutes/seasonRules/SeasonRules";
 import GDLeaguesList from "../pages/QLGiaiDauRoutes/leaguesList/LeaguesList";
 import GDCreateSchedule from "../pages/QLGiaiDauRoutes/createSchedule/CreateSchedule";
 import GDRegistration from "../pages/QLGiaiDauRoutes/registration/Registration";
+import GDRegistrationDetail from "../pages/QLGiaiDauRoutes/registration/RegistrationDetail";
 
 import DBHome from "../pages/QLDoiBongRoutes/home/Home";
 import DBManageTeam from "../pages/QLDoiBongRoutes/manageTeam/ManageTeam";
 import DBRegister from "../pages/QLDoiBongRoutes/register/Register";
+import DBRegisterList from "../pages/QLDoiBongRoutes/registerlist/RegisterList";
+import DBRegisterDetail from "../pages/QLDoiBongRoutes/registerlist/RegisterDetail";
+
 import { baselightTheme } from "../theme/DefaultTheme";
 import { ThemeProvider } from "@mui/material/styles";
 import RequiredAuth from "../utils/RequiredAuth";
@@ -49,6 +53,14 @@ const App = () => {
             path="/manager/register-league"
             element={<DBRegister></DBRegister>}
           ></Route>
+          <Route
+            path="/manager/register-list"
+            element={<DBRegisterList></DBRegisterList>}
+          ></Route>
+          <Route
+            path="/manager/register-list/detail"
+            element={<DBRegisterDetail />}
+          />
         </Route>
 
         {/* Protected route for admin */}
@@ -68,6 +80,10 @@ const App = () => {
             exact
             path="/organizer/league-registration"
             element={<GDRegistration />}
+          />
+          <Route
+            path="/organizer/league-registration/detail"
+            element={<GDRegistrationDetail />}
           />
         </Route>
         <Route

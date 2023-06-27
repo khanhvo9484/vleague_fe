@@ -62,7 +62,7 @@ const MatchDay = () => {
 
   const handleNexPage = () => {
     setIsLoading(true);
-    if (currentPage + 1 < currentSchedule.length / showedItem) {
+    if (currentPage + 1 < currentSchedule?.length / showedItem) {
       setCurrentPage((prv) => prv + 1);
     }
   };

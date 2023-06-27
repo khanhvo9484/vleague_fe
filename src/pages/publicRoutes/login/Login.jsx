@@ -83,12 +83,12 @@ export default function Login() {
       setNotify({ message: "Đăng nhập thành công", status: "success" });
       setIsFirstLogin(true);
       setTimeout(() => {
-        // if (role === "QLGD") {
-        //   navigate("/organizer/dashboard", { replace: true });
-        // } else if(role==="QLDB") {
-        //   navigate("/manager/dashboard", { replace: true });
-        // }
-        navigate("/");
+        if (role === "QLGD") {
+          navigate("/organizer/all-leagues", { replace: true });
+        } else if (role === "QLDB") {
+          navigate("/manager/home", { replace: true });
+        }
+        // navigate("/");
       }, 1500);
     } catch (error) {
       if (!error.response) {

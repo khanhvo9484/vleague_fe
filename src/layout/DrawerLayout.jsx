@@ -102,7 +102,9 @@ const DrawerLayout = ({ children, menuItems }) => {
                         },
                       }}
                       className={
-                        location.pathname == item?.path ? classes.active : ""
+                        location.pathname.includes(item?.path)
+                          ? classes.active
+                          : ""
                       }
                       onClick={() => navigate(item.path)}
                     >
