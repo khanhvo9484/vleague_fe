@@ -261,11 +261,7 @@ const AllClubs = () => {
                                 >
                                   <img
                                     style={{ width: "35px" }}
-                                    src={
-                                      imageList.find((image) => {
-                                        return image.id === club.id;
-                                      })?.image || defaultImage?.player
-                                    }
+                                    src={club?.hinhAnh || defaultImage?.player}
                                   ></img>
                                   <Typography variant="h6" sx={{ ml: "1rem" }}>
                                     {club?.hoTen}

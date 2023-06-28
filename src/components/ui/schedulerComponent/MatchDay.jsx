@@ -43,8 +43,17 @@ const useStyles = makeStyles((theme) => ({
 }));
 const MatchDay = (props) => {
   const classes = useStyles();
-  const { currentSchedule, setCurrentMatchDay, currentMatchDay, background } =
-    props;
+  const {
+    currentSchedule,
+    setCurrentMatchDay,
+    currentMatchDay,
+    background,
+    isEditable,
+    setIsEditable,
+    changeList,
+    setChangeList,
+    isSave,
+  } = props;
   const showedItem = 6;
   const [isShowItem, setIsShowItem] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
@@ -178,11 +187,18 @@ const MatchDay = (props) => {
         </IconButton>
       </Paper>
       {/* Matchs */}
-      <Match
-        currentMatchDay={currentMatchDay}
-        background={background}
-        // currentSchedule={currentSchedule}
-      />
+      {currentMatchDay && (
+        <Match
+          currentMatchDay={currentMatchDay}
+          background={background}
+          isEditable={isEditable}
+          setIsEditable={setIsEditable}
+          changeList={changeList}
+          setChangeList={setChangeList}
+          isSave={isSave}
+          // currentSchedule={currentSchedule}
+        />
+      )}
     </Box>
   );
 };

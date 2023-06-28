@@ -150,7 +150,7 @@ const MatchDay = () => {
             ))}
         <IconButton
           onClick={handleNexPage}
-          disabled={currentPage + 1 >= currentSchedule.length / showedItem}
+          disabled={currentPage + 1 >= currentSchedule?.length / showedItem}
           sx={{
             "&:disabled": {
               backgroundColor: "disabledBackground.main",

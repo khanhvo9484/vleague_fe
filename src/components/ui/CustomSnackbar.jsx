@@ -10,8 +10,17 @@ const CustomSnackbar = (props) => {
   };
   return (
     <Box sx={{ zIndex: "1000" }}>
-      <Snackbar open={isOpen} autoHideDuration={5000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity={type} sx={{ width: "100%" }}>
+      <Snackbar open={isOpen} autoHideDuration={8000} onClose={handleClose}>
+        <Alert
+          onClose={handleClose}
+          severity={type}
+          sx={{
+            width: "150%",
+            fontSize: "1.1rem",
+            padding: "1rem",
+            fontWeight: "bold",
+          }}
+        >
           {message}
         </Alert>
       </Snackbar>

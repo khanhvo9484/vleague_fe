@@ -58,9 +58,8 @@ const Home = () => {
 
   useEffect(() => {
     if (currentLeague) {
-      setTargetDate("2023-06-19");
+      setTargetDate(currentLeague?.thoiDiemKetThuc);
     }
-    // console.log(remainingTime);
   }, [currentLeague]);
   return (
     <DefaultLayout>
@@ -96,7 +95,7 @@ const Home = () => {
 
                 <Grid item xs={12} sm={7} container>
                   <Grid item sm={7}>
-                    {currentLeague && !hasPassed && (
+                    {currentLeague && (
                       <Grow in={true} timeout={1000}>
                         <Box
                           sx={{
@@ -107,7 +106,7 @@ const Home = () => {
                           }}
                         >
                           <Typography variant="h1" sx={{ margin: "1rem" }}>
-                            Mùa giải sẽ bắt đầu sau:
+                            Mùa giải sẽ kết thúc sau:
                           </Typography>
                           <Box className={classes.timeContainer}>
                             <Box className={classes.timeBox}>
@@ -145,8 +144,11 @@ const Home = () => {
                         padding: "1rem",
                       }}
                     >
-                      <Typography variant="h2" sx={{ color: "white" }}>
-                        Some long text here to test the text overflow of the box
+                      <Typography variant="subtitle1" sx={{ color: "white" }}>
+                        UEFA Champions League là giải đấu bóng đá hàng đầu châu
+                        Âu, thu hút sự cạnh tranh khốc liệt giữa các câu lạc bộ
+                        hàng đầu và mang đến những trận cầu đỉnh cao, với mục
+                        tiêu tìm ra đội bóng vô địch châu lục.
                       </Typography>
                     </Box>
                   </Grid>

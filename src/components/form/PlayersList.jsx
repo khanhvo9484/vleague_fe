@@ -19,6 +19,8 @@ import { useState, useEffect } from "react";
 import { useTheme } from "@mui/material/styles";
 import Helper from "../../utils/Helper";
 import useCurrentLeague from "../../hooks/useCurrentLeague";
+import MyAxios from "../../api/MyAxios";
+import useAuth from "../../hooks/useAuth";
 const useStyles = makeStyles((theme) => ({
   title: {
     display: "flex",
@@ -124,6 +126,9 @@ const PlayerTable = (props) => {
     hoverEffect,
     selectedList,
     setSelectedList,
+    setData,
+    selectedFreePlayer,
+    setSelectedFreePlayer,
   } = props;
 
   const theme = useTheme();
@@ -132,9 +137,21 @@ const PlayerTable = (props) => {
 
   const numberPerPage = number ? number : 12;
   const [page, setPage] = useState(1);
+  const { auth } = useAuth();
 
-  const handleAddToList = (id) => {
-    data.filter((player) => player.id !== id);
+  const handleAddToList = async (id) => {
+    try {
+      const res = await MyAxios.post(`/doibong/cauthu`, {
+        idDoi: auth?.teamId,
+        dsCauThuMoi: [],
+        dsCauThuTuDo: [{ id_cauthu: id, thoiDiemKetThuc: "2027-05-10" }],
+      });
+      if (res.status == 200) {
+        setData(data.filter((player) => player.id != id));
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
   const handleRegisterList = (itemId) => {
     if (selectedList.includes(itemId)) {
@@ -312,6 +329,8 @@ const PlayerTable = (props) => {
                             <Button
                               onClick={() => handleAddToList(item.id)}
                               variant="outlined"
+                              color="error"
+                              sx={{ borderRadius: "20px" }}
                             >
                               Thêm vào đội
                             </Button>

@@ -16,6 +16,8 @@ import GDLeaguesList from "../pages/QLGiaiDauRoutes/leaguesList/LeaguesList";
 import GDCreateSchedule from "../pages/QLGiaiDauRoutes/createSchedule/CreateSchedule";
 import GDRegistration from "../pages/QLGiaiDauRoutes/registration/Registration";
 import GDRegistrationDetail from "../pages/QLGiaiDauRoutes/registration/RegistrationDetail";
+import GDMatches from "../pages/QLGiaiDauRoutes/matches/Matches";
+import GDLeagueDetail from "../pages/QLGiaiDauRoutes/leaguesList/LeagueDetail";
 
 import DBHome from "../pages/QLDoiBongRoutes/home/Home";
 import DBManageTeam from "../pages/QLDoiBongRoutes/manageTeam/ManageTeam";
@@ -72,6 +74,10 @@ const App = () => {
             element={<GDLeaguesList />}
           />
           <Route
+            path="/organizer/all-leagues/detail"
+            element={<GDLeagueDetail />}
+          />
+          <Route
             exact
             path="/organizer/create-schedule"
             element={<GDCreateSchedule />}
@@ -85,6 +91,7 @@ const App = () => {
             path="/organizer/league-registration/detail"
             element={<GDRegistrationDetail />}
           />
+          <Route path="/organizer/matches" element={<GDMatches />} />
         </Route>
         <Route
           exact

@@ -8,6 +8,22 @@ function formatDateToLocal(dateString) {
     return dateString;
   }
 }
+function formatDateToVNDate(dateString) {
+  try {
+    const [datePart, timePart] = dateString.split(" ");
+    const [year, month, day] = datePart.split("-");
+    const [hour, minute, second] = timePart.split(":");
+
+    const formattedDate = new Date(year, month - 1, day, hour, minute);
+    const formattedTime = format(formattedDate, "hh:mmA");
+    const formattedDateTime =
+      format(formattedDate, "dd/MM/yyyy") + " " + formattedTime;
+
+    return formattedDateTime;
+  } catch (err) {
+    return dateString;
+  }
+}
 function formatDateToUTC(dateString) {
   try {
     const parts = dateString.split("/");
@@ -21,4 +37,5 @@ function formatDateToUTC(dateString) {
 export default {
   formatDateToLocal,
   formatDateToUTC,
+  formatDateToVNDate,
 };

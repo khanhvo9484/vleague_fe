@@ -301,6 +301,18 @@ const OneLeague = (props) => {
                     </Tooltip>
                   </Box>
                 )}
+                <Typography
+                  sx={{
+                    "&:hover": {
+                      color: "primary.dark",
+                      textDecoration: "underline",
+                      cursor: "pointer",
+                    },
+                  }}
+                  onClick={() => {}}
+                >
+                  Xem chi tiết
+                </Typography>
               </Grid>
             </Grid>
           )}

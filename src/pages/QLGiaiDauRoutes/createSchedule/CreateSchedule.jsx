@@ -9,7 +9,13 @@ import { Add } from "@mui/icons-material";
 import Scheduler from "../../../components/ui/schedulerComponent/Scheduler";
 import useAuth from "../../../hooks/useAuth";
 import CustomSnackbar from "../../../components/ui/CustomSnackbar";
+
+import { useLocation } from "react-router-dom";
 const CreateSchedule = () => {
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const id = searchParams.get("id");
+
   const [currentLeague, setCurrentLeague] = useState("");
   const [currentSchedule, setCurrentSchedule] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -18,10 +24,11 @@ const CreateSchedule = () => {
   const [isOpenSnackbar, setIsOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarType, setSnackbarType] = useState("success");
-
+  const [alreadyCreated, setAlreadyCreated] = useState(false);
   useEffect(async () => {
     if (currentLeague) {
       setIsLoading(true);
+      console.log(currentLeague);
       try {
         const res = await MyAxios.get(`/lichthidau/${currentLeague?.id}`);
         if (res?.data?.data?.cacVongDau) {
@@ -33,6 +40,7 @@ const CreateSchedule = () => {
         setCurrentSchedule([]);
       } finally {
         setIsLoading(false);
+        setAlreadyCreated(true);
       }
     }
   }, [currentLeague]);
@@ -61,6 +69,7 @@ const CreateSchedule = () => {
       <AllLeaguesSelector
         currentLeague={currentLeague}
         setCurrentLeague={setCurrentLeague}
+        selectId={id}
       ></AllLeaguesSelector>
       <ComponentLayoutBackdrop isLoading={isLoading} notify={notify}>
         <Grid
@@ -69,6 +78,9 @@ const CreateSchedule = () => {
           elevation={3}
           sx={{ mt: "1rem", padding: "0.5rem" }}
         >
+          {!isLoading && !currentLeague && !currentSchedule?.length > 0 && (
+            <Typography>Hãy chọn giải đấu</Typography>
+          )}
           {!isLoading && currentLeague && !currentSchedule?.length > 0 && (
             <Box
               sx={{
@@ -99,13 +111,18 @@ const CreateSchedule = () => {
                 Hiện chưa có lịch thi đấu của giải đấu này
               </Typography>
             )}
-            {!isLoading && currentLeague && currentSchedule?.length > 0 && (
+            {alreadyCreated ||
+            (!isLoading && currentLeague && currentSchedule?.length > 0) ? (
               <Scheduler
                 currentSchedule={currentSchedule}
                 setCurrentSchedule={setCurrentSchedule}
                 background={"blueBackground.manage"}
+                setIsLoading={setIsLoading}
+                setSnackbarMessage={setSnackbarMessage}
+                setSnackbarType={setSnackbarType}
+                setIsOpenSnackbar={setIsOpenSnackbar}
               ></Scheduler>
-            )}
+            ) : null}
           </Grid>
         </Grid>
         <CustomSnackbar

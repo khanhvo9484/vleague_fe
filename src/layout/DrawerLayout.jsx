@@ -17,6 +17,7 @@ import useProgressiveImage from "../hooks/useProgressiveImage.js";
 import drawerLogo from "../assets/patterns/drawerLogo.png";
 import drawerPatterns from "../assets/patterns/drawerPatterns.png";
 const drawerWidth = 300;
+import { Link } from "react-router-dom";
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
@@ -106,11 +107,15 @@ const DrawerLayout = ({ children, menuItems }) => {
                           ? classes.active
                           : ""
                       }
-                      onClick={() => navigate(item.path)}
+                      onClick={() => {
+                        navigate(item.path);
+                      }}
                     >
                       <ListItemIcon>{item?.icon}</ListItemIcon>
                       <ListItemText
-                        primaryTypographyProps={{ style: { fontWeight: 600 } }}
+                        primaryTypographyProps={{
+                          style: { fontWeight: 600 },
+                        }}
                       >
                         {item.text}
                       </ListItemText>

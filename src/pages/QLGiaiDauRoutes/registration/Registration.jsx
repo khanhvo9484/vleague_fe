@@ -20,7 +20,7 @@ const Registration = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [listRegis, setListRegis] = useState([]);
   const [allListRegis, setAllListRegis] = useState([]);
-  const [selectValue, setSelectValue] = useState("Chưa duyệt");
+  const [selectValue, setSelectValue] = useState("Chờ duyệt");
   useEffect(async () => {
     if (currentLeague) {
       try {
@@ -100,7 +100,11 @@ const Registration = () => {
             {!currentLeague && (
               <Typography
                 variant="h5"
-                sx={{ backgroundColor: "none", textAlign: "center" }}
+                sx={{
+                  backgroundColor: "none",
+                  textAlign: "center",
+                  padding: "2rem",
+                }}
               >
                 Vui lòng chọn giải đấu
               </Typography>
@@ -108,7 +112,11 @@ const Registration = () => {
             {currentLeague && listRegis?.length === 0 && (
               <Typography
                 variant="h5"
-                sx={{ backgroundColor: "none", textAlign: "center" }}
+                sx={{
+                  backgroundColor: "none",
+                  textAlign: "center",
+                  padding: "2rem",
+                }}
               >
                 Không có đơn đăng ký nào
               </Typography>

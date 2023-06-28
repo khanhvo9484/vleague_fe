@@ -10,6 +10,7 @@ import { useState, useEffect } from "react";
 import MyAxios from "../../api/MyAxios";
 import ComponentLayout from "../../layout/ComponentLayout";
 import Helper from "../../utils/Helper";
+import { useLocation, useNavigate } from "react-router-dom";
 const status = {
   0: "Đang đăng ký",
   1: "Đã bắt đầu",
@@ -23,31 +24,24 @@ const AllLeaguesSelector = (props) => {
     selectFirst,
     AllLeagues,
     setAllLeagues,
+    selectId,
   } = props;
+  const location = useLocation();
+  const navigate = useNavigate();
+
   const [isLoading, setIsLoading] = useState(false);
   const [notify, setNotify] = useState({ message: "", type: "" });
   const [leagues, setLeagues] = useState([]);
-  const [selectedLeague, setSelectedLeague] = useState(null);
-  const [leagueSeasons, setLeagueSeasons] = useState([]);
-  // State variable to store the selected value(s)
-  const [seasonsStartDate, setSeasonsStartDate] = useState("");
-  const [seasonsEndDate, setSeasonsEndDate] = useState("");
-  const [seasonsStatus, setSeasonsStatus] = useState("");
-
-  const [isDisabledEndDate, setIsDisabledEndDate] = useState(false);
-  const [isDisabledStatus, setIsDisabledStatus] = useState(false);
-
-  const [statusArray, setStatusArray] = useState([]);
+  const [filterLeagues, setFilterLeagues] = useState([]);
+  const [nameSet, setNameSet] = useState([]);
+  const [statusSet, setStatusSet] = useState([]);
+  const [selectedLeagueNameObj, setSelectedLeagueNameObj] = useState();
+  const [selectedName, setSelectedName] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [leagueStatus, setLeagueStatus] = useState("");
 
   const [isFirstTime, setIsFirstTime] = useState(true);
-  // Function to handle Autocomplete value changes
-  const handleAutocompleteChange = (event, value) => {
-    setSelectedLeague(value);
-    setCurrentLeague("");
-    setSeasonsStartDate("");
-    setSeasonsEndDate("");
-    setSeasonsStatus("");
-  };
 
   useEffect(async () => {
     setIsLoading(true);
@@ -56,17 +50,15 @@ const AllLeaguesSelector = (props) => {
         params: { page: 1, limit: 1000 },
       });
       setLeagues(response?.data?.data?.listResult);
+      setFilterLeagues(response?.data?.data?.listResult);
+      // setSelectedLeagueNameObj(response?.data?.data?.listResult[0]);
       if (AllLeagues) {
         setAllLeagues(response?.data?.data?.listResult);
       }
-      if (selectFirst) {
-        const season = response?.data?.data?.listResult[0];
-        setSelectedLeague(season);
-        setCurrentLeague(season);
-        setSeasonsStartDate(season?.thoiDiemBatDau);
-        setSeasonsEndDate(season?.thoiDiemKetThuc);
-        setSeasonsStatus(season?.trangThai);
-        setIsFirstTime(false);
+      if (selectId) {
+        setCurrentLeague(
+          response?.data?.data?.listResult.find((item) => item.id == selectId)
+        );
       }
     } catch (err) {
       setNotify({ message: err.message, type: "error" });
@@ -74,59 +66,91 @@ const AllLeaguesSelector = (props) => {
       setIsLoading(false);
     }
   }, []);
-  useEffect(() => {
-    setLeagueSeasons(
-      leagues.filter((league) => league?.ten == selectedLeague?.ten)
-    );
-  }, [selectedLeague]);
-
-  useEffect(() => {
-    if (selectFirst) {
-      if (!isFirstTime) {
-        setSeasonsStartDate("");
-        setSeasonsEndDate("");
-        setSeasonsStatus("");
-      }
+  // Function to handle Autocomplete value changes
+  const handleAutocompleteChange = (event, value) => {
+    setSelectedName(value?.ten);
+    setCurrentLeague("");
+    setSelectedLeagueNameObj(value);
+    setStartDate("");
+    setEndDate("");
+    setLeagueStatus("");
+    setFilterLeagues(leagues.filter((league) => league?.ten == value?.ten));
+  };
+  const handleStartDateChange = (event) => {
+    setStartDate(event.target.value);
+    if (filterLeagues.length == 1) {
+      setEndDate(filterLeagues[0]?.thoiDiemKetThuc);
+      setLeagueStatus(filterLeagues[0]?.trangThai);
     } else {
-      setSeasonsStartDate("");
-      setSeasonsEndDate("");
-      setSeasonsStatus("");
+      setFilterLeagues(
+        leagues.filter((league) => {
+          if (selectedName) {
+            return (
+              league?.ten == selectedName &&
+              league?.thoiDiemBatDau == event.target.value
+            );
+          }
+          return league?.thoiDiemBatDau == event.target.value;
+        })
+      );
     }
+  };
+  const handleEndDateChange = (event) => {
+    setEndDate(event.target.value);
+    if (filterLeagues.length == 1) {
+      setStartDate(filterLeagues[0]?.thoiDiemBatDau);
+      setLeagueStatus(filterLeagues[0]?.trangThai);
+    } else {
+      setFilterLeagues(
+        leagues.filter((league) => {
+          if (selectedName && startDate) {
+            return (
+              league?.ten == selectedName &&
+              league?.thoiDiemBatDau == startDate &&
+              league?.thoiDiemKetThuc == event.target.value
+            );
+          }
+          return league?.thoiDiemKetThuc == event.target.value;
+        })
+      );
+    }
+  };
+  const handleStatusChange = (event) => {
+    setLeagueStatus(event.target.value);
+    if (filterLeagues.length == 1) {
+      setStartDate(filterLeagues[0]?.thoiDiemBatDau);
+      setEndDate(filterLeagues[0]?.thoiDiemKetThuc);
+    }
+  };
+  useEffect(() => {
+    console.log("filterLeagues", filterLeagues);
+  }, [filterLeagues]);
+  useEffect(() => {
+    console.log(selectedName, startDate, endDate, leagueStatus);
+    if ((selectedName, startDate, endDate, leagueStatus !== "")) {
+      if (filterLeagues.length == 1) {
+        setCurrentLeague(filterLeagues[0]);
+      }
+    }
+  }, [selectedName, startDate, endDate, leagueStatus]);
+  useEffect(() => {
+    if (currentLeague) {
+      setSelectedLeagueNameObj(currentLeague);
+      setSelectedName(currentLeague?.ten);
+      setStartDate(currentLeague?.thoiDiemBatDau);
+      setEndDate(currentLeague?.thoiDiemKetThuc);
+      setLeagueStatus(currentLeague?.trangThai);
+    }
+    if (currentLeague) {
+      const searchParams = new URLSearchParams(location.search);
+      searchParams.set("id", `${currentLeague?.id}`);
 
-    setStatusArray(
-      Array.from(
-        new Set(leagueSeasons?.map((season, index) => season?.trangThai))
-      )
-    );
-  }, [leagueSeasons]);
+      navigate({
+        search: `?${searchParams.toString()}`,
+      });
+    }
+  }, [currentLeague]);
 
-  const handleSelectStartDate = (event) => {
-    const season = leagueSeasons.find(
-      (item) => item?.thoiDiemBatDau == event.target.value
-    );
-    setCurrentLeague(season);
-    setSeasonsStartDate(season?.thoiDiemBatDau);
-    setSeasonsEndDate(season?.thoiDiemKetThuc);
-    setSeasonsStatus(season?.trangThai);
-  };
-  const handleSelectEndDate = (event) => {
-    const season = leagueSeasons.find(
-      (item) => item?.thoiDiemKetThuc == event.target.value
-    );
-    setCurrentLeague(season);
-    setSeasonsStartDate(season?.thoiDiemBatDau);
-    setSeasonsEndDate(season?.thoiDiemKetThuc);
-    setSeasonsStatus(season?.trangThai);
-  };
-  const handleSelectStatus = (event) => {
-    const tempStatus = event.target.value;
-    setSeasonsStatus(status[tempStatus]);
-    setLeagueSeasons(
-      leagueSeasons.filter((item) => {
-        item?.trangThai == tempStatus;
-      })
-    );
-  };
   return (
     <ComponentLayout isLoading={isLoading} notify={notify}>
       <Grid container justifyContent={"space-between"}>
@@ -134,6 +158,7 @@ const AllLeaguesSelector = (props) => {
           <Autocomplete
             options={leagues}
             autoHighlight
+            // isOptionEqualToValue={(option, value) => option?.id === value?.id}
             getOptionLabel={(option) => option?.ten}
             renderOption={(props, option) => (
               <Box
@@ -160,7 +185,7 @@ const AllLeaguesSelector = (props) => {
                 }}
               />
             )}
-            value={selectedLeague} // Set the value prop to the selectedLeague state variable
+            value={selectedLeagueNameObj || null} // Set the value prop to the selectedLeague state variable
             onChange={handleAutocompleteChange} // Handle value changes
           />
         </Grid>
@@ -169,10 +194,10 @@ const AllLeaguesSelector = (props) => {
             select
             label="Ngày bắt đầu"
             sx={{ width: "100%" }}
-            value={seasonsStartDate}
-            onChange={handleSelectStartDate}
+            value={startDate}
+            onChange={handleStartDateChange}
           >
-            {leagueSeasons?.map((season, index) => (
+            {filterLeagues?.map((season, index) => (
               <MenuItem key={index} value={season?.thoiDiemBatDau}>
                 {" "}
                 {Helper.formatDateToLocal(season?.thoiDiemBatDau)}
@@ -186,11 +211,10 @@ const AllLeaguesSelector = (props) => {
             select
             label="Ngày kết thúc"
             sx={{ width: "100%" }}
-            disabled={isDisabledEndDate}
-            value={seasonsEndDate}
-            onChange={handleSelectEndDate}
+            value={endDate}
+            onChange={handleEndDateChange}
           >
-            {leagueSeasons?.map((season, index) => (
+            {filterLeagues?.map((season, index) => (
               <MenuItem key={index} value={season?.thoiDiemKetThuc}>
                 {" "}
                 {Helper.formatDateToLocal(season?.thoiDiemKetThuc)}
@@ -203,11 +227,12 @@ const AllLeaguesSelector = (props) => {
             select
             label="Tình trạng"
             sx={{ width: "100%" }}
-            value={seasonsStatus}
-            disabled={isDisabledStatus}
-            onChange={handleSelectStatus}
+            value={leagueStatus}
+            onChange={handleStatusChange}
           >
-            {statusArray.map((tempStatus, index) => (
+            {Array.from(
+              new Set(filterLeagues.map((league) => league?.trangThai))
+            ).map((tempStatus, index) => (
               <MenuItem key={index} value={tempStatus}>
                 {" "}
                 {status[tempStatus]}

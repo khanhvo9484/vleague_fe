@@ -5,11 +5,13 @@ import PlayersList from "../../../components/form/PlayersList";
 import ComponentLayout from "../../../layout/ComponentLayout";
 import { useState, useEffect } from "react";
 import MyAxios from "../../../api/MyAxios";
+
 const AddNewPlayerToClub = (props) => {
   const onFilterChange = (value) => {};
   const [isLoading, setIsLoading] = useState(false);
   const [notify, setNotify] = useState({ message: "", type: "" });
   const [players, setPlayers] = useState([]);
+  const [selectedFreePlayer, setSelectedFreePlayer] = useState("");
   useEffect(async () => {
     setIsLoading(true);
     try {
@@ -35,9 +37,13 @@ const AddNewPlayerToClub = (props) => {
         <Grid item xs={12} sx={{ mt: "0.5rem" }}>
           <PlayersList
             data={players}
+            setData={setPlayers}
+            hoverEffect={false}
             // hasCheckbox={true}
             addToList={true}
             title={"Danh sách cầu thủ tự do"}
+            selectedFreePlayer={selectedFreePlayer}
+            setSelectedFreePlayer={setSelectedFreePlayer}
           ></PlayersList>
         </Grid>
       </Grid>

@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
     position: "absolute",
     top: "0",
     right: "0",
-    borderRadius: "2px",
+    borderRadius: "px",
     outline: "2px solid gray",
     mt: "0.2rem",
     mr: "0.2rem",
@@ -63,6 +63,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 const Match = () => {
   const classes = useStyles();
+  const theme = useTheme();
   const { currentMatchDay, currentSchedule } = useCurrentLeague();
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
@@ -89,7 +90,10 @@ const Match = () => {
                     <Box className={classes.endedMatchStamp}>
                       <Typography
                         variant="body3"
-                        sx={{ padding: "0.1rem", color: "gray" }}
+                        sx={{
+                          padding: "0rem 0.5rem 0rem 0.5rem",
+                          color: "gray",
+                        }}
                       >
                         Đã kết thúc
                       </Typography>
@@ -171,7 +175,7 @@ const Match = () => {
                     xs={12}
                   >
                     <Typography>
-                      {Helper.formatDateToLocal(match.thoiGian)}
+                      {Helper.formatDateToVNDate(match?.thoiGianVietNam)}
                     </Typography>
                   </Grid>
                   <Grid

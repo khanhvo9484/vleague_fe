@@ -28,13 +28,17 @@ const menuItems = [
     path: "/organizer/all-leagues",
   },
   {
-    text: "Tạo lịch thi đấu",
+    text: "Lịch thi đấu",
     icon: <EditNote />,
     path: "/organizer/create-schedule",
   },
-  { text: "Quản lý trận đấu", icon: <SportsSoccer />, path: "/manager/match" },
   {
-    text: "Danh sách hồ sơ đăng ký",
+    text: "Quản lý trận đấu",
+    icon: <SportsSoccer />,
+    path: "/organizer/matches",
+  },
+  {
+    text: "Hồ sơ đăng ký",
     icon: <DescriptionRounded />,
     path: "/organizer/league-registration",
   },
