@@ -33,8 +33,12 @@ const RegistrationDetail = () => {
   const [isOpenSnackbar, setIsOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarType, setSnackbarType] = useState("success");
-
+  const [player, setPlayer] = useState({});
   const [isOpenBackdrop, setIsOpenBackdrop] = useState(false);
+  const [players, setPlayers] = useState([]);
+  useEffect(() => {
+    players.find((item) => item.id == currentPlayer && setPlayer(item));
+  }, [currentPlayer]);
 
   const fetchingForm = async () => {
     try {
@@ -42,6 +46,8 @@ const RegistrationDetail = () => {
       const res = await MyAxios.get(`/hosodangky/chitiet?hoso=${id}`);
       setCurrentForm(res?.data?.data);
       setCurrentPlayer(res?.data?.data?.dsCauThuDangKy[0]);
+      setPlayer(res.data?.data?.dsCauThuDangKy[0]);
+      setPlayers(res?.data?.data?.dsCauThuDangKy);
     } catch (err) {
       console.log(err);
       setNotify(err?.data?.message);
@@ -85,14 +91,12 @@ const RegistrationDetail = () => {
           </Grid>
           <Grid item container justifyContent={"space-between"}>
             <Grid item xs={8}>
-              {currentForm && (
-                <PlayerTable data={currentForm?.dsCauThuDangKy}></PlayerTable>
-              )}
+              {currentForm && <PlayerTable data={players}></PlayerTable>}
             </Grid>
             <Grid item xs={3}>
               {currentForm && (
                 <PlayerLargeCard
-                  player={currentPlayer}
+                  player={player}
                   isNotShowEdit={true}
                 ></PlayerLargeCard>
               )}

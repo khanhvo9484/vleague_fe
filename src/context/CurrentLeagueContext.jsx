@@ -10,6 +10,7 @@ export const CurrentLeagueProvider = ({ children }) => {
   const [currentClub, setCurrentClub] = useState();
   const [currentStadium, setCurrentStadium] = useState();
   const [currentManager, setCurrentManager] = useState();
+  const [checkRuleResult, setCheckRuleResult] = useState(false);
   return (
     <CurrentLeagueContext.Provider
       value={{
@@ -27,6 +28,8 @@ export const CurrentLeagueProvider = ({ children }) => {
         setCurrentStadium,
         currentManager,
         setCurrentManager,
+        checkRuleResult,
+        setCheckRuleResult,
       }}
     >
       {children}

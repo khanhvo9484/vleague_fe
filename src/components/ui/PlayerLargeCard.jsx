@@ -406,7 +406,14 @@ const currentPlayerLargeCard = (props) => {
                   size="small"
                   fullWidth={false}
                   disabled={!isEditable}
-                  value={playerPosition.join(", ")}
+                  value={(() => {
+                    try {
+                      return playerPosition.join(", ");
+                    } catch (error) {
+                      // Handle the error here
+                      return "";
+                    }
+                  })()}
                   onChange={(e) => {
                     setPlayerPosition(e.target.value.split(", "));
                   }}

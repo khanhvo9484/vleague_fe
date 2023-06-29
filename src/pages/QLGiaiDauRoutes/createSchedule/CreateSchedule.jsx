@@ -78,9 +78,6 @@ const CreateSchedule = () => {
           elevation={3}
           sx={{ mt: "1rem", padding: "0.5rem" }}
         >
-          {!isLoading && !currentLeague && !currentSchedule?.length > 0 && (
-            <Typography>Hãy chọn giải đấu</Typography>
-          )}
           {!isLoading && currentLeague && !currentSchedule?.length > 0 && (
             <Box
               sx={{
@@ -106,6 +103,11 @@ const CreateSchedule = () => {
             xs={12}
             sx={{ padding: "1rem", backgroundColor: "blueBackground.manage" }}
           >
+            {!isLoading && !currentLeague && !currentSchedule?.length > 0 && (
+              <Typography variant="h5" sx={{ textAlign: "center" }}>
+                Hãy chọn giải đấu
+              </Typography>
+            )}
             {!isLoading && currentLeague && !currentSchedule?.length > 0 && (
               <Typography variant="h6" sx={{ textAlign: "center" }}>
                 Hiện chưa có lịch thi đấu của giải đấu này

@@ -42,6 +42,8 @@ const Scheduler = (props) => {
     setSnackbarMessage,
     setSnackbarType,
     setIsOpenSnackbar,
+    showDetail,
+    notShowEdit,
   } = props;
 
   const [notify, setNotify] = useState("");
@@ -103,7 +105,7 @@ const Scheduler = (props) => {
             }}
           >
             <Box sx={{}}>
-              {!isEditable && (
+              {!isEditable && !notShowEdit && (
                 <Tooltip title="Chỉnh sửa lịch thi đấu">
                   <IconButton
                     sx={{
@@ -173,6 +175,7 @@ const Scheduler = (props) => {
         changeList={changeList}
         setChangeList={setChangeList}
         isSave={isSave}
+        showDetail
       ></MatchDay>
     </Grid>
   );

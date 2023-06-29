@@ -26,6 +26,7 @@ const AddNewLeague = () => {
   const [drawPoint, setDrawPoint] = useState(-1);
   const [losePoint, setLosePoint] = useState(-1);
   const [isEditable, setIsEditable] = useState(true);
+  const [isDisable, setIsDisable] = useState(false);
 
   const [numberOfClubs, setNumberOfClubs] = useState(-1);
   const { imageUrl, hasImageOnQueue, isFireUpload, setIsFireUpload } =
@@ -35,7 +36,6 @@ const AddNewLeague = () => {
   const [snackbarContent, setSnackbarContent] = useState("");
   const [snackbarType, setSnackbarType] = useState("success");
   const { auth } = useAuth();
-  console.log(auth);
   const handleAddLeague = async () => {
     setIsLoading(true);
     let data = {
@@ -47,7 +47,7 @@ const AddNewLeague = () => {
       quyDinhCauThu: {
         soLuongCauThuToiDa: maxPlayer,
         soLuongCauThuToiThieu: minPlayer,
-        soLuongCauThuNgoaiQuocToiDa: maxForeignPlayer,
+        soLuongCauThuNuocNgoaiToiDa: maxForeignPlayer,
         tuoiToiThieu: minAge,
         tuoiToiDa: maxAge,
       },
@@ -60,7 +60,7 @@ const AddNewLeague = () => {
         soLuongDoi: numberOfClubs,
       },
     };
-    console.log(data);
+
     try {
       const res = await MyAxios.post("/muagiai/taogiaidau_quydinhmoi", data, {
         contentType: "application/json",
@@ -129,6 +129,8 @@ const AddNewLeague = () => {
                 setWinPoint={setWinPoint}
                 setDrawPoint={setDrawPoint}
                 setLosePoint={setLosePoint}
+                isDisable={isDisable}
+                setIsDisable={setIsDisable}
               ></Rules>
               <Box
                 sx={{
@@ -138,7 +140,11 @@ const AddNewLeague = () => {
                   width: "100%",
                 }}
               >
-                <Button variant="contained" onClick={handleAddLeague}>
+                <Button
+                  disabled={isDisable}
+                  variant="contained"
+                  onClick={handleAddLeague}
+                >
                   Thêm giải đấu <Add></Add>
                 </Button>
               </Box>

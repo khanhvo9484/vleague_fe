@@ -11,6 +11,7 @@ import { makeStyles } from "@mui/styles";
 import CustomTextField from "../CustomTextField";
 import { useState, useEffect } from "react";
 import Helper from "../../../utils/Helper";
+import { useNavigate } from "react-router-dom";
 const useStyles = makeStyles((theme) => ({
   matchList: {
     display: "flex",
@@ -59,6 +60,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const MatchCard = (props) => {
+  const navigate = useNavigate();
   const {
     match,
     isEditable,
@@ -66,6 +68,7 @@ const MatchCard = (props) => {
     changeList,
     setChangeList,
     isSave,
+    showDetail,
   } = props;
   const classes = useStyles();
   const [currentDate, setCurrentDate] = useState("");
@@ -316,6 +319,34 @@ const MatchCard = (props) => {
                 </Typography>
               ))}
           </Box>
+          {showDetail && (
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "flex-end",
+                width: "100%",
+                alignItems: "flex-end",
+              }}
+            >
+              <Typography
+                sx={{
+                  paddingRight: "0.5rem",
+                  paddingBottom: "0.5rem",
+                  cursor: "pointer",
+                  color: "primary.dark",
+                  "&:hover": {
+                    color: "blueBackground.dark",
+                    textDecoration: "underline",
+                  },
+                }}
+                onClick={() => {
+                  navigate(`/organizer/matches/match?matchId=${match.id}`);
+                }}
+              >
+                Xem chi tiết
+              </Typography>
+            </Box>
+          )}
         </Grid>
       </Grid>
     </Paper>

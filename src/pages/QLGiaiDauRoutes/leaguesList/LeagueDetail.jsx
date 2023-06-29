@@ -1,32 +1,54 @@
-import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
-import { Paper, Box, Grid, Typography } from "@mui/material";
-import OneLeague from "./OneLeague";
-import MyAxios from "../../../api/MyAxios";
-import OrganizerLayout from "../../../layout/OrganizerLayout";
-import ComponentLayoutBackdrop from "../../../layout/ComponentLayout";
-const LeagueDetail = () => {
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  const id = searchParams.get("id");
-  const [league, setLeague] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
-  const [notify, setNotify] = useState({ message: "", type: "" });
-  useEffect(async () => {
-    const abortController = new AbortController();
-    setIsLoading(true);
-    try {
-      const res = await MyAxios.get(`/giaidau/chitiet?giaidau=${id}`, {
-        signal: abortController.signal,
-      });
-    } catch (err) {
-      setNotify({ message: err?.data?.message, type: "error" });
-    } finally {
-      setIsLoading(false);
-    }
-    return () => abortController.abort();
-  }, []);
-  return <div>LeagueDetail</div>;
+import { Paper, Box, Grid, Typography, Button } from "@mui/material";
+import { ArrowBackIos } from "@mui/icons-material";
+
+const LeagueDetail = (props) => {
+  const { league, setSelectedLeague } = props;
+  return (
+    <Grid container>
+      <Grid item xs={12} sx={{ mb: "0.5rem", ml: "0.5rem" }}>
+        <Box sx={{ display: "flex", width: "100%", justifyContent: "left" }}>
+          <Typography variant="h5">{league[0]?.tenGiai}</Typography>
+        </Box>
+        <Box>
+          <Typography>Danh sách đội đã đăng ký</Typography>
+        </Box>
+      </Grid>
+      {league &&
+        league.map((item, index) => (
+          <Grid
+            item
+            xs={5}
+            key={index}
+            component={Paper}
+            elevation={3}
+            sx={{ mt: "0.5rem", ml: "0.5rem" }}
+          >
+            <Box
+              sx={{ display: "flex", padding: "0.5rem", alignItems: "center" }}
+            >
+              <Box sx={{ width: "60px" }}>
+                <img style={{ height: "40px" }} src={item?.hinhAnhDoi}></img>
+              </Box>
+              <Typography variant="h6">{item?.ten_doibong}</Typography>
+            </Box>
+          </Grid>
+        ))}
+      <Grid item xs={12} sx={{ mt: "1rem", ml: "0.5rem" }}>
+        <Box sx={{ display: "flex", width: "100%", justifyContent: "left" }}>
+          <Button
+            startIcon={<ArrowBackIos></ArrowBackIos>}
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              setSelectedLeague("");
+            }}
+          >
+            Trở lại
+          </Button>
+        </Box>
+      </Grid>
+    </Grid>
+  );
 };
 
 export default LeagueDetail;

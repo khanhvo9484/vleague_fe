@@ -7,6 +7,8 @@ import {
   Select,
   MenuItem,
   Button,
+  IconButton,
+  Tooltip,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import OrganizerLayout from "../../../layout/OrganizerLayout";
@@ -15,7 +17,7 @@ import AllLeaguesSelector from "../../../components/ui/AllLeaguesSelector";
 import MyAxios from "../../../api/MyAxios";
 import RegistrationForm from "../../../components/form/RegistrationForm";
 import PlayerTable from "../../../components/form/PlayersList";
-import { Add, Close } from "@mui/icons-material";
+import { Add, Close, Check } from "@mui/icons-material";
 import { useLocation } from "react-router-dom";
 import PlayerLargeCard from "../../../components/ui/PlayerLargeCard";
 import useCurrentLeague from "../../../hooks/useCurrentLeague";
@@ -32,6 +34,14 @@ const RegistrationDetail = () => {
   const [isOpenSnackbar, setIsOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarType, setSnackbarType] = useState("success");
+  const [player, setPlayer] = useState({});
+  const [players, setPlayers] = useState([]);
+  const [notes, setNotes] = useState("");
+  const [isShowDeclineNotes, setIsShowDeclineNotes] = useState(false);
+
+  useEffect(() => {
+    players.find((item) => item.id == currentPlayer && setPlayer(item));
+  }, [currentPlayer]);
 
   const [isOpenBackdrop, setIsOpenBackdrop] = useState(false);
 
@@ -40,7 +50,8 @@ const RegistrationDetail = () => {
       setIsLoading(true);
       const res = await MyAxios.get(`/hosodangky/chitiet?hoso=${id}`);
       setCurrentForm(res?.data?.data);
-      setCurrentPlayer(res?.data?.data?.dsCauThuDangKy[0]);
+      setCurrentPlayer(res?.data?.data?.dsCauThuDangKy[0]?.id);
+      setPlayers(res?.data?.data?.dsCauThuDangKy);
     } catch (err) {
       console.log(err);
       setNotify(err?.data?.message);
@@ -69,6 +80,27 @@ const RegistrationDetail = () => {
       setIsOpenBackdrop(false);
     }
   };
+  const handleDecline = async () => {
+    setIsOpenBackdrop(true);
+    try {
+      const res = await MyAxios.put(`/hosodangky/tuchoi`, {
+        id_hoso: id,
+        ghiChu: notes,
+      });
+      if (res.status === 200) {
+        fetchingForm();
+      }
+      setSnackbarMessage("Từ chối thành công");
+      setSnackbarType("success");
+    } catch (err) {
+      console.log(err);
+      setSnackbarMessage("Từ chối thất bại");
+      setSnackbarType("error");
+    } finally {
+      setIsOpenSnackbar(true);
+      setIsOpenBackdrop(false);
+    }
+  };
 
   return (
     <OrganizerLayout
@@ -83,13 +115,68 @@ const RegistrationDetail = () => {
           <Box
             sx={{ display: "flex", justifyContent: "flex-end", width: "100%" }}
           >
-            <Button
-              variant="contained"
-              disabled={currentForm?.trangThai == "Đã duyệt" ? true : false}
-              onClick={handleAccept}
-            >
-              Duyệt
-            </Button>
+            {!isShowDeclineNotes && (
+              <>
+                <Button
+                  sx={{ mr: "1rem" }}
+                  variant="contained"
+                  disabled={currentForm?.trangThai == "Đã duyệt" ? true : false}
+                  onClick={() => {
+                    setIsShowDeclineNotes(true);
+                  }}
+                >
+                  Từ chối
+                </Button>
+                <Button
+                  variant="contained"
+                  disabled={currentForm?.trangThai == "Đã duyệt" ? true : false}
+                  onClick={handleAccept}
+                >
+                  Duyệt
+                </Button>
+              </>
+            )}
+            {isShowDeclineNotes && (
+              <>
+                <Tooltip title="Hủy">
+                  <IconButton
+                    onClick={() => {
+                      setIsShowDeclineNotes(false);
+                    }}
+                  >
+                    <Close></Close>
+                  </IconButton>
+                </Tooltip>
+
+                <Tooltip title="Xác nhận">
+                  <IconButton sx={{ ml: "0.5rem" }} onClick={handleDecline}>
+                    <Check></Check>
+                  </IconButton>
+                </Tooltip>
+              </>
+            )}
+          </Box>
+          <Box
+            sx={{
+              width: "100%",
+              display: isShowDeclineNotes ? "flex" : "none",
+              justifyContent: "flex-end",
+              mt: "1rem",
+              mb: "0.5rem",
+            }}
+          >
+            <TextField
+              value={notes}
+              onChange={(e) => {
+                setNotes(e.target.value);
+              }}
+              sx={{ width: "20rem" }}
+              label="Ghi chú lý do từ chối"
+              variant="outlined"
+              placeholder="Nhập lý do từ chối"
+              multiline
+              rows={3}
+            ></TextField>
           </Box>
           <Grid
             item
@@ -119,7 +206,7 @@ const RegistrationDetail = () => {
             <Grid item xs={3}>
               {currentForm && (
                 <PlayerLargeCard
-                  player={currentPlayer}
+                  player={player}
                   isNotShowEdit={true}
                 ></PlayerLargeCard>
               )}

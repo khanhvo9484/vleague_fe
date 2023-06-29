@@ -73,6 +73,7 @@ const Match = (props) => {
     changeList,
     setChangeList,
     isSave,
+    showDetail,
   } = props;
   const [isLoading, setIsLoading] = useState(true);
 
@@ -92,6 +93,7 @@ const Match = (props) => {
                 changeList={changeList}
                 setChangeList={setChangeList}
                 isSave={isSave}
+                showDetail={showDetail}
               />
             </ListItem>
           );

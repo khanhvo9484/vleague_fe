@@ -18,6 +18,7 @@ import GDRegistration from "../pages/QLGiaiDauRoutes/registration/Registration";
 import GDRegistrationDetail from "../pages/QLGiaiDauRoutes/registration/RegistrationDetail";
 import GDMatches from "../pages/QLGiaiDauRoutes/matches/Matches";
 import GDLeagueDetail from "../pages/QLGiaiDauRoutes/leaguesList/LeagueDetail";
+import GDMatchDetail from "../pages/QLGiaiDauRoutes/matches/MatchDetail";
 
 import DBHome from "../pages/QLDoiBongRoutes/home/Home";
 import DBManageTeam from "../pages/QLDoiBongRoutes/manageTeam/ManageTeam";
@@ -92,6 +93,7 @@ const App = () => {
             element={<GDRegistrationDetail />}
           />
           <Route path="/organizer/matches" element={<GDMatches />} />
+          <Route path="/organizer/matches/match" element={<GDMatchDetail />} />
         </Route>
         <Route
           exact

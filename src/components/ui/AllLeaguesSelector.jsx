@@ -53,9 +53,11 @@ const AllLeaguesSelector = (props) => {
       setFilterLeagues(response?.data?.data?.listResult);
       // setSelectedLeagueNameObj(response?.data?.data?.listResult[0]);
       if (AllLeagues) {
+        console.log("all league", AllLeagues);
         setAllLeagues(response?.data?.data?.listResult);
       }
       if (selectId) {
+        console.log("select ID");
         setCurrentLeague(
           response?.data?.data?.listResult.find((item) => item.id == selectId)
         );
@@ -122,11 +124,8 @@ const AllLeaguesSelector = (props) => {
       setEndDate(filterLeagues[0]?.thoiDiemKetThuc);
     }
   };
+
   useEffect(() => {
-    console.log("filterLeagues", filterLeagues);
-  }, [filterLeagues]);
-  useEffect(() => {
-    console.log(selectedName, startDate, endDate, leagueStatus);
     if ((selectedName, startDate, endDate, leagueStatus !== "")) {
       if (filterLeagues.length == 1) {
         setCurrentLeague(filterLeagues[0]);
@@ -144,7 +143,6 @@ const AllLeaguesSelector = (props) => {
     if (currentLeague) {
       const searchParams = new URLSearchParams(location.search);
       searchParams.set("id", `${currentLeague?.id}`);
-
       navigate({
         search: `?${searchParams.toString()}`,
       });
@@ -158,7 +156,7 @@ const AllLeaguesSelector = (props) => {
           <Autocomplete
             options={leagues}
             autoHighlight
-            // isOptionEqualToValue={(option, value) => option?.id === value?.id}
+            isOptionEqualToValue={(option, value) => option?.id === value?.id}
             getOptionLabel={(option) => option?.ten}
             renderOption={(props, option) => (
               <Box

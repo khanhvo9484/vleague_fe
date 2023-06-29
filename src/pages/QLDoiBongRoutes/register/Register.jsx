@@ -18,6 +18,7 @@ import AllLeaguesSelector from "../../../components/ui/AllLeaguesSelector";
 import AllPlayers from "./AllPlayers";
 import ComponentLayoutBackdrop from "../../../layout/ComponentLayoutBackdrop";
 import CustomSnackbar from "../../../components/ui/CustomSnackbar";
+
 import {
   Add,
   ArrowBack,
@@ -27,7 +28,13 @@ import {
 import NotifiBox from "../../../components/ui/NotifiBox";
 import Rules from "../../../components/ui/rules/Rules";
 import PopupRules from "./PopupRules";
+import CheckRule from "./CheckRule";
+import { useLocation } from "react-router-dom";
 const Register = () => {
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const id = searchParams.get("id");
+
   const [isLoading, setIsLoading] = useState(false);
   const [notify, setNotify] = useState({ message: "", type: "" });
   const { auth } = useAuth();
@@ -43,6 +50,8 @@ const Register = () => {
   const [isOpenSnackbar, setIsOpenSnackbar] = useState(false);
   const [snackbarContent, setSnackbarContent] = useState("");
   const [snackbarType, setSnackbarType] = useState("success");
+  const [currentRegisterListInfo, setCurrentRegisterListInfo] = useState({});
+  const { checkRuleResult } = useCurrentLeague();
 
   const [isLoadingSubmit, setIsLoadingSubmit] = useState(false);
   const handleSubmit = async () => {
@@ -95,6 +104,31 @@ const Register = () => {
       );
     }
   }, [selectedList]);
+  useEffect(() => {
+    try {
+      let maxAge = Math.max(...filterList.map((player) => player?.age));
+      let minAge = Math.min(...filterList.map((player) => player?.age));
+      // Check if maxAge is -Infinity
+      if (!isFinite(maxAge)) {
+        maxAge = 0;
+      }
+      // Check if minAge is Infinity
+      if (!isFinite(minAge)) {
+        minAge = 0;
+      }
+      const numberOfPlayer = filterList.length;
+      const numberOfForeignPlayer = filterList.filter(
+        (player) => player?.loaiCauThu == "Ngoại binh"
+      ).length;
+      setCurrentRegisterListInfo({
+        maxAge,
+        minAge,
+        numberOfPlayer,
+        numberOfForeignPlayer,
+      });
+    } catch (err) {}
+  }, [filterList]);
+
   return (
     <ManagerLayout
       title={"Đăng ký mùa giải"}
@@ -105,16 +139,17 @@ const Register = () => {
         <AllLeaguesSelector
           currentLeague={currentLeague}
           setCurrentLeague={setCurrentLeague}
+          selectId={id}
         ></AllLeaguesSelector>
       )}
 
       <ComponentLayoutBackdrop isLoading={isLoadingSubmit}>
         <Grid container justifyContent={"center"}>
-          <Grid item xs={12} sx={{ mb: "1rem" }}></Grid>
+          <Grid item container xs={12} sx={{ mb: "1rem" }}></Grid>
           <>
-            <Grid item xs={10}>
-              {!isShowRegisterList && (
-                <>
+            {!isShowRegisterList && (
+              <Grid item container justifyContent="space-between">
+                <Grid item xs={6}>
                   <PlayerList
                     title={"Danh sách cầu thủ"}
                     hasCheckbox={true}
@@ -123,8 +158,35 @@ const Register = () => {
                     selectedList={selectedList}
                     setSelectedList={setSelectedList}
                   ></PlayerList>
-                </>
-              )}
+                </Grid>
+                <Grid item xs={6}>
+                  <Box sx={{ display: "flex", ml: "2rem" }}>
+                    {!currentLeague && (
+                      <Box
+                        sx={{
+                          padding: "1rem",
+                          width: "100%",
+                          borderRadius: "4px",
+                          boxShadow: "shadows[5]",
+                          backgroundColor: "background.paper",
+                        }}
+                        component={Paper}
+                        elevation={3}
+                      >
+                        <Typography variant="h6" sx={{ textAlign: "center" }}>
+                          Hãy chọn mùa giải
+                        </Typography>
+                      </Box>
+                    )}
+                    <CheckRule
+                      currentLeague={currentLeague}
+                      currentRegisterListInfo={currentRegisterListInfo}
+                    ></CheckRule>
+                  </Box>
+                </Grid>
+              </Grid>
+            )}
+            <Grid item xs={12}>
               {isShowRegisterList && (
                 <PlayerList
                   title={"Danh sách cầu thủ đăng ký"}
@@ -147,6 +209,21 @@ const Register = () => {
                     onClick={() => {
                       if (!currentLeague) {
                         setNotifiContent("Vui lòng chọn giải đấu");
+                        setIsOpenNotification(true);
+                        return;
+                      }
+                      if (
+                        currentLeague?.trangThai == 1 ||
+                        currentLeague?.trangThai == 2
+                      ) {
+                        setNotifiContent(
+                          "Giải đấu đã kết thúc hoặc đang diễn ra"
+                        );
+                        setIsOpenNotification(true);
+                        return;
+                      }
+                      if (currentLeague && !checkRuleResult) {
+                        setNotifiContent("Vui lòng kiểm tra quy định mùa giải");
                         setIsOpenNotification(true);
                         return;
                       }

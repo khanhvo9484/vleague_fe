@@ -10,8 +10,7 @@ import Scheduler from "../../../components/ui/schedulerComponent/Scheduler";
 import useAuth from "../../../hooks/useAuth";
 import CustomSnackbar from "../../../components/ui/CustomSnackbar";
 import { useLocation } from "react-router-dom";
-
-const Matches = () => {
+const CreateSchedule = () => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const id = searchParams.get("id");
@@ -24,7 +23,7 @@ const Matches = () => {
   const [isOpenSnackbar, setIsOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarType, setSnackbarType] = useState("success");
-
+  const [alreadyCreated, setAlreadyCreated] = useState(false);
   useEffect(async () => {
     if (currentLeague) {
       setIsLoading(true);
@@ -39,14 +38,17 @@ const Matches = () => {
         setCurrentSchedule([]);
       } finally {
         setIsLoading(false);
+        setAlreadyCreated(true);
       }
     }
   }, [currentLeague]);
+
   return (
-    <OrganizerLayout title={"Trận đấu"}>
+    <OrganizerLayout title={"Danh sách trận đấu"}>
       <AllLeaguesSelector
         currentLeague={currentLeague}
         setCurrentLeague={setCurrentLeague}
+        selectId={id}
       ></AllLeaguesSelector>
       <ComponentLayoutBackdrop isLoading={isLoading} notify={notify}>
         <Grid
@@ -54,10 +56,44 @@ const Matches = () => {
           component={Paper}
           elevation={3}
           sx={{ mt: "1rem", padding: "0.5rem" }}
-        ></Grid>
+        >
+          <Grid
+            item
+            container
+            xs={12}
+            sx={{ padding: "1rem", backgroundColor: "blueBackground.manage" }}
+          >
+            {!isLoading && !currentLeague && !currentSchedule?.length > 0 && (
+              <Typography variant="h5" sx={{ textAlign: "center" }}>
+                Hãy chọn giải đấu
+              </Typography>
+            )}
+            {!isLoading && currentLeague && !currentSchedule?.length > 0 && (
+              <Typography variant="h6" sx={{ textAlign: "center" }}>
+                Hiện chưa có lịch thi đấu của giải đấu này
+              </Typography>
+            )}
+            {alreadyCreated ||
+            (!isLoading && currentLeague && currentSchedule?.length > 0) ? (
+              <Scheduler
+                currentSchedule={currentSchedule}
+                setCurrentSchedule={setCurrentSchedule}
+                background={"blueBackground.manage"}
+                showDetail={true}
+                notShowEdit={true}
+              ></Scheduler>
+            ) : null}
+          </Grid>
+        </Grid>
+        <CustomSnackbar
+          isOpen={isOpenSnackbar}
+          setIsOpen={setIsOpenSnackbar}
+          message={snackbarMessage}
+          type={snackbarType}
+        ></CustomSnackbar>
       </ComponentLayoutBackdrop>
     </OrganizerLayout>
   );
 };
 
-export default Matches;
+export default CreateSchedule;

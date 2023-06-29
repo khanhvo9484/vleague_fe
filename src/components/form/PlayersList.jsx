@@ -134,7 +134,9 @@ const PlayerTable = (props) => {
   const theme = useTheme();
   const classes = useStyles();
   const { currentPlayer, setCurrentPlayer } = useCurrentLeague();
-
+  useEffect(() => {
+    console.log("current player", currentPlayer);
+  }, [currentPlayer]);
   const numberPerPage = number ? number : 12;
   const [page, setPage] = useState(1);
   const { auth } = useAuth();

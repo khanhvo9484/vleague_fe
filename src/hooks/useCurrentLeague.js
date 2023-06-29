@@ -24,6 +24,8 @@ const useCurrentLeague = () => {
     currentManager,
     setCurrentManager,
     // current manager
+    checkRuleResult,
+    setCheckRuleResult,
   } = useContext(CurrentLeagueContext);
 
   return {
@@ -41,6 +43,8 @@ const useCurrentLeague = () => {
     setCurrentStadium,
     currentManager,
     setCurrentManager,
+    checkRuleResult,
+    setCheckRuleResult,
   };
 };
 export default useCurrentLeague;

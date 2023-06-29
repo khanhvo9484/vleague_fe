@@ -28,6 +28,8 @@ import { styled } from "@mui/material/styles";
 import OneLeague from "./OneLeague";
 import CustomSnackbar from "../../../components/ui/CustomSnackbar";
 import AddNewLeague from "./AddNewLeague";
+import { useLocation } from "react-router-dom";
+import LeagueDetail from "./LeagueDetail";
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -127,6 +129,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 const LeaguesList = () => {
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const id = searchParams.get("id");
+
   const classes = useStyles();
   const [allLeagues, setAllLeagues] = useState([]);
   const [currentLeague, setCurrentLeague] = useState([]);
@@ -139,9 +145,7 @@ const LeaguesList = () => {
   const handleChangeTab = (event, newValue) => {
     setCurrentTab(newValue);
   };
-  useEffect(() => {
-    setCurrentLeague(allLeagues);
-  }, [allLeagues]);
+  const [selectedLeague, setSelectedLeague] = useState("");
 
   return (
     <OrganizerLayout title={"Mùa giải"}>
@@ -154,12 +158,16 @@ const LeaguesList = () => {
         <StyledTab value={1} label="Thêm mùa giải"></StyledTab>
       </StyledTabs>
       <TabPanel value={currentTab} index={0}>
-        <AllLeaguesSelector
-          setCurrentLeague={setCurrentLeague}
-          currentLeague={currentLeague}
-          AllLeagues={allLeagues}
-          setAllLeagues={setAllLeagues}
-        ></AllLeaguesSelector>
+        <Box sx={{ display: "none" }}>
+          <AllLeaguesSelector
+            // currentLeague={currentLeague}
+            // setCurrentLeague={setCurrentLeague}
+            selectId={id}
+            AllLeagues={allLeagues}
+            setAllLeagues={setAllLeagues}
+          ></AllLeaguesSelector>
+        </Box>
+
         <Box sx={{ color: "primary.main" }}>
           <Box
             sx={{
@@ -170,19 +178,30 @@ const LeaguesList = () => {
             }}
           ></Box>
         </Box>
-        {currentLeague.map((league) => (
-          <Box sx={{ mb: "1rem" }} key={league?.id}>
-            <OneLeague
-              league={league}
-              snackbarContent={snackbarContent}
-              snackbarType={snackbarType}
-              isOpenSnackbar={isOpenSnackbar}
-              setIsOpenSnackbar={setIsOpenSnackbar}
-              setSnackbarContent={setSnackbarContent}
-              setSnackbarType={setSnackbarType}
-            ></OneLeague>
+        {!selectedLeague &&
+          allLeagues &&
+          allLeagues.map((league) => (
+            <Box sx={{ mb: "1rem" }} key={league?.id}>
+              <OneLeague
+                league={league}
+                snackbarContent={snackbarContent}
+                snackbarType={snackbarType}
+                isOpenSnackbar={isOpenSnackbar}
+                setIsOpenSnackbar={setIsOpenSnackbar}
+                setSnackbarContent={setSnackbarContent}
+                setSnackbarType={setSnackbarType}
+                setSelectedLeague={setSelectedLeague}
+              ></OneLeague>
+            </Box>
+          ))}
+        {selectedLeague && (
+          <Box sx={{ mb: "1rem" }}>
+            <LeagueDetail
+              league={selectedLeague}
+              setSelectedLeague={setSelectedLeague}
+            ></LeagueDetail>
           </Box>
-        ))}
+        )}
       </TabPanel>
       <TabPanel value={currentTab} index={1}>
         <AddNewLeague></AddNewLeague>

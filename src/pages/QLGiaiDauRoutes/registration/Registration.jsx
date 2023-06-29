@@ -15,12 +15,17 @@ import MyAxios from "../../../api/MyAxios";
 import RegistrationForm from "../../../components/form/RegistrationForm";
 import PlayerTable from "../../../components/form/PlayersList";
 import { Add, Close } from "@mui/icons-material";
+import { useLocation } from "react-router-dom";
 const Registration = () => {
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const id = searchParams.get("id");
   const [currentLeague, setCurrentLeague] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [listRegis, setListRegis] = useState([]);
   const [allListRegis, setAllListRegis] = useState([]);
   const [selectValue, setSelectValue] = useState("Chờ duyệt");
+
   useEffect(async () => {
     if (currentLeague) {
       try {
@@ -55,6 +60,7 @@ const Registration = () => {
       <AllLeaguesSelector
         currentLeague={currentLeague}
         setCurrentLeague={setCurrentLeague}
+        selectId={id}
       ></AllLeaguesSelector>
       <ComponentLayoutBackdrop isLoading={isLoading}>
         <Grid container sx={{}}>
@@ -123,7 +129,7 @@ const Registration = () => {
             )}
             {listRegis?.length > 0 &&
               listRegis.map((regis, index) => (
-                <Box sx={{ padding: "0.5rem" }}>
+                <Box key={index} sx={{ padding: "0.5rem" }}>
                   <RegistrationForm
                     key={index}
                     registration={regis}

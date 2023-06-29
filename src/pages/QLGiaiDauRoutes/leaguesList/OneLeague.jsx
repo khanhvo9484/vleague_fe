@@ -50,6 +50,7 @@ const OneLeague = (props) => {
     snackbarType,
     setSnackbarType,
     setIsOpenSnackbar,
+    setSelectedLeague,
   } = props;
   const [leagueName, setLeagueName] = useState("");
   const [startDate, setStartDate] = useState("");
@@ -61,6 +62,21 @@ const OneLeague = (props) => {
   const [notificationContent, setNotificationContent] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
+  const getLeagueAcceptedTeam = async (id) => {
+    setIsLoading(true);
+    try {
+      const res = await MyAxios.get(`/hosodangky/${id}`);
+      if (res.status === 200) {
+        setSelectedLeague(
+          res.data.data.filter((item) => item?.trangThai == "Đã duyệt")
+        );
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   const handleClickEdit = () => {
     if (league?.trangThai == 2 || league?.trangThai == 1) {
       setIsOpenNotification(true);
@@ -73,7 +89,6 @@ const OneLeague = (props) => {
   };
   useEffect(() => {
     if (league) {
-      console.log(league);
       setLeagueName(league?.ten);
       setStartDate(league?.thoiDiemBatDau);
       setEndDate(league?.thoiDiemKetThuc);
@@ -309,7 +324,9 @@ const OneLeague = (props) => {
                       cursor: "pointer",
                     },
                   }}
-                  onClick={() => {}}
+                  onClick={() => {
+                    getLeagueAcceptedTeam(league?.id);
+                  }}
                 >
                   Xem chi tiết
                 </Typography>
