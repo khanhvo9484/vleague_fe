@@ -17,6 +17,7 @@ const MatchDetail = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [match, setMatch] = useState({});
   const [notify, setNotify] = useState({ message: "", type: "" });
+
   useEffect(async () => {
     setIsLoading(true);
     try {
@@ -52,7 +53,10 @@ const MatchDetail = () => {
             {!match && (
               <Typography variant="h5">Không tìm thấy trận đấu</Typography>
             )}
-            <MatchDetailComponent match={match}></MatchDetailComponent>
+            <MatchDetailComponent
+              match={match}
+              setMatch={setMatch}
+            ></MatchDetailComponent>
           </Grid>
         </Grid>
       </ComponentLayoutBackdrop>
