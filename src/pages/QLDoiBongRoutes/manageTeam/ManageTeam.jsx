@@ -157,6 +157,7 @@ const ManageTeam = () => {
                   isEditable={isEditable}
                   setIsEditable={setIsEditable}
                   player={player}
+                  setPlayer={setPlayer}
                 ></PlayerLargeCard>
               </Grid>
             </Grid>

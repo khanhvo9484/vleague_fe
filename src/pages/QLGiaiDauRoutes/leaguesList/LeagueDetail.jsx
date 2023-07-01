@@ -13,6 +13,11 @@ const LeagueDetail = (props) => {
           <Typography>Danh sách đội đã đăng ký</Typography>
         </Box>
       </Grid>
+      {!league && (
+        <Typography variant="h5" sx={{ ml: "0.5rem" }}>
+          Chưa có đội nào đăng ký
+        </Typography>
+      )}
       {league &&
         league.map((item, index) => (
           <Grid

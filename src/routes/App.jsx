@@ -25,6 +25,7 @@ import DBManageTeam from "../pages/QLDoiBongRoutes/manageTeam/ManageTeam";
 import DBRegister from "../pages/QLDoiBongRoutes/register/Register";
 import DBRegisterList from "../pages/QLDoiBongRoutes/registerlist/RegisterList";
 import DBRegisterDetail from "../pages/QLDoiBongRoutes/registerlist/RegisterDetail";
+import DBSchedule from "../pages/QLDoiBongRoutes/schedule/ManagerSchedule";
 
 import { baselightTheme } from "../theme/DefaultTheme";
 import { ThemeProvider } from "@mui/material/styles";
@@ -64,6 +65,7 @@ const App = () => {
             path="/manager/register-list/detail"
             element={<DBRegisterDetail />}
           />
+          <Route path="/manager/schedule" element={<DBSchedule />} />
         </Route>
 
         {/* Protected route for admin */}

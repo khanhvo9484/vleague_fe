@@ -23,6 +23,7 @@ import MyAxios from "../../api/MyAxios";
 import ConfirmBox from "./ConfirmBox";
 import ComponentLayoutBackdrop from "../../layout/ComponentLayoutBackdrop";
 import useLoading from "../../hooks/useLoading";
+import CustomSnackbar from "./CustomSnackbar";
 const useStyles = makeStyles((theme) => ({
   detailBox: {
     border: "2px solid #ffffffff",
@@ -53,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
 
 const currentPlayerLargeCard = (props) => {
   const classes = useStyles();
-  const { player, isEditable, setIsEditable, isNotShowEdit } = props;
+  const { player, isEditable, setIsEditable, isNotShowEdit, setPlayer } = props;
   const { currentPlayer } = useCurrentLeague();
   const {
     setOpenNotiBox,
@@ -75,6 +76,11 @@ const currentPlayerLargeCard = (props) => {
   const [playerStatus, setPlayerStatus] = useState("");
   const [playerType, setPlayerType] = useState("");
   const [playerPosition, setPlayerPosition] = useState([]);
+  const [isAcceptKick, setIsAcceptKick] = useState(false);
+
+  const [isOpenSnackbar, setIsOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarType, setSnackbarType] = useState("success");
 
   useEffect(() => {
     if (player) {
@@ -108,9 +114,14 @@ const currentPlayerLargeCard = (props) => {
   };
   const handleEndContract = async () => {
     setOpenNotiBox(true);
-    // try {
-    //   const res = await MyAxios.put(`/cau-thu/${player?.id}`);
-    // } catch (err) {}
+    if (isAcceptKick) {
+      try {
+        const res = await MyAxios.put(`/doibong/huycauthu`, {
+          id_cauthu: player?.id,
+          id_doibong: player?.idDoi,
+        });
+      } catch (err) {}
+    }
   };
   useEffect(async () => {
     if (isAccept) {
@@ -127,7 +138,7 @@ const currentPlayerLargeCard = (props) => {
           count++;
         }
       }
-      const sendData = JSON.stringify({
+      const sendData = {
         idDoi: player?.idDoi,
         id: player?.id,
         hoTen: playerName ? playerName : player?.hoTen,
@@ -142,19 +153,33 @@ const currentPlayerLargeCard = (props) => {
         loaiCauThu: playerType ? playerType : player?.loaiCauThu,
         viTri: playerPosition ? playerPosition : player?.viTri,
         hinhAnh: imageUrl ? imageUrl : player?.hinhAnh,
-      });
-      const res = await MyAxios.put(`/cauthu`, sendData, {
+      };
+      const res = await MyAxios.put(`/cauthu/update`, sendData, {
         headers: { contentType: "application/json" },
+        accept: "application/json",
       });
+      setPlayer(res?.data?.data);
+      setSnackbarMessage("Cập nhật thông tin thành công");
+      setSnackbarType("success");
+      setIsEditable(false);
     } catch (err) {
       console.log(err);
       setNotify({ message: err.message, type: "error" });
+      setSnackbarMessage("Cập nhật thông tin thất bại");
+      setSnackbarType("error");
     } finally {
       setIsLoading(false);
+      setIsOpenSnackbar(true);
     }
   };
   return (
     <ComponentLayoutBackdrop isLoading={isLoading} notify={notify}>
+      <CustomSnackbar
+        isOpen={isOpenSnackbar}
+        setIsOpen={setIsOpenSnackbar}
+        message={snackbarMessage}
+        type={snackbarType}
+      ></CustomSnackbar>
       <Collapse
         key={player?.id}
         in={true}
@@ -162,7 +187,7 @@ const currentPlayerLargeCard = (props) => {
         timeout={1000}
       >
         {openNotiBox && (
-          <ConfirmBox>
+          <ConfirmBox setIsAcept={setIsAcceptKick}>
             <Box
               sx={{
                 display: "flex",
@@ -257,7 +282,9 @@ const currentPlayerLargeCard = (props) => {
                       color: "primary.dark",
                       padding: "5px",
                       fontWeight: 650,
+                      whiteSpace: "wrap",
                     },
+                    whiteSpace: "wrap",
                   }}
                 ></TextField>
               </Grid>

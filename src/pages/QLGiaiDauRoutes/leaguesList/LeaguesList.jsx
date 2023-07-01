@@ -142,6 +142,7 @@ const LeaguesList = () => {
   const [snackbarType, setSnackbarType] = useState("success");
 
   const [currentTab, setCurrentTab] = useState(0);
+  const [isShowDetail, setIsShowDetail] = useState(false);
   const handleChangeTab = (event, newValue) => {
     setCurrentTab(newValue);
   };
@@ -178,7 +179,7 @@ const LeaguesList = () => {
             }}
           ></Box>
         </Box>
-        {!selectedLeague &&
+        {!isShowDetail &&
           allLeagues &&
           allLeagues.map((league) => (
             <Box sx={{ mb: "1rem" }} key={league?.id}>
@@ -191,10 +192,12 @@ const LeaguesList = () => {
                 setSnackbarContent={setSnackbarContent}
                 setSnackbarType={setSnackbarType}
                 setSelectedLeague={setSelectedLeague}
+                isShowDetail={isShowDetail}
+                setIsShowDetail={setIsShowDetail}
               ></OneLeague>
             </Box>
           ))}
-        {selectedLeague && (
+        {isShowDetail && (
           <Box sx={{ mb: "1rem" }}>
             <LeagueDetail
               league={selectedLeague}

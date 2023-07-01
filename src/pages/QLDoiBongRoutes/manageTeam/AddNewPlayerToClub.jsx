@@ -5,13 +5,16 @@ import PlayersList from "../../../components/form/PlayersList";
 import ComponentLayout from "../../../layout/ComponentLayout";
 import { useState, useEffect } from "react";
 import MyAxios from "../../../api/MyAxios";
-
+import CustomSnackbar from "../../../components/ui/CustomSnackbar";
 const AddNewPlayerToClub = (props) => {
   const onFilterChange = (value) => {};
   const [isLoading, setIsLoading] = useState(false);
   const [notify, setNotify] = useState({ message: "", type: "" });
   const [players, setPlayers] = useState([]);
   const [selectedFreePlayer, setSelectedFreePlayer] = useState("");
+  const [isOpenSnackbar, setIsOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarType, setSnackbarType] = useState("success");
   useEffect(async () => {
     setIsLoading(true);
     try {
@@ -25,6 +28,11 @@ const AddNewPlayerToClub = (props) => {
   }, []);
   return (
     <ComponentLayout isLoading={isLoading} notify={notify}>
+      <CustomSnackbar
+        isOpen={isOpenSnackbar}
+        message={snackbarMessage}
+        type={snackbarType}
+      ></CustomSnackbar>
       <Grid container>
         <Grid item xs={8}></Grid>
         <Grid item xs={4}>
@@ -36,6 +44,9 @@ const AddNewPlayerToClub = (props) => {
         </Grid>
         <Grid item xs={12} sx={{ mt: "0.5rem" }}>
           <PlayersList
+            setIsOpenSnackbar={setIsOpenSnackbar}
+            setSnackbarMessage={setSnackbarMessage}
+            setSnackbarType={setSnackbarType}
             data={players}
             setData={setPlayers}
             hoverEffect={false}

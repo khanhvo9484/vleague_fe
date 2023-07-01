@@ -30,9 +30,9 @@ const menuItems = [
     path: "/manager/register-list",
   },
   {
-    text: "Bảng xếp hạng",
+    text: "Lịch thi đấu",
     icon: <BarChart />,
-    path: "/dashboard",
+    path: "/manager/schedule",
   },
 ];
 const Dashboard = ({

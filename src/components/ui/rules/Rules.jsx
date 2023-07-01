@@ -75,28 +75,27 @@ const Rules = (props) => {
         drawPoint === losePoint
       ) {
         setNotify("Điểm thắng, hòa, thua không được trùng nhau");
-        setIsDisable(true);
       } else if (winPoint < 0 || drawPoint < 0 || losePoint < 0) {
         setNotify("Điểm không được âm");
-        setIsDisable(true);
+
         setRedBorderWinPoint(winPoint < 0 ? true : false);
         setRedBorderDrawPoint(drawPoint < 0 ? true : false);
         setRedBorderLosePoint(losePoint < 0 ? true : false);
       } else if (winPoint < drawPoint || winPoint < losePoint) {
         setNotify("Điểm thắng phải lớn hơn điểm hòa và thua");
-        setIsDisable(true);
+
         setRedBorderWinPoint(true);
       } else if (drawPoint > winPoint || drawPoint < losePoint) {
         setNotify("Điểm hòa phải lớn hơn điểm thua và nhỏ hơn điểm thắng");
-        setIsDisable(true);
+
         setRedBorderDrawPoint(true);
       } else if (losePoint > winPoint || losePoint > drawPoint) {
         setNotify("Điểm thua phải nhỏ hơn điểm thắng và hòa");
-        setIsDisable(true);
+
         setRedBorderLosePoint(true);
       } else {
         setNotify("");
-        setIsDisable(false);
+
         setRedBorderWinPoint(false);
         setRedBorderDrawPoint(false);
         setRedBorderLosePoint(false);

@@ -51,6 +51,7 @@ const OneLeague = (props) => {
     setSnackbarType,
     setIsOpenSnackbar,
     setSelectedLeague,
+    setIsShowDetail,
   } = props;
   const [leagueName, setLeagueName] = useState("");
   const [startDate, setStartDate] = useState("");
@@ -62,15 +63,22 @@ const OneLeague = (props) => {
   const [notificationContent, setNotificationContent] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
+  const [hasNoForm, setHasNoForm] = useState(false);
+
   const getLeagueAcceptedTeam = async (id) => {
     setIsLoading(true);
     try {
       const res = await MyAxios.get(`/hosodangky/${id}`);
       if (res.status === 200) {
-        setSelectedLeague(
-          res.data.data.filter((item) => item?.trangThai == "Đã duyệt")
-        );
+        if (res?.data?.data) {
+          setSelectedLeague(
+            res?.data?.data.filter((item) => item?.trangThai == "Đã duyệt")
+          );
+        } else {
+          setHasNoForm(true);
+        }
       }
+      setIsShowDetail(true);
     } catch (err) {
       console.log(err);
     } finally {
@@ -152,6 +160,14 @@ const OneLeague = (props) => {
     <ComponentLayoutBackdrop isLoading={isLoading}>
       <Grid container sx={{ padding: "2rem" }} component={Paper} elevation={3}>
         <Grid container item xs={12} sm={12} justifyContent={"space-between"}>
+          {/* {hasNoForm && (
+            <Box sx={{ display: "flex", justifyContent: "center" }}>
+              {" "}
+              <Typography variant="h6">
+                Chưa có đội nào đăng ký tham gia giải đấu này
+              </Typography>
+            </Box>
+          )} */}
           {league && (
             <Grid
               item

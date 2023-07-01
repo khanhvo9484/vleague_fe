@@ -129,6 +129,9 @@ const PlayerTable = (props) => {
     setData,
     selectedFreePlayer,
     setSelectedFreePlayer,
+    setIsOpenSnackbar,
+    setSnackbarMessage,
+    setSnackbarType,
   } = props;
 
   const theme = useTheme();
@@ -151,8 +154,14 @@ const PlayerTable = (props) => {
       if (res.status == 200) {
         setData(data.filter((player) => player.id != id));
       }
+      setSnackbarMessage("Thêm cầu thủ thành công");
+      setSnackbarType("success");
     } catch (err) {
       console.log(err);
+      setSnackbarMessage("Thêm cầu thủ thất bại");
+      setSnackbarType("error");
+    } finally {
+      setIsOpenSnackbar(true);
     }
   };
   const handleRegisterList = (itemId) => {

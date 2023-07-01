@@ -9,9 +9,10 @@ import { Add } from "@mui/icons-material";
 import Scheduler from "../../../components/ui/schedulerComponent/Scheduler";
 import useAuth from "../../../hooks/useAuth";
 import CustomSnackbar from "../../../components/ui/CustomSnackbar";
+import ManagerLayout from "../../../layout/ManagerLayout";
 
 import { useLocation } from "react-router-dom";
-const CreateSchedule = () => {
+const ManagerSchedule = () => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const id = searchParams.get("id");
@@ -52,30 +53,9 @@ const CreateSchedule = () => {
       console.log(currentLeague);
     }
   }, [currentSchedule]);
-  const handleCreateSchedule = async () => {
-    setIsLoading(true);
-    const data = {
-      idMuaGiai: currentLeague?.id,
-      idQuanLy: auth?.id,
-    };
-    console.log(data);
-    try {
-      const res = await MyAxios.post(`/lichthidau`, data);
-      if (res.status === 200) {
-        setCurrentSchedule(res?.data?.data?.cacVongDau);
-        setSnackbarMessage("Tạo lịch thi đấu thành công");
-        setSnackbarType("success");
-      }
-    } catch (err) {
-      setSnackbarMessage(err?.response?.data?.message);
-      setSnackbarType("error");
-    } finally {
-      setIsOpenSnackbar(true);
-      setIsLoading(false);
-    }
-  };
+
   return (
-    <OrganizerLayout title={"Tạo lịch thi đấu"}>
+    <ManagerLayout title={"Lịch thi đấu"}>
       <AllLeaguesSelector
         currentLeague={currentLeague}
         setCurrentLeague={setCurrentLeague}
@@ -88,25 +68,6 @@ const CreateSchedule = () => {
           elevation={3}
           sx={{ mt: "1rem", padding: "0.5rem" }}
         >
-          {!isLoading && currentLeague && !currentSchedule?.length > 0 && (
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "flex-end",
-                width: "100%",
-                mt: "0.5rem",
-                mb: "1rem",
-              }}
-            >
-              <Button
-                variant="contained"
-                startIcon={<Add></Add>}
-                onClick={handleCreateSchedule}
-              >
-                Tạo lịch thi đấu
-              </Button>
-            </Box>
-          )}
           <Grid
             item
             container
@@ -123,7 +84,7 @@ const CreateSchedule = () => {
                 Hiện chưa có lịch thi đấu của giải đấu này
               </Typography>
             )}
-            {currentLeague && currentSchedule?.length > 0 ? (
+            {!isLoading && currentLeague && currentSchedule?.length > 0 ? (
               <Scheduler
                 currentSchedule={currentSchedule}
                 setCurrentSchedule={setCurrentSchedule}
@@ -143,8 +104,8 @@ const CreateSchedule = () => {
           type={snackbarType}
         ></CustomSnackbar>
       </ComponentLayoutBackdrop>
-    </OrganizerLayout>
+    </ManagerLayout>
   );
 };
 
-export default CreateSchedule;
+export default ManagerSchedule;

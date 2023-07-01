@@ -89,6 +89,7 @@ const MatchDetailComponent = (props) => {
       });
       if (res.status === 200) {
         setSnackbarMessage("Bắt đầu trận đấu thành công");
+        setMatchResult(res?.data?.data);
         setSnackbarType("success");
         setIsShowTimer(true);
       }
@@ -107,6 +108,7 @@ const MatchDetailComponent = (props) => {
         dsIDKetQuaTranDau: [match?.id],
       });
       if (res.status === 200) {
+        setMatchResult(res?.data?.data);
         setSnackbarMessage("Dừng trận đấu thành công");
         setSnackbarType("success");
         setIsShowTimer(false);
@@ -148,7 +150,7 @@ const MatchDetailComponent = (props) => {
       }
     } catch (err) {
       console.log(err);
-      setSnackbarMessage(err?.response?.data?.message);
+      setSnackbarMessage("Cập nhật kết quả thất bại");
       setSnackbarType("error");
     } finally {
       setIsLoading(false);
@@ -329,7 +331,7 @@ const MatchDetailComponent = (props) => {
           </Grid>
           <Grid item xs={4} sx={{ display: "flex", justifyContent: "center" }}>
             <Box sx={{ mr: "2rem" }}>
-              {matchResult.dsBanThang?.length > 0 &&
+              {matchResult?.dsBanThang?.length > 0 &&
                 matchResult?.dsBanThang.map((goal, index) => (
                   <Typography key={index} sx={{ whiteSpace: "nowrap" }}>
                     {goal?.idDoi === match?.ketQuaTranDau?.idDoiNha
@@ -361,8 +363,8 @@ const MatchDetailComponent = (props) => {
           </Grid>
           <Grid item xs={4} sx={{ display: "flex", justifyContent: "center" }}>
             <Box sx={{ ml: "2rem" }}>
-              {matchResult.dsBanThang?.length > 0 &&
-                matchResult.dsBanThang.map((goal, index) => (
+              {matchResult?.dsBanThang?.length > 0 &&
+                matchResult?.dsBanThang.map((goal, index) => (
                   <Typography key={index} sx={{ whiteSpace: "nowrap" }}>
                     {goal?.idDoi === match?.ketQuaTranDau?.idDoiKhach
                       ? `${goal?.tenCauThu} - ${goal?.thoiDiemGhiBan}'`
