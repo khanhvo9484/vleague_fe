@@ -7,6 +7,8 @@ import {
   IconButton,
   Autocomplete,
   TextField,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import { PlayCircle, Add, Remove } from "@mui/icons-material";
 import CountUpTimer from "../CountUpTimer";
@@ -15,13 +17,26 @@ import ComponentLayoutBackdrop from "../../../layout/ComponentLayoutBackdrop";
 import CustomSnackbar from "../CustomSnackbar";
 import { useState, useEffect } from "react";
 
+const goalType = [
+  {
+    id: 1,
+    mota: "Penalty",
+    ten: "Penalty",
+  },
+  {
+    id: 2,
+    mota: "Bàn thắng thông thường",
+    ten: "Bình thường",
+  },
+];
+
 const MatchDetailComponent = (props) => {
   const { match } = props;
   const homeTeam = match?.doiNha || "";
   const awayTeam = match?.doiKhach || "";
   const result = match?.ketQuaTranDau || "";
   const startTime = match?.thoiGianNhanStart || "";
-  console.log(match);
+
   const [isLoading, setIsLoading] = useState(false);
   const [isOpenSnackbar, setIsOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
@@ -57,12 +72,11 @@ const MatchDetailComponent = (props) => {
   };
   const [goalPaper, setGoalPaper] = useState([]);
 
-  const handleAddPaper = (index) => {
+  const handleAddPaper = () => {
     const newPaper = (
       <Paper key={goalPaper.length} elevation={3} sx={{ padding: "1rem" }}>
-        {" "}
-        <Grid container justifyContent={"space-between"}>
-          <Grid item xs={6}>
+        <Grid container justifyContent="space-between">
+          <Grid item xs={6} sx={{ borderRight: "2px solid black" }}>
             <Box
               sx={{
                 display: "flex",
@@ -72,60 +86,142 @@ const MatchDetailComponent = (props) => {
             >
               <Typography variant="h6">{homeTeam?.ten}</Typography>
             </Box>
-            <Box
+            <Grid
+              item
+              container
               sx={{
                 width: "100%",
                 display: "flex",
                 justifyContent: "space-between",
-                mt: "0.5rem ",
+                mt: "0.5rem",
               }}
             >
-              <Autocomplete
-                sx={{ width: "40%" }}
-                getOptionLabel={(option) => option.hoTen}
-                options={homeTeam?.danhSachCauThuDangThiDau}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Chọn cầu thủ"
-                    inputProps={{
-                      ...params.inputProps,
-                    }}
-                  />
-                )}
-              ></Autocomplete>
-              <Autocomplete
-                sx={{ width: "40%" }}
-                getOptionLabel={(option) => option.hoTen}
-                options={homeTeam?.danhSachCauThuDangThiDau}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Chọn cầu thủ"
-                    inputProps={{
-                      ...params.inputProps,
-                    }}
-                  />
-                )}
-              ></Autocomplete>
-              <Box sx={{}}>
+              <Grid item xs={4}>
+                <Autocomplete
+                  sx={{}}
+                  getOptionLabel={(option) => option.hoTen}
+                  options={homeTeam?.danhSachCauThuDangThiDau}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Chọn cầu thủ"
+                      inputProps={{
+                        ...params.inputProps,
+                      }}
+                    />
+                  )}
+                  // value={paperPlayer}
+                ></Autocomplete>
+              </Grid>
+              <Grid item xs={4} sx={{ padding: "0 0.5rem 0 0.5rem" }}>
                 <TextField
-                  sx={{ width: "40%" }}
-                  label="Thời điểm ghi bàn"
-                ></TextField>
-              </Box>
-            </Box>
+                  sx={{ width: "100%" }}
+                  select
+                  value={1}
+                  label="Loại bàn thắng"
+                >
+                  {goalType.map((item) => (
+                    <MenuItem key={item.id} value={item.id}>
+                      {item.ten}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </Grid>
+              <Grid item xs={4}>
+                {" "}
+                <Box sx={{ paddingRight: "1rem" }}>
+                  <TextField sx={{}} label="Thời điểm ghi bàn"></TextField>
+                </Box>
+              </Grid>
+            </Grid>
           </Grid>
           <Grid item xs={6}>
-            <Typography>{awayTeam?.ten}</Typography>
+            <Grid
+              item
+              container
+              xs={12}
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Grid item xs={4}></Grid>
+              <Grid xs={4} item>
+                <Typography variant="h6">{awayTeam?.ten}</Typography>
+              </Grid>
+
+              <Grid
+                item
+                xs={4}
+                sx={{ display: "flex", justifyContent: "flex-end" }}
+              >
+                <IconButton
+                  sx={{ width: "1rem", height: "1rem" }}
+                  onClick={() => handleDeletePaper(newPaper)}
+                >
+                  <Remove></Remove>
+                </IconButton>
+              </Grid>
+            </Grid>
+            <Grid
+              item
+              container
+              sx={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "space-between",
+                mt: "0.5rem",
+              }}
+            >
+              <Grid item xs={4}>
+                <Autocomplete
+                  sx={{ paddingLeft: "1rem" }}
+                  getOptionLabel={(option) => option.hoTen}
+                  options={homeTeam?.danhSachCauThuDangThiDau}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Chọn cầu thủ"
+                      inputProps={{
+                        ...params.inputProps,
+                      }}
+                    />
+                  )}
+                  // value={paperPlayer}
+                ></Autocomplete>
+              </Grid>
+              <Grid item xs={4} sx={{ padding: "0 0.5rem 0 0.5rem" }}>
+                <TextField
+                  sx={{ width: "100%" }}
+                  select
+                  value={1}
+                  label="Loại bàn thắng"
+                >
+                  {goalType.map((item) => (
+                    <MenuItem key={item.id} value={item.id}>
+                      {item.ten}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </Grid>
+              <Grid item xs={4}>
+                {" "}
+                <Box sx={{}}>
+                  <TextField sx={{}} label="Thời điểm ghi bàn"></TextField>
+                </Box>
+              </Grid>
+            </Grid>
           </Grid>
         </Grid>
       </Paper>
     );
+
     setGoalPaper([...goalPaper, newPaper]);
   };
-  const handleDeletePaper = (index) => {
-    const updatedPapers = goalPaper.filter((_, i) => i !== index);
+
+  const handleDeletePaper = (paper) => {
+    const updatedPapers = goalPaper.filter((item) => item !== paper);
     setGoalPaper(updatedPapers);
   };
   return (
@@ -136,18 +232,6 @@ const MatchDetailComponent = (props) => {
         type={snackbarType}
       ></CustomSnackbar>
       <Grid container sx={{ display: "flex" }}>
-        {!match?.ketQuaTranDau && (
-          <Box sx={{ position: "absolute", right: "2.5rem", top: "9.3rem" }}>
-            <Button
-              variant="contained"
-              startIcon={<PlayCircle></PlayCircle>}
-              onClick={handleStartMatch}
-              disabled={match?.ketQuaTranDau}
-            >
-              Bắt đầu trận đấu
-            </Button>
-          </Box>
-        )}
         <Grid
           item
           container
@@ -164,7 +248,7 @@ const MatchDetailComponent = (props) => {
                 justifyContent: "center",
               }}
             >
-              <Box>
+              <Box sx={{ display: "flex", justifyContent: "center" }}>
                 <img style={{ height: "80px" }} src={homeTeam?.hinhAnh}></img>
               </Box>
               <Typography variant="h5">{homeTeam?.ten}</Typography>
@@ -179,7 +263,7 @@ const MatchDetailComponent = (props) => {
                 justifyContent: "center",
               }}
             >
-              <Box>
+              <Box sx={{ display: "flex", justifyContent: "center" }}>
                 <img style={{ height: "80px" }} src={awayTeam?.hinhAnh}></img>
               </Box>
               <Typography variant="h5">{awayTeam?.ten}</Typography>
@@ -188,18 +272,40 @@ const MatchDetailComponent = (props) => {
         </Grid>
         <Grid item xs={12} sx={{ padding: "1rem" }}>
           <Box>
-            <Typography variant="h6">Sân đấu: </Typography>
-          </Box>
-          <Box sx={{ display: "flex" }}>
-            <Box>
-              <img
-                style={{ height: "70px" }}
-                src="https://assets.goal.com/v3/assets/bltcc7a7ffd2fbf71f5/bltf65bc65fc205ad23/641b4e9c99cb6c0a57d664c6/Disen%CC%83o_sin_ti%CC%81tulo-9.jpg?auto=webp&format=pjpg&width=1200&quality=60"
-              ></img>
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <Typography variant="h6" sx={{ whiteSpace: "nowrap" }}>
+                Sân đấu:{" "}
+              </Typography>
+              {!match?.ketQuaTranDau && (
+                <Box
+                  sx={{
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "flex-end",
+                  }}
+                >
+                  <Button
+                    variant="contained"
+                    startIcon={<PlayCircle></PlayCircle>}
+                    onClick={handleStartMatch}
+                    disabled={match?.ketQuaTranDau}
+                  >
+                    Bắt đầu trận đấu
+                  </Button>
+                </Box>
+              )}
             </Box>
-            <Box sx={{ ml: "1rem" }}>
-              <Typography variant="h6">{homeTeam?.sanNha?.tenSan}</Typography>
-              <Typography>{homeTeam?.sanNha?.diaDiem}</Typography>
+            <Box sx={{ display: "flex" }}>
+              <Box>
+                <img
+                  style={{ height: "70px" }}
+                  src="https://assets.goal.com/v3/assets/bltcc7a7ffd2fbf71f5/bltf65bc65fc205ad23/641b4e9c99cb6c0a57d664c6/Disen%CC%83o_sin_ti%CC%81tulo-9.jpg?auto=webp&format=pjpg&width=1200&quality=60"
+                ></img>
+              </Box>
+              <Box sx={{ ml: "1rem" }}>
+                <Typography variant="h6">{homeTeam?.sanNha?.tenSan}</Typography>
+                <Typography>{homeTeam?.sanNha?.diaDiem}</Typography>
+              </Box>
             </Box>
           </Box>
         </Grid>
@@ -211,24 +317,24 @@ const MatchDetailComponent = (props) => {
           ) : null}
         </Grid>
         <Grid item xs={12} sx={{ padding: "1rem" }}>
-          <Typography variant="h6">Thêm bàn thắng</Typography>
+          <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+            <Typography variant="h6">Thêm bàn thắng</Typography>
+          </Box>
+
           {goalPaper.map((paper, index) => (
-            <Box key={index}>
-              {paper}
-              <Box sx={{}}>
-                <IconButton onClick={() => handleDeletePaper(index)}>
-                  <Remove></Remove>
-                </IconButton>
-              </Box>
-            </Box>
+            <Box key={index}>{paper}</Box>
           ))}
-          <Button
-            variant="contained"
-            startIcon={<Add></Add>}
-            onClick={handleAddPaper}
+          <Box
+            sx={{ display: "flex", justifyContent: "flex-end", mt: "0.5rem" }}
           >
-            Thêm
-          </Button>
+            <Button
+              variant="contained"
+              startIcon={<Add></Add>}
+              onClick={handleAddPaper}
+            >
+              Thêm
+            </Button>
+          </Box>
         </Grid>
       </Grid>
     </ComponentLayoutBackdrop>

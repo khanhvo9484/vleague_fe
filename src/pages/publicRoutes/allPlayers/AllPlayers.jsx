@@ -20,8 +20,9 @@ import useProgressiveImage from "../../../hooks/useProgressiveImage";
 import Loader from "@mui/material/CircularProgress";
 import Helper from "../../../utils/Helper";
 import Filter from "../../../components/ui/Filter";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, createSearchParams } from "react-router-dom";
 import { defaultImage } from "../../../data/GlobalConstant";
+import { useLocation } from "react-router-dom";
 const backgroundStyle = {
   backgroundSize: "cover",
   backgroundPosition: "center",
@@ -75,95 +76,81 @@ const AllClubs = () => {
   const [imageList, setImageList] = useState([]);
   const [filterValue, setFilterValue] = useState("");
 
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const page = searchParams.get("page") || 1;
+
   const handleFilterChange = (value) => {
     setFilterValue(value);
   };
-  useEffect(() => {
-    if (clubs && filterValue) {
-      setFilteredClubs(
-        clubs
-          .filter((club) => {
-            try {
-              let name = club?.hoTen.toLowerCase();
-              if (name && name.includes(filterValue.toLowerCase())) {
-                return club;
-              }
-            } catch (err) {
-              return {};
-            }
-          })
-          .slice(0, numberPerPage)
-      );
-    } else if (!filterValue) {
-      setFilteredClubs(
-        clubs.slice(
-          (currentPage - 1) * numberPerPage,
-          currentPage * numberPerPage
-        )
-      );
-      setCurrentPage(1);
-      setTotalPage(Math.ceil(clubs.length / numberPerPage));
-    }
-  }, [filterValue]);
+
+  // useEffect(() => {
+  //   if (clubs && filterValue) {
+  //     setFilteredClubs(
+  //       clubs
+  //         .filter((club) => {
+  //           try {
+  //             let name = club?.hoTen.toLowerCase();
+  //             if (name && name.includes(filterValue.toLowerCase())) {
+  //               return club;
+  //             }
+  //           } catch (err) {
+  //             return {};
+  //           }
+  //         })
+  //         .slice(0, numberPerPage)
+  //     );
+  //   } else if (!filterValue) {
+  //     setFilteredClubs(
+  //       clubs.slice(
+  //         (currentPage - 1) * numberPerPage,
+  //         currentPage * numberPerPage
+  //       )
+  //     );
+  //     setCurrentPage(1);
+  //     setTotalPage(Math.ceil(clubs.length / numberPerPage));
+  //   }
+  // }, [filterValue]);
 
   const fetchClubs = async () => {
+    console.log("im here");
     try {
       setFilteredClubs([]);
       setClubs([]);
       setIsLoading(true);
       setNotify({ message: "", type: "" });
       const response = await MyAxios.get(`/cauthu/all`, {
-        params: { page: 1, limit: 100 },
+        params: { page: page, limit: numberPerPage },
       });
+
       if (response?.data?.data) {
-        setClubs(response.data.data);
+        console.log(response.data.data);
+        setClubs(response.data.data.listPlayerDto);
+        setFilteredClubs(response.data.data.listPlayerDto);
+        setTotalPage(response.data.data.totalPage);
+        setCurrentPage(response.data.data.page);
       }
-      setIsLoading(false);
     } catch (err) {
       console.log(err);
       setNotify({ message: err.message, type: "error" });
+    } finally {
       setIsLoading(false);
     }
   };
   useEffect(() => {
     fetchClubs();
-  }, []);
-  useEffect(() => {
-    if (clubs) {
-      try {
-        setTotalPage(Math.ceil(clubs.length / numberPerPage));
-        setFilteredClubs(
-          clubs.slice(
-            (currentPage - 1) * numberPerPage,
-            currentPage * numberPerPage
-          )
-        );
-        const tempImageList = clubs.map((club) => {
-          return { id: club?.id, image: useProgressiveImage(club?.hinhAnh) };
-        });
-        setImageList(tempImageList);
-      } catch (err) {
-        // console.log(err);
-      }
-    }
-  }, [clubs]);
-  useEffect(() => {
-    if (filterValue) {
-      setTotalPage(Math.ceil(filteredClubs.length / numberPerPage));
-      setCurrentPage(1);
-    }
-  }, [filteredClubs]);
+  }, [currentPage]);
+
   const handlePageChange = (event, value) => {
     setCurrentPage(value);
+    navigate({
+      pathname: "/players",
+      search: createSearchParams({
+        page: value,
+      }).toString(),
+    });
   };
-  useEffect(() => {
-    setFilteredClubs(
-      clubs.slice(
-        (currentPage - 1) * numberPerPage,
-        currentPage * numberPerPage
-      )
-    );
-  }, [currentPage]);
+
   return (
     <DefaultLayout>
       <Box>
@@ -317,6 +304,7 @@ const AllClubs = () => {
                     variant="outlined"
                     shape="rounded"
                     onChange={handlePageChange}
+                    key={location.search}
                   ></Pagination>
                 </Box>
               </Paper>

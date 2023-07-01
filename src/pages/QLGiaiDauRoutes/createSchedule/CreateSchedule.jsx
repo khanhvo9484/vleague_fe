@@ -43,16 +43,26 @@ const CreateSchedule = () => {
         setAlreadyCreated(true);
       }
     }
+    if (!currentLeague) {
+      setCurrentSchedule([]);
+    }
   }, [currentLeague]);
+  useEffect(() => {
+    if (currentSchedule.length > 0) {
+      console.log(currentLeague);
+    }
+  }, [currentSchedule]);
   const handleCreateSchedule = async () => {
     setIsLoading(true);
     const data = {
       idMuaGiai: currentLeague?.id,
       idQuanLy: auth?.id,
     };
+    console.log(data);
     try {
       const res = await MyAxios.post(`/lichthidau`, data);
       if (res.status === 200) {
+        setCurrentSchedule(res?.data?.data?.cacVongDau);
         setSnackbarMessage("Tạo lịch thi đấu thành công");
         setSnackbarType("success");
       }
@@ -113,8 +123,7 @@ const CreateSchedule = () => {
                 Hiện chưa có lịch thi đấu của giải đấu này
               </Typography>
             )}
-            {alreadyCreated ||
-            (!isLoading && currentLeague && currentSchedule?.length > 0) ? (
+            {!isLoading && currentLeague && currentSchedule?.length > 0 ? (
               <Scheduler
                 currentSchedule={currentSchedule}
                 setCurrentSchedule={setCurrentSchedule}

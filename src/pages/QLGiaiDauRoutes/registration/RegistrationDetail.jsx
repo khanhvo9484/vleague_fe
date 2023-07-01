@@ -39,18 +39,12 @@ const RegistrationDetail = () => {
   const [notes, setNotes] = useState("");
   const [isShowDeclineNotes, setIsShowDeclineNotes] = useState(false);
 
-  useEffect(() => {
-    players.find((item) => item.id == currentPlayer && setPlayer(item));
-  }, [currentPlayer]);
-
-  const [isOpenBackdrop, setIsOpenBackdrop] = useState(false);
-
   const fetchingForm = async () => {
     try {
       setIsLoading(true);
       const res = await MyAxios.get(`/hosodangky/chitiet?hoso=${id}`);
       setCurrentForm(res?.data?.data);
-      setCurrentPlayer(res?.data?.data?.dsCauThuDangKy[0]?.id);
+
       setPlayers(res?.data?.data?.dsCauThuDangKy);
     } catch (err) {
       console.log(err);
@@ -62,6 +56,12 @@ const RegistrationDetail = () => {
   useEffect(async () => {
     fetchingForm();
   }, []);
+  useEffect(() => {
+    if (players.length > 0) {
+      setPlayer(players[0]);
+      setCurrentPlayer(players[0])?.id;
+    }
+  }, [players]);
   const handleAccept = async () => {
     setIsOpenBackdrop(true);
     try {
@@ -101,7 +101,14 @@ const RegistrationDetail = () => {
       setIsOpenBackdrop(false);
     }
   };
+  useEffect(() => {
+    if (currentPlayer == null) return;
+    if (players) {
+      players.find((item) => item.id == currentPlayer && setPlayer(item));
+    }
+  }, [currentPlayer]);
 
+  const [isOpenBackdrop, setIsOpenBackdrop] = useState(false);
   return (
     <OrganizerLayout
       title={"Hồ sơ đăng ký"}

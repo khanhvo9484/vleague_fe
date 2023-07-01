@@ -12,6 +12,7 @@ import CustomTextField from "../CustomTextField";
 import { useState, useEffect } from "react";
 import Helper from "../../../utils/Helper";
 import { useNavigate } from "react-router-dom";
+import { useTheme } from "@mui/material/styles";
 const useStyles = makeStyles((theme) => ({
   matchList: {
     display: "flex",
@@ -61,6 +62,7 @@ const useStyles = makeStyles((theme) => ({
 
 const MatchCard = (props) => {
   const navigate = useNavigate();
+  const theme = useTheme();
   const {
     match,
     isEditable,
@@ -293,10 +295,10 @@ const MatchCard = (props) => {
           </Grid>
         )}
         <Grid item xs={6} sx={{ display: "flex", justifyContent: "flex-end" }}>
-          <Box sx={{ mr: "4rem" }}>
+          <Box sx={{ mr: "2rem" }}>
             {match?.ketQuaTranDau?.dsBanThang &&
               match?.ketQuaTranDau?.dsBanThang.map((goal, index) => (
-                <Typography key={index}>
+                <Typography key={index} sx={{ whiteSpace: "nowrap" }}>
                   {goal?.idDoi === match?.ketQuaTranDau?.idDoiNha
                     ? `${goal?.tenCauThu} - ${goal?.thoiDiemGhiBan}'`
                     : null}
@@ -309,10 +311,10 @@ const MatchCard = (props) => {
           xs={6}
           sx={{ display: "flex", justifyContent: "flex-start" }}
         >
-          <Box sx={{ ml: "4rem" }}>
+          <Box sx={{ ml: "2rem" }}>
             {match?.ketQuaTranDau?.dsBanThang &&
               match?.ketQuaTranDau?.dsBanThang.map((goal, index) => (
-                <Typography key={index}>
+                <Typography key={index} sx={{ whiteSpace: "nowrap" }}>
                   {goal?.idDoi === match?.ketQuaTranDau?.idDoiKhach
                     ? `${goal?.tenCauThu} - ${goal?.thoiDiemGhiBan}'`
                     : null}
