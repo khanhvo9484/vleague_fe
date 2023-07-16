@@ -5,12 +5,15 @@ import { useState, useEffect } from "react";
 import RegistrationForm from "../../../components/form/RegistrationForm";
 import useAuth from "../../../hooks/useAuth";
 import MyAxios from "../../../api/MyAxios";
+import useCurrentLeague from "../../../hooks/useCurrentLeague";
 const RegisterList = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [listRegis, setListRegis] = useState([]);
   const [allListRegis, setAllListRegis] = useState([]);
-  const [selectValue, setSelectValue] = useState("Chờ duyệt");
+  const [selectValue, setSelectValue] = useState("Tất cả");
+
   const { auth } = useAuth();
+
   useEffect(async () => {
     try {
       setIsLoading(true);
@@ -37,7 +40,31 @@ const RegisterList = () => {
         allListRegis.filter((regis) => regis.trangThai == "Chờ duyệt")
       );
     }
+    if (e.target.value === "Tất cả") {
+      setListRegis(allListRegis);
+    }
   };
+  // const fetchingForm = async () => {
+  //   try {
+  //     setIsLoading(true);
+  //     const res = await MyAxios.get(`/hosodangky/chitiet?hoso=${id}`);
+  //     setCurrentForm(res?.data?.data);
+  //     setCurrentPlayer(res?.data?.data?.dsCauThuDangKy[0]);
+  //     setPlayer(res.data?.data?.dsCauThuDangKy[0]);
+  //     setPlayers(res?.data?.data?.dsCauThuDangKy);
+  //   } catch (err) {
+  //     console.log(err);
+  //     setNotify(err?.data?.message);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
+  // useEffect( async () => {
+  //   if(currentFormId){
+  //     fetchingForm();
+  //   }
+
+  // },[currentFormId])
   return (
     <ManagerLayout title={"Danh sách đăng ký"} isLoading={isLoading}>
       <Grid
@@ -67,6 +94,11 @@ const RegisterList = () => {
             }}
             sx={{ width: "14rem" }}
           >
+            {" "}
+            <MenuItem key={0} value="Tất cả">
+              {" "}
+              Tất cả
+            </MenuItem>
             <MenuItem key={1} value="Đã duyệt">
               Đã duyệt
             </MenuItem>

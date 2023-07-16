@@ -10,6 +10,7 @@ import Club from "../pages/publicRoutes/club/Club";
 import AllClubs from "../pages/publicRoutes/allClubs/AllClubs";
 import Standings from "../pages/publicRoutes/standings/Standings";
 import Schedule from "../pages/publicRoutes/schedule/Schedule";
+import GoalScorers from "../pages/publicRoutes/goalScorers/GoalScorers";
 
 import GDSeasonRules from "../pages/QLGiaiDauRoutes/seasonRules/SeasonRules";
 import GDLeaguesList from "../pages/QLGiaiDauRoutes/leaguesList/LeaguesList";
@@ -46,6 +47,7 @@ const App = () => {
         <Route path="/players/:id" element={<Player />} />
         <Route exact path="/standings" element={<Standings />} />
         <Route exact path="/schedule" element={<Schedule />} />
+        <Route exact path="/goalscorers" element={<GoalScorers />} />
         {/* Private routes for manager*/}
         <Route element={<RequiredAuth allowedRoles={["QLDB"]} />}>
           <Route exact path="/manager/home" element={<DBHome />} />

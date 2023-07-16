@@ -10,6 +10,7 @@ import Scheduler from "../../../components/ui/schedulerComponent/Scheduler";
 import useAuth from "../../../hooks/useAuth";
 import CustomSnackbar from "../../../components/ui/CustomSnackbar";
 import { useLocation } from "react-router-dom";
+
 const CreateSchedule = () => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
@@ -81,6 +82,7 @@ const CreateSchedule = () => {
                 background={"blueBackground.manage"}
                 showDetail={true}
                 notShowEdit={true}
+                leagueId={currentLeague?.id}
               ></Scheduler>
             ) : null}
           </Grid>

@@ -11,12 +11,12 @@ import {
   TableHead,
   TableRow,
   Grow,
+  Pagination,
 } from "@mui/material";
 import { useState, useEffect } from "react";
 import useCurrentLeague from "../../../hooks/useCurrentLeague";
 import MyAxios from "../../../api/MyAxios";
 import { useTheme } from "@mui/material/styles";
-
 const useStyles = makeStyles((theme) => ({
   title: {
     display: "flex",
@@ -81,13 +81,16 @@ const Ranking = () => {
   const [notify, setNotify] = useState("");
   const { currentLeague } = useCurrentLeague();
   const [data, setData] = useState([]);
+  const [refinedData, setRefinedData] = useState([]); // [
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPage, setTotalPage] = useState(1);
   useEffect(async () => {
     if (!currentLeague) return;
     try {
       setIsLoading(true);
       setNotify("");
       const response = await MyAxios.get(
-        `/muagiai/${currentLeague.id}/ranking`
+        `/cauthughibanmuagiai/${currentLeague.id}`
       );
       if (response?.data?.data) {
         setData(response.data.data);
@@ -99,11 +102,30 @@ const Ranking = () => {
       setNotify("Không tìm thấy dữ liệu");
     }
   }, [currentLeague]);
+  useEffect(async () => {
+    if (!data) return;
+    try {
+      // setData(data.sort((a, b) => b.soBanThang - a.soBanThang));
+
+      const promises = data?.map(async (item) => {
+        const res = await MyAxios.get(`/cauthu?id=${item?.idCauThu}`);
+        return {
+          ...item,
+          loaiCauThu: res?.data?.data?.loaiCauThu,
+          hinhAnh: res?.data?.data?.hinhAnh,
+        };
+      });
+      setRefinedData(await Promise.all(promises));
+    } catch (err) {
+      console.log(err);
+    }
+  }, [data]);
+
   return (
     <>
       <Paper elevation={3} sx={{ minWidth: "40vw" }}>
         <Typography variant="h3" className={classes.title}>
-          Bảng xếp hạng
+          Danh sách cầu thủ ghi bàn
         </Typography>
         {isLoading && (
           <Box className={classes.loadingBox}>
@@ -142,31 +164,22 @@ const Ranking = () => {
                         color: "white",
                         padding: "0.5rem",
                         borderRadius: "4px",
-                        margin: "0.5rem",
+                        // margin: "0.5rem",
                       }}
                     >
-                      Xếp hạng
+                      Cầu thủ
                     </Typography>
                   </TableCell>
-                  <TableCell align="left">
+                  <TableCell align="center">
                     <Typography sx={{ ml: "1rem" }} variant="h6">
                       Đội bóng
                     </Typography>
                   </TableCell>
                   <TableCell align="center">
-                    <Typography variant="h6">Thắng</Typography>
+                    <Typography variant="h6">Loại cầu thủ</Typography>
                   </TableCell>
                   <TableCell align="center">
-                    <Typography variant="h6">Thua</Typography>
-                  </TableCell>
-                  <TableCell align="center">
-                    <Typography variant="h6">Hòa</Typography>
-                  </TableCell>
-                  <TableCell align="center">
-                    <Typography variant="h6">Hiệu số</Typography>
-                  </TableCell>
-                  <TableCell align="center">
-                    <Typography variant="h6">Điểm</Typography>
+                    <Typography variant="h6">Số bàn thắng</Typography>
                   </TableCell>
                 </TableRow>
               </TableHead>
@@ -175,26 +188,13 @@ const Ranking = () => {
                   backgroundColor: "blueBackground.light",
                 }}
               >
-                {data.map((item, index) => (
+                {refinedData.map((item, index) => (
                   <Grow
                     in={!isLoading}
                     {...(!isLoading ? { timeout: index * 1000 } : {})}
                     key={index}
                   >
                     <TableRow key={index} className={classes.row}>
-                      <TableCell align="center" sx={{ padding: "8px" }}>
-                        <Typography
-                          variant="h6"
-                          sx={{
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                          }}
-                        >
-                          {" "}
-                          {item?.xephang}{" "}
-                        </Typography>
-                      </TableCell>
                       <TableCell align="center" sx={{ padding: "8px" }}>
                         <Box
                           sx={{
@@ -209,28 +209,28 @@ const Ranking = () => {
                               marginLeft: "1rem",
                               marginRight: "1rem",
                             }}
-                            src={item.hinhAnh}
+                            src={item?.hinhAnh}
                           ></img>
-                          <Typography variant="h6"> {item.ten_doi}</Typography>
+                          <Typography variant="h6">
+                            {" "}
+                            {item?.tenCauThu}
+                          </Typography>
                         </Box>
+                      </TableCell>
+                      <TableCell align="center" sx={{ padding: "8px" }}>
+                        <Typography variant="h6"> {item?.tenDoi}</Typography>
                       </TableCell>
 
                       <TableCell align="center" sx={{ padding: "8px" }}>
-                        <Typography variant="h6"> {item.tranThang}</Typography>
-                      </TableCell>
-                      <TableCell align="center" sx={{ padding: "8px" }}>
-                        <Typography variant="h6"> {item.tranThua}</Typography>
-                      </TableCell>
-                      <TableCell align="center" sx={{ padding: "8px" }}>
-                        <Typography variant="h6"> {item.tranHoa}</Typography>
-                      </TableCell>
-                      <TableCell align="center" sx={{ padding: "8px" }}>
-                        <Typography variant="h6"> {item.hieuSo}</Typography>
+                        <Typography variant="h6">
+                          {" "}
+                          {item?.loaiCauThu}
+                        </Typography>
                       </TableCell>
                       <TableCell align="center" sx={{ padding: "8px" }}>
                         <Typography variant="h6">
                           {" "}
-                          {item.diem ? item.diem : "0"}
+                          {item.soLuongBanThang}
                         </Typography>
                       </TableCell>
                     </TableRow>
@@ -240,6 +240,29 @@ const Ranking = () => {
             </Table>
           </TableContainer>
         )}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            backgroundColor: "blueBackground.main",
+            paddingBottom: "0.5rem",
+          }}
+        >
+          {refinedData.length > 0 ? (
+            <Pagination
+              count={totalPage}
+              page={currentPage}
+              variant="contained"
+              shape="rounded"
+              // onChange={handlePageChange}
+              key={currentPage}
+            ></Pagination>
+          ) : (
+            <Typography variant="h6" sx={{ padding: "1rem" }}>
+              Không có dữ liệu
+            </Typography>
+          )}
+        </Box>
       </Paper>
     </>
   );

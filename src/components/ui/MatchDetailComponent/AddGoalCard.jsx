@@ -22,7 +22,12 @@ const AddGoalCard = (props) => {
     {
       id: 2,
       mota: "Bàn thắng thông thường",
-      ten: "Bình thường",
+      ten: "Thông thường",
+    },
+    {
+      id: 3,
+      mota: "Phản lưới nhà",
+      ten: "Phản lưới",
     },
   ];
   const {

@@ -65,7 +65,7 @@ const SearchBar = () => {
       if (res?.data?.data?.listResult) {
         let data = res.data.data.listResult;
 
-        let mappedArr = data.map((item) => {
+        let mappedArr = data?.map((item) => {
           return {
             id: item.id,
             name: item.ten,
@@ -80,10 +80,12 @@ const SearchBar = () => {
       console.log(err);
     }
     try {
-      const res = await MyAxios.get("/cauthu/all");
-      if (res?.data?.data) {
-        let data = res.data.data;
-        let mappedArr = data.map((item) => {
+      const res = await MyAxios.get("/cauthu/all", {
+        params: { page: 1, limit: 100 },
+      });
+      if (res?.data?.data?.listPlayerDto) {
+        let data = res.data?.data?.listPlayerDto;
+        let mappedArr = data?.map((item) => {
           return {
             id: item.id,
             name: item.hoTen,
@@ -126,10 +128,20 @@ const SearchBar = () => {
       }
     }
   }, [searchValue]);
+  const handleChange = (event, value) => {
+    if (value) {
+      if (value.type === "team") {
+        window.location.href = `/clubs/${value.id}`;
+      } else {
+        window.location.href = `/players/${value.id}`;
+      }
+    }
+  };
 
   return (
     <>
       <Autocomplete
+        onChange={handleChange}
         className={classes.searchField}
         isOptionEqualToValue={(option, value) =>
           option.name === value.name && option.id === value.id

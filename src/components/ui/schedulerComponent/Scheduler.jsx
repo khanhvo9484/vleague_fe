@@ -44,6 +44,7 @@ const Scheduler = (props) => {
     setIsOpenSnackbar,
     showDetail,
     notShowEdit,
+    leagueId,
   } = props;
 
   const [notify, setNotify] = useState("");
@@ -176,6 +177,7 @@ const Scheduler = (props) => {
         setChangeList={setChangeList}
         isSave={isSave}
         showDetail
+        leagueId={leagueId}
       ></MatchDay>
     </Grid>
   );

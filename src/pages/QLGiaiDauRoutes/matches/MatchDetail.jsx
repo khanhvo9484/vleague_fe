@@ -13,6 +13,7 @@ const MatchDetail = () => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const matchId = searchParams.get("matchId");
+  const leagueId = searchParams.get("leagueId");
 
   const [isLoading, setIsLoading] = useState(false);
   const [match, setMatch] = useState({});
@@ -34,7 +35,7 @@ const MatchDetail = () => {
     <OrganizerLayout
       title={"Quản lý trận đấu"}
       childLv1={"Chi tiết trận đấu"}
-      parentLink={"/organizer/matches"}
+      parentLink={"/organizer/matches?id=" + leagueId}
       isLoading={isLoading}
       notify={notify}
     >

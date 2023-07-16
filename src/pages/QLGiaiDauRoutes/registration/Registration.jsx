@@ -24,7 +24,7 @@ const Registration = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [listRegis, setListRegis] = useState([]);
   const [allListRegis, setAllListRegis] = useState([]);
-  const [selectValue, setSelectValue] = useState("Chờ duyệt");
+  const [selectValue, setSelectValue] = useState("Tất cả");
 
   useEffect(async () => {
     if (currentLeague) {
@@ -53,6 +53,9 @@ const Registration = () => {
       setListRegis(
         allListRegis.filter((regis) => regis.trangThai == "Chờ duyệt")
       );
+    }
+    if (e.target.value === "Tất cả") {
+      setListRegis(allListRegis);
     }
   };
   return (
@@ -83,12 +86,16 @@ const Registration = () => {
               onChange={(e) => {
                 handleChangeFilter(e);
               }}
-              sx={{ width: "14rem" }}
+              sx={{ width: "13.5rem" }}
             >
+              <MenuItem key={0} value="Tất cả">
+                {" "}
+                Tất cả
+              </MenuItem>
               <MenuItem key={1} value="Đã duyệt">
                 Đã duyệt
               </MenuItem>
-              <MenuItem key={0} value="Chờ duyệt">
+              <MenuItem key={2} value="Chờ duyệt">
                 {" "}
                 Chờ duyệt
               </MenuItem>
@@ -133,6 +140,7 @@ const Registration = () => {
                   <RegistrationForm
                     key={index}
                     registration={regis}
+                    leagueId={currentLeague?.id}
                   ></RegistrationForm>
                 </Box>
               ))}

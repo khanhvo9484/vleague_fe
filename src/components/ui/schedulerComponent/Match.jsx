@@ -74,6 +74,7 @@ const Match = (props) => {
     setChangeList,
     isSave,
     showDetail,
+    leagueId,
   } = props;
   const [isLoading, setIsLoading] = useState(true);
 
@@ -94,6 +95,7 @@ const Match = (props) => {
                 setChangeList={setChangeList}
                 isSave={isSave}
                 showDetail={showDetail}
+                leagueId={leagueId}
               />
             </ListItem>
           );

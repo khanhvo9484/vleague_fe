@@ -54,6 +54,7 @@ const MatchDay = (props) => {
     setChangeList,
     isSave,
     showDetail,
+    leagueId,
   } = props;
   const showedItem = 6;
   const [isShowItem, setIsShowItem] = useState(false);
@@ -198,6 +199,7 @@ const MatchDay = (props) => {
           setChangeList={setChangeList}
           isSave={isSave}
           showDetail={showDetail}
+          leagueId={leagueId}
           // currentSchedule={currentSchedule}
         />
       )}

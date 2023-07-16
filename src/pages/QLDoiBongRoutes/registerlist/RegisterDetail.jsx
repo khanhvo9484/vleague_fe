@@ -7,6 +7,7 @@ import {
   Select,
   MenuItem,
   Button,
+  Paper,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import OrganizerLayout from "../../../layout/OrganizerLayout";
@@ -63,7 +64,7 @@ const RegistrationDetail = () => {
     <ManagerLayout
       title={"Hồ sơ đăng ký"}
       childLv1={"Chi tiết hồ sơ"}
-      parentLink="/manager/register-list"
+      parentLink={`/manager/register-list`}
       isLoading={isLoading}
       notify={notify}
     >
@@ -100,6 +101,76 @@ const RegistrationDetail = () => {
                   isNotShowEdit={true}
                 ></PlayerLargeCard>
               )}
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid container>
+          <Grid
+            item
+            xs={8}
+            sx={{ mt: "1rem", padding: "1rem" }}
+            component={Paper}
+            elevation={3}
+            container
+          >
+            <Grid item container xs={12}>
+              <Grid item xs={3}>
+                {" "}
+                <Typography variant="subtitle1" sx={{ ml: "1rem" }}>
+                  Tuổi tối đa:{" "}
+                </Typography>{" "}
+              </Grid>
+              <Grid item xs={9}>
+                <Typography variant="h6" sx={{ color: "primary.dark" }}>
+                  {" "}
+                  {Math.max(...players.map((player) => player?.age))}
+                </Typography>
+              </Grid>
+            </Grid>
+            <Grid item container xs={12}>
+              <Grid item xs={3}>
+                {" "}
+                <Typography variant="subtitle1" sx={{ ml: "1rem" }}>
+                  Tuổi tối thiểu:{" "}
+                </Typography>{" "}
+              </Grid>
+              <Grid item xs={9}>
+                <Typography variant="h6" sx={{ color: "primary.dark" }}>
+                  {" "}
+                  {Math.min(...players.map((player) => player?.age))}
+                </Typography>
+              </Grid>
+            </Grid>
+            <Grid item container xs={12}>
+              <Grid item xs={3}>
+                {" "}
+                <Typography variant="subtitle1" sx={{ ml: "1rem" }}>
+                  Số lượng cầu thủ:
+                </Typography>{" "}
+              </Grid>
+              <Grid item xs={9}>
+                <Typography variant="h6" sx={{ color: "primary.dark" }}>
+                  {" "}
+                  {players.length}
+                </Typography>
+              </Grid>
+            </Grid>
+            <Grid item container xs={12}>
+              <Grid item xs={3}>
+                {" "}
+                <Typography variant="subtitle1" sx={{ ml: "1rem" }}>
+                  Số lượng cầu thủ nước ngoài:{" "}
+                </Typography>{" "}
+              </Grid>
+              <Grid item xs={9}>
+                <Typography variant="h6" sx={{ color: "primary.dark" }}>
+                  {
+                    players.filter(
+                      (player) => player?.loaiCauThu == "Ngoại binh"
+                    ).length
+                  }
+                </Typography>
+              </Grid>
             </Grid>
           </Grid>
         </Grid>

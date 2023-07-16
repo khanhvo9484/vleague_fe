@@ -13,6 +13,7 @@ import { useState, useEffect } from "react";
 import Helper from "../../../utils/Helper";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
+import { te } from "date-fns/locale";
 const useStyles = makeStyles((theme) => ({
   matchList: {
     display: "flex",
@@ -71,6 +72,7 @@ const MatchCard = (props) => {
     setChangeList,
     isSave,
     showDetail,
+    leagueId,
   } = props;
   const classes = useStyles();
   const [currentDate, setCurrentDate] = useState("");
@@ -116,6 +118,7 @@ const MatchCard = (props) => {
       if (currentDate.length == 10 && currentTime.length == 8 && isChanged) {
         const tempDateTime =
           Helper.formatDateToUTC(currentDate) + " " + currentTime;
+        console.log(tempDateTime);
         const tempMatch = { idTranDau: match?.id, timeString: tempDateTime };
         setChangeList((prevList) => {
           const updatedList = prevList.map((item) => {
@@ -142,19 +145,20 @@ const MatchCard = (props) => {
   return (
     <Paper elevation={3} sx={{ width: "100%" }}>
       <Box className={classes.matchCard}>
-        {match?.ketQuaTranDau?.trangThai == "Đã kết thúc" && (
-          <Box className={classes.endedMatchStamp}>
-            <Typography
-              variant="body3"
-              sx={{
-                padding: "0rem 0.5rem 0rem 0.5rem",
-                color: "error.main",
-              }}
-            >
-              Đã kết thúc
-            </Typography>
-          </Box>
-        )}
+        {match?.ketQuaTranDau?.trangThai == "Đã kết thúc" ||
+          (match?.ketQuaTranDau?.trangThai == "Đã cập nhật kết quả" && (
+            <Box className={classes.endedMatchStamp}>
+              <Typography
+                variant="body3"
+                sx={{
+                  padding: "0rem 0.5rem 0rem 0.5rem",
+                  color: "error.main",
+                }}
+              >
+                Đã kết thúc
+              </Typography>
+            </Box>
+          ))}
         <Grid container spacing={0} justifyContent="center">
           <Grid
             item
@@ -242,12 +246,14 @@ const MatchCard = (props) => {
                     color="black"
                     width={"6rem"}
                     isEditable={
-                      match?.ketQuaTranDau?.trangThai == "Đã kết thúc"
+                      match?.ketQuaTranDau?.trangThai == "Đã kết thúc" ||
+                      match?.ketQuaTranDau?.trangThai == "Đã cập nhật kết quả"
                         ? ""
                         : isEditable
                     }
                     setIsEditable={
-                      match?.ketQuaTranDau?.trangThai == "Đã kết thúc"
+                      match?.ketQuaTranDau?.trangThai == "Đã kết thúc" ||
+                      match?.ketQuaTranDau?.trangThai == "Đã cập nhật kết quả"
                         ? ""
                         : setIsEditable
                     }
@@ -267,12 +273,14 @@ const MatchCard = (props) => {
                     color="black"
                     width={"6rem"}
                     isEditable={
-                      match?.ketQuaTranDau?.trangThai == "Đã kết thúc"
+                      match?.ketQuaTranDau?.trangThai == "Đã kết thúc" ||
+                      match?.ketQuaTranDau?.trangThai == "Đã cập nhật kết quả"
                         ? ""
                         : isEditable
                     }
                     setIsEditable={
-                      match?.ketQuaTranDau?.trangThai == "Đã kết thúc"
+                      match?.ketQuaTranDau?.trangThai == "Đã kết thúc" ||
+                      match?.ketQuaTranDau?.trangThai == "Đã cập nhật kết quả"
                         ? ""
                         : setIsEditable
                     }
@@ -285,15 +293,18 @@ const MatchCard = (props) => {
             </>
           }
         </Grid>
-        {match?.thoiGianVietNam == null && !isEditable && (
-          <Grid
-            item
-            xs={12}
-            sx={{ justifyContent: "center", display: "flex", mb: "0.5rem" }}
-          >
-            <Typography variant="body1">Chưa có thời gian</Typography>
-          </Grid>
-        )}
+        {match?.thoiGianVietNam == null &&
+          !isEditable &&
+          !currentDate &&
+          !currentTime && (
+            <Grid
+              item
+              xs={12}
+              sx={{ justifyContent: "center", display: "flex", mb: "0.5rem" }}
+            >
+              <Typography variant="body1">Chưa có thời gian</Typography>
+            </Grid>
+          )}
         <Grid item xs={6} sx={{ display: "flex", justifyContent: "flex-end" }}>
           <Box sx={{ mr: "2rem" }}>
             {match?.ketQuaTranDau?.dsBanThang &&
@@ -342,7 +353,9 @@ const MatchCard = (props) => {
                   },
                 }}
                 onClick={() => {
-                  navigate(`/organizer/matches/match?matchId=${match.id}`);
+                  navigate(
+                    `/organizer/matches/match?leagueId=${leagueId}&matchId=${match.id}`
+                  );
                 }}
               >
                 Xem chi tiết

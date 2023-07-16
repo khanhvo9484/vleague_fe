@@ -75,9 +75,9 @@ const CustomTextField = (props) => {
   useEffect(() => {
     if (type) {
       if (type === "date") {
-        setPlaceholder("MM/DD/YYYY");
+        setPlaceholder("dd/mm/yyyy");
       } else if (type === "time") {
-        setPlaceholder("HH:MM:SS");
+        setPlaceholder("hh:mm:ss");
       }
     }
   }, [value]); // eslint-disable-line react-hooks/exhaustive-deps

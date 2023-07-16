@@ -34,16 +34,16 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     alignItems: "center",
     marginBottom: "0.5rem",
-    color: theme.palette.primary.dark,
+    color: theme.palette.primary.main,
   },
 
   disableTextField: {
     "& fieldset": {
       border: "none",
-      color: theme.palette.primary.dark,
+      color: theme.palette.primary.main,
     },
     "& .MuiInputBase-input.Mui-disabled": {
-      WebkitTextFillColor: theme.palette.primary.dark,
+      WebkitTextFillColor: theme.palette.primary.main,
     },
   },
   select: {

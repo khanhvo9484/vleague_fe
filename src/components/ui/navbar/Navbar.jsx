@@ -131,6 +131,16 @@ const Navbar = ({ drawerWidth }) => {
               </Typography>
               <Typography variant="h6" sx={{ margin: "1rem" }}>
                 <NavLink
+                  to="/goalscorers"
+                  className={(navData) =>
+                    navData.isActive ? classes.activeLink : classes.inActiveLink
+                  }
+                >
+                  Cầu thủ ghi bàn
+                </NavLink>
+              </Typography>
+              <Typography variant="h6" sx={{ margin: "1rem" }}>
+                <NavLink
                   to="/clubs"
                   className={(navData) =>
                     navData.isActive ? classes.activeLink : classes.inActiveLink

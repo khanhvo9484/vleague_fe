@@ -26,6 +26,7 @@ const RegistrationDetail = () => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const id = searchParams.get("id");
+  const leagueId = searchParams.get("leagueId");
 
   const [isLoading, setIsLoading] = useState(false);
   const [notify, setNotify] = useState({ message: "", type: "" });
@@ -113,7 +114,7 @@ const RegistrationDetail = () => {
     <OrganizerLayout
       title={"Hồ sơ đăng ký"}
       childLv1={"Chi tiết hồ sơ"}
-      parentLink="/organizer/league-registration"
+      parentLink={`/organizer/league-registration?id=${leagueId}`}
       isLoading={isLoading}
       notify={notify}
     >

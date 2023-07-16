@@ -4,7 +4,15 @@ import { regisStatus } from "../../data/GlobalConstant";
 import { useNavigate } from "react-router-dom";
 const RegistrationForm = (props) => {
   const navigate = useNavigate();
-  const { registration, isDetail, displayLeagueName, isManager } = props;
+  const {
+    registration,
+    isDetail,
+    displayLeagueName,
+    isManager,
+    id,
+    setId,
+    leagueId,
+  } = props;
   return (
     <Paper elevation={3}>
       <Grid
@@ -17,17 +25,27 @@ const RegistrationForm = (props) => {
       >
         <Grid item xs={3}>
           {displayLeagueName && (
-            <img
-              src={registration?.hinhAnhGiai}
-              style={{ height: "35px" }}
-            ></img>
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <img
+                src={registration?.hinhAnhGiai}
+                style={{ height: "35px", marginRight: "1rem" }}
+              ></img>
+              <Typography variant="h6" sx={{ color: "primary.dark" }}>
+                {registration?.tenGiai}
+              </Typography>
+            </Box>
           )}
-
-          <Typography variant="h6" sx={{ color: "primary.dark" }}>
-            {displayLeagueName
-              ? registration?.tenGiai
-              : registration?.ten_doibong}
-          </Typography>
+          {!displayLeagueName && (
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <img
+                src={registration?.hinhAnhDoi}
+                style={{ height: "35px", marginRight: "1rem" }}
+              ></img>
+              <Typography variant="h6" sx={{ color: "primary.dark" }}>
+                {registration?.ten_doibong}
+              </Typography>
+            </Box>
+          )}
         </Grid>
         <Grid item xs={3}>
           <Typography>Quản lý</Typography>
@@ -69,7 +87,7 @@ const RegistrationForm = (props) => {
                     );
                   } else {
                     navigate(
-                      `/organizer/league-registration/detail?id=${registration?.id}`,
+                      `/organizer/league-registration/detail?leagueId=${leagueId}&id=${registration?.id}`,
                       { replace: true }
                     );
                   }

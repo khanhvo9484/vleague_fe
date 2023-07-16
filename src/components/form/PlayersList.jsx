@@ -322,8 +322,8 @@ const PlayerTable = (props) => {
                             sx={{ color: "primary.lightGray" }}
                           >
                             {" "}
-                            {/* {item?.viTri.join(", ")} */}
-                            {item?.viTri}
+                            {item?.viTri.join(", ")}
+                            {/* {item?.viTri} */}
                           </Typography>
                         </TableCell>
                         <TableCell align="center" sx={{ padding: "8px" }}>

@@ -80,8 +80,16 @@ const AllClubs = () => {
   const searchParams = new URLSearchParams(location.search);
   const page = searchParams.get("page") || 1;
 
-  const handleFilterChange = (value) => {
-    setFilterValue(value);
+  const handleFilterChange = async (value) => {
+    try {
+      const res = await MyAxios.get(`/cauthu/all`, {
+        params: { page: 1, limit: 100, keyword: `${value}` },
+      });
+      setClubs(res.data.data.listPlayerDto);
+      setFilterValue(value);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   // useEffect(() => {
@@ -238,7 +246,7 @@ const AllClubs = () => {
                                 }}
                               >
                                 <Grid
-                                  xs={4}
+                                  xs={3}
                                   item
                                   className={classes.allCenter}
                                   sx={{
@@ -255,7 +263,7 @@ const AllClubs = () => {
                                   </Typography>
                                 </Grid>
                                 <Grid
-                                  xs={4}
+                                  xs={2}
                                   item
                                   className={classes.allCenter}
                                   sx={{
@@ -272,7 +280,7 @@ const AllClubs = () => {
                                   </Typography>
                                 </Grid>
                                 <Grid
-                                  xs={4}
+                                  xs={2}
                                   item
                                   className={classes.allCenter}
                                   sx={{
@@ -287,6 +295,24 @@ const AllClubs = () => {
                                   >
                                     Quốc tịch:{" "}
                                     {club?.quocTich || "Chưa cập nhật"}
+                                  </Typography>
+                                </Grid>
+                                <Grid
+                                  xs={2}
+                                  item
+                                  className={classes.allCenter}
+                                  sx={{
+                                    justifyContent: "flex-start",
+                                  }}
+                                >
+                                  <Typography
+                                    variant="subtitle1"
+                                    sx={{
+                                      color: "primary.dark",
+                                    }}
+                                  >
+                                    Loại cầu thủ:{" "}
+                                    {club?.loaiCauThu || "Chưa cập nhật"}
                                   </Typography>
                                 </Grid>
                               </Grid>
