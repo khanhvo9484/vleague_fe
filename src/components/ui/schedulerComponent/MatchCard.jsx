@@ -310,8 +310,13 @@ const MatchCard = (props) => {
             {match?.ketQuaTranDau?.dsBanThang &&
               match?.ketQuaTranDau?.dsBanThang.map((goal, index) => (
                 <Typography key={index} sx={{ whiteSpace: "nowrap" }}>
-                  {goal?.idDoi === match?.ketQuaTranDau?.idDoiNha
+                  {goal?.idDoi === match?.ketQuaTranDau?.idDoiNha &&
+                  goal?.loaiBanThang?.id != 3
                     ? `${goal?.tenCauThu} - ${goal?.thoiDiemGhiBan}'`
+                    : null}
+                  {goal?.idDoi !== match?.ketQuaTranDau?.idDoiNha &&
+                  goal?.loaiBanThang?.id == 3
+                    ? `${goal?.tenCauThu} - ${goal?.thoiDiemGhiBan}' (OG)`
                     : null}
                 </Typography>
               ))}
@@ -326,8 +331,13 @@ const MatchCard = (props) => {
             {match?.ketQuaTranDau?.dsBanThang &&
               match?.ketQuaTranDau?.dsBanThang.map((goal, index) => (
                 <Typography key={index} sx={{ whiteSpace: "nowrap" }}>
-                  {goal?.idDoi === match?.ketQuaTranDau?.idDoiKhach
+                  {goal?.idDoi === match?.ketQuaTranDau?.idDoiKhach &&
+                  goal?.loaiBanThang?.id != 3
                     ? `${goal?.tenCauThu} - ${goal?.thoiDiemGhiBan}'`
+                    : null}
+                  {goal?.idDoi !== match?.ketQuaTranDau?.idDoiKhach &&
+                  goal?.loaiBanThang?.id == 3
+                    ? `${goal?.tenCauThu} - ${goal?.thoiDiemGhiBan}' (OG)`
                     : null}
                 </Typography>
               ))}

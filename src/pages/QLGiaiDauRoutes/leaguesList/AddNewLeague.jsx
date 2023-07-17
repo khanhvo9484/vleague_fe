@@ -29,14 +29,27 @@ const AddNewLeague = () => {
   const [isDisable, setIsDisable] = useState(false);
 
   const [numberOfClubs, setNumberOfClubs] = useState(-1);
-  const { imageUrl, hasImageOnQueue, isFireUpload, setIsFireUpload } =
-    useEditInfo();
+  const {
+    imageUrl,
+    hasImageOnQueue,
+    isFireUpload,
+    setIsFireUpload,
+    resetImage,
+  } = useEditInfo();
   const [isLoading, setIsLoading] = useState(false);
   const [isOpenSnackbar, setIsOpenSnackbar] = useState(false);
   const [snackbarContent, setSnackbarContent] = useState("");
   const [snackbarType, setSnackbarType] = useState("success");
   const { auth } = useAuth();
   const handleAddLeague = async () => {
+    setIsFireUpload(true);
+  };
+  useEffect(async () => {
+    if (!isFireUpload) return;
+    if (hasImageOnQueue && !imageUrl) {
+      setIsLoading(false);
+      return;
+    }
     setIsLoading(true);
     let data = {
       id_nguoitao: auth?.id,
@@ -76,8 +89,11 @@ const AddNewLeague = () => {
     } finally {
       setIsLoading(false);
       setIsOpenSnackbar(true);
+      if (imageUrl) {
+        resetImage();
+      }
     }
-  };
+  }, [isFireUpload, imageUrl]);
   return (
     <ComponentLayoutBackdrop isLoading={isLoading}>
       <Paper sx={{ padding: "1rem" }}>

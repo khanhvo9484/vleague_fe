@@ -39,14 +39,13 @@ const UploadImageSection = () => {
         const snapshot = await uploadBytes(imageRef, image);
         const url = await getDownloadURL(snapshot.ref);
         setImageUrl(url);
-      } catch (error) {}
+        console.log(url);
+      } catch (error) {
+        console.log(err);
+      }
     }
   };
-  useEffect(() => {
-    if (imageUrl) {
-      setHasImageOnQueue(false);
-    }
-  }, [imageUrl]);
+
   return (
     <Box
       sx={{ display: "flex", flexDirection: "column", alignContent: "center" }}

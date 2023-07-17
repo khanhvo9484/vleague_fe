@@ -31,14 +31,20 @@ const StadiumCard = (props) => {
   const [stadiums, setStadiums] = useState([]);
   const [newStadium, setNewStadium] = useState("");
   useEffect(async () => {
+    const abortController = new AbortController();
     setIsLoading(true);
     try {
-      const res = await MyAxios.get(`/sanbong/chuadangky`);
+      const res = await MyAxios.get(`/sanbong/chuadangky`, {
+        signal: abortController.signal,
+      });
       setStadiums(res.data.data);
     } catch (err) {
       console.log(err);
     } finally {
       setIsLoading(false);
+      return () => {
+        abortController.abort();
+      };
     }
   }, [isEditable]);
   useEffect(() => {
@@ -167,8 +173,8 @@ const StadiumCard = (props) => {
                     {stadiums &&
                       Array.isArray(stadiums) &&
                       stadiums.map((stadium) => (
-                        <MenuItem key={stadium.id} value={stadium.id}>
-                          {stadium.tenSan}
+                        <MenuItem key={stadium?.id} value={stadium?.id}>
+                          {stadium?.tenSan}
                         </MenuItem>
                       ))}
                   </Select>

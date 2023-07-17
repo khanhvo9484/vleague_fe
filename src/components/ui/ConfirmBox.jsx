@@ -1,8 +1,7 @@
 import { Backdrop, Paper, Box, Typography, Button } from "@mui/material";
 import { Close, Check } from "@mui/icons-material";
 import useEditInfo from "../../hooks/useEditInfo";
-const ConfirmBox = ({ children }) => {
-  const { openNotiBox, setOpenNotiBox, setIsAccept } = useEditInfo();
+const ConfirmBox = ({ children, openNotiBox, setOpenNotiBox, setIsAccept }) => {
   return (
     <Box>
       <Backdrop

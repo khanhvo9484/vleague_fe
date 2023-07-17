@@ -2,7 +2,7 @@ import { Paper, Box, Grid, Typography, Button } from "@mui/material";
 import { ArrowBackIos } from "@mui/icons-material";
 
 const LeagueDetail = (props) => {
-  const { league, setSelectedLeague } = props;
+  const { league, setSelectedLeague, setIsShowDetail } = props;
   return (
     <Grid container>
       <Grid item xs={12} sx={{ mb: "0.5rem", ml: "0.5rem" }}>
@@ -45,7 +45,7 @@ const LeagueDetail = (props) => {
             variant="contained"
             color="primary"
             onClick={() => {
-              setSelectedLeague("");
+              setIsShowDetail(false);
             }}
           >
             Trở lại

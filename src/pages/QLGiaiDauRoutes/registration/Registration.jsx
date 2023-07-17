@@ -31,8 +31,11 @@ const Registration = () => {
       try {
         setIsLoading(true);
         const res = await MyAxios.get(`/hosodangky/${currentLeague?.id}`);
-        setAllListRegis(res.data.data);
-        setListRegis(res.data.data);
+
+        setAllListRegis(res?.data?.data);
+        setListRegis(
+          res?.data?.data.filter((regis) => regis.trangThai != "Hủy")
+        );
         // setCurrentForm(res.data.data[0]);
         console.log(res.data.data[0]);
       } catch (err) {
@@ -52,6 +55,11 @@ const Registration = () => {
     if (e.target.value === "Chờ duyệt") {
       setListRegis(
         allListRegis.filter((regis) => regis.trangThai == "Chờ duyệt")
+      );
+    }
+    if (e.target.value === "Từ chối") {
+      setListRegis(
+        allListRegis.filter((regis) => regis.trangThai == "Từ chối")
       );
     }
     if (e.target.value === "Tất cả") {
@@ -98,6 +106,10 @@ const Registration = () => {
               <MenuItem key={2} value="Chờ duyệt">
                 {" "}
                 Chờ duyệt
+              </MenuItem>
+              <MenuItem key={3} value="Từ chối">
+                {" "}
+                Đã từ chối
               </MenuItem>
             </Select>
           </Box>

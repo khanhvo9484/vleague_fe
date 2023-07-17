@@ -40,6 +40,14 @@ const RegisterList = () => {
         allListRegis.filter((regis) => regis.trangThai == "Chờ duyệt")
       );
     }
+    if (e.target.value === "Hủy") {
+      setListRegis(allListRegis.filter((regis) => regis.trangThai == "Hủy"));
+    }
+    if (e.target.value === "Từ chối") {
+      setListRegis(
+        allListRegis.filter((regis) => regis.trangThai == "Từ chối")
+      );
+    }
     if (e.target.value === "Tất cả") {
       setListRegis(allListRegis);
     }
@@ -102,9 +110,17 @@ const RegisterList = () => {
             <MenuItem key={1} value="Đã duyệt">
               Đã duyệt
             </MenuItem>
-            <MenuItem key={0} value="Chờ duyệt">
+            <MenuItem key={2} value="Chờ duyệt">
               {" "}
               Chờ duyệt
+            </MenuItem>
+            <MenuItem key={3} value="Hủy">
+              {" "}
+              Đã hủy
+            </MenuItem>
+            <MenuItem key={4} value="Từ chối">
+              {" "}
+              Bị từ chối
             </MenuItem>
           </Select>
         </Box>

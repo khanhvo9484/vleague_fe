@@ -46,6 +46,7 @@ const RegistrationDetail = () => {
       setIsLoading(true);
       const res = await MyAxios.get(`/hosodangky/chitiet?hoso=${id}`);
       setCurrentForm(res?.data?.data);
+
       setCurrentPlayer(res?.data?.data?.dsCauThuDangKy[0]);
       setPlayer(res.data?.data?.dsCauThuDangKy[0]);
       setPlayers(res?.data?.data?.dsCauThuDangKy);
@@ -59,6 +60,21 @@ const RegistrationDetail = () => {
   useEffect(async () => {
     fetchingForm();
   }, []);
+  const handleCancelForm = async () => {
+    try {
+      setIsOpenBackdrop(true);
+      const res = await MyAxios.put(`/hosodangky/huy?hoso=${currentForm?.id}`);
+      setSnackbarMessage("Hủy đăng ký thành công");
+      setSnackbarType("success");
+    } catch (err) {
+      console.log(err);
+      setSnackbarMessage("Hủy đăng ký thất bại");
+      setSnackbarType("error");
+    } finally {
+      setIsOpenBackdrop(false);
+      setIsOpenSnackbar(true);
+    }
+  };
 
   return (
     <ManagerLayout
@@ -79,6 +95,23 @@ const RegistrationDetail = () => {
               borderRadius: "4px",
             }}
           >
+            {currentForm?.trangThai == "Chờ duyệt" && (
+              <Box
+                sx={{
+                  m: "0.5rem",
+                  display: "flex",
+                  justifyContent: "flex-end",
+                }}
+              >
+                <Button
+                  variant="contained"
+                  color="error"
+                  onClick={handleCancelForm}
+                >
+                  Hủy đăng ký
+                </Button>
+              </Box>
+            )}
             {currentForm && (
               <Box sx={{ padding: "0.5rem" }}>
                 <RegistrationForm

@@ -10,7 +10,7 @@ import Scheduler from "../../../components/ui/schedulerComponent/Scheduler";
 import useAuth from "../../../hooks/useAuth";
 import CustomSnackbar from "../../../components/ui/CustomSnackbar";
 import ManagerLayout from "../../../layout/ManagerLayout";
-
+import MatchCard from "../../../components/ui/schedulerComponent/MatchCard";
 import { useLocation } from "react-router-dom";
 const ManagerSchedule = () => {
   const location = useLocation();
@@ -31,9 +31,11 @@ const ManagerSchedule = () => {
       setIsLoading(true);
       console.log(currentLeague);
       try {
-        const res = await MyAxios.get(`/lichthidau/${currentLeague?.id}`);
-        if (res?.data?.data?.cacVongDau) {
-          setCurrentSchedule(res.data.data.cacVongDau);
+        const res = await MyAxios.get(
+          `/trandau?muagiai=${currentLeague?.id}&doibong=${auth?.teamId}&trangthai=chuathidau`
+        );
+        if (res?.data?.data?.dsTranDaus) {
+          setCurrentSchedule(res.data.data.dsTranDaus);
         }
       } catch (err) {
         console.log(err);
@@ -84,17 +86,49 @@ const ManagerSchedule = () => {
                 Hiện chưa có lịch thi đấu của giải đấu này
               </Typography>
             )}
-            {!isLoading && currentLeague && currentSchedule?.length > 0 ? (
-              <Scheduler
-                currentSchedule={currentSchedule}
-                setCurrentSchedule={setCurrentSchedule}
-                background={"blueBackground.manage"}
-                setIsLoading={setIsLoading}
-                setSnackbarMessage={setSnackbarMessage}
-                setSnackbarType={setSnackbarType}
-                setIsOpenSnackbar={setIsOpenSnackbar}
-              ></Scheduler>
-            ) : null}
+            {!isLoading && currentLeague && currentSchedule?.length > 0 && (
+              <Box sx={{ width: "100%" }}>
+                <Typography variant="h3" sx={{ mb: "0.5rem" }}>
+                  Trận đấu sắp diễn ra
+                </Typography>
+              </Box>
+            )}
+
+            {!isLoading &&
+              currentLeague &&
+              currentSchedule?.length > 0 &&
+              currentSchedule.map((item, index) => {
+                return (
+                  <Grid container sx={{ mb: "0.5rem" }} key={index}>
+                    <Grid container item xs={8}>
+                      <MatchCard
+                        match={item}
+                        setIsLoading={setIsLoading}
+                        setSnackbarMessage={setSnackbarMessage}
+                        setSnackbarType={setSnackbarType}
+                        setIsOpenSnackbar={setIsOpenSnackbar}
+                      ></MatchCard>
+                    </Grid>
+                    <Grid item xs={3} component={Paper} sx={{ ml: "1rem" }}>
+                      <Box sx={{ padding: "1rem" }}>
+                        <Box sx={{ display: "flex", alignItems: "center" }}>
+                          <Typography variant="subtitle1">Sân đấu: </Typography>
+                          <Typography variant="h6" sx={{ ml: "0.5rem" }}>
+                            {" "}
+                            {item?.doiNha?.sanNha?.tenSan}
+                          </Typography>
+                        </Box>
+                        <Box>
+                          <img
+                            style={{ width: "80px", borderRadius: "4px" }}
+                            src={`${item?.doiNha?.sanNha?.hinhAnh}`}
+                          ></img>
+                        </Box>
+                      </Box>
+                    </Grid>
+                  </Grid>
+                );
+              })}
           </Grid>
         </Grid>
         <CustomSnackbar

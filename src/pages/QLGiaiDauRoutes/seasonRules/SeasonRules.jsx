@@ -83,6 +83,48 @@ const Dashboard = () => {
   const [isOpenNotification, setIsOpenNotification] = useState(false);
   const [notificationContent, setNotificationContent] = useState("");
 
+  const [notify, setNotify] = useState("");
+
+  const [redBorderWinPoint, setRedBorderWinPoint] = useState(false);
+  const [redBorderDrawPoint, setRedBorderDrawPoint] = useState(false);
+  const [redBorderLosePoint, setRedBorderLosePoint] = useState(false);
+
+  useEffect(() => {
+    if (winPoint && drawPoint && losePoint) {
+      if (
+        winPoint === drawPoint ||
+        winPoint === losePoint ||
+        drawPoint === losePoint
+      ) {
+        setNotify("Điểm thắng, hòa, thua không được trùng nhau");
+      } else if (winPoint < 0 || drawPoint < 0 || losePoint < 0) {
+        setNotify("Điểm không được âm");
+
+        setRedBorderWinPoint(winPoint < 0 ? true : false);
+        setRedBorderDrawPoint(drawPoint < 0 ? true : false);
+        setRedBorderLosePoint(losePoint < 0 ? true : false);
+      } else if (winPoint < drawPoint || winPoint < losePoint) {
+        setNotify("Điểm thắng phải lớn hơn điểm hòa và thua");
+
+        setRedBorderWinPoint(true);
+      } else if (drawPoint > winPoint || drawPoint < losePoint) {
+        setNotify("Điểm hòa phải lớn hơn điểm thua và nhỏ hơn điểm thắng");
+
+        setRedBorderDrawPoint(true);
+      } else if (losePoint > winPoint || losePoint > drawPoint) {
+        setNotify("Điểm thua phải nhỏ hơn điểm thắng và hòa");
+
+        setRedBorderLosePoint(true);
+      } else {
+        setNotify("");
+
+        setRedBorderWinPoint(false);
+        setRedBorderDrawPoint(false);
+        setRedBorderLosePoint(false);
+      }
+    }
+  }, [winPoint, losePoint, drawPoint]);
+
   useEffect(() => {
     setIsEditable(false);
     if (currentLeague) {
@@ -300,6 +342,8 @@ const Dashboard = () => {
                             fontWeight: "700",
                             // fontSize: "1.2rem",
                           },
+                          border: redBorderWinPoint ? "2px solid red" : "none",
+                          borderRadius: "4px",
                         }}
                         disabled={!isEditable}
                         className={!isEditable ? classes.disableTextField : ""}
@@ -322,6 +366,8 @@ const Dashboard = () => {
                             fontWeight: "700",
                             // fontSize: "1.2rem",
                           },
+                          border: redBorderDrawPoint ? "2px solid red" : "none",
+                          borderRadius: "4px",
                         }}
                         disabled={!isEditable}
                         className={!isEditable ? classes.disableTextField : ""}
@@ -346,6 +392,8 @@ const Dashboard = () => {
                             fontWeight: "700",
                             // fontSize: "1.2rem",
                           },
+                          border: redBorderLosePoint ? "2px solid red" : "none",
+                          borderRadius: "4px",
                         }}
                         disabled={!isEditable}
                         className={!isEditable ? classes.disableTextField : ""}
@@ -388,6 +436,11 @@ const Dashboard = () => {
                       ></TextField>
                     </Grid>
                   </Grid>
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography variant="h6" sx={{ mb: "1rem" }}>
+                    {notify}
+                  </Typography>
                 </Grid>
               </Grid>
               <Grid item xs={1} justifyContent={"flex-end"}>

@@ -64,6 +64,8 @@ const Scheduler = (props) => {
       if (response.status === 200) {
         setSnackbarMessage("Lưu thành công");
         setSnackbarType("success");
+        setIsSave(true);
+        setIsEditable(false);
       }
     } catch (err) {
       setSnackbarMessage("Lưu thất bại");
@@ -71,8 +73,6 @@ const Scheduler = (props) => {
     } finally {
       setIsLoading(false);
       setIsOpenSnackbar(true);
-      setIsSave(true);
-      setIsEditable(false);
     }
   };
   return (

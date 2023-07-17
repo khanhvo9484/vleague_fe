@@ -56,14 +56,8 @@ const currentPlayerLargeCard = (props) => {
   const classes = useStyles();
   const { player, isEditable, setIsEditable, isNotShowEdit, setPlayer } = props;
   const { currentPlayer } = useCurrentLeague();
-  const {
-    setOpenNotiBox,
-    openNotiBox,
-    isAccept,
-    hasImageOnQueue,
-    imageUrl,
-    resetAll,
-  } = useEditInfo();
+  const { openNotiBox, hasImageOnQueue, imageUrl, resetImage, resetAll } =
+    useEditInfo();
   const [isLoading, setIsLoading] = useState(false);
   const [notify, setNotify] = useState({ message: "", type: "" });
 
@@ -81,6 +75,8 @@ const currentPlayerLargeCard = (props) => {
   const [isOpenSnackbar, setIsOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarType, setSnackbarType] = useState("success");
+
+  const [isOpenConfirmBox, setIsOpenConfirmBox] = useState(false);
 
   useEffect(() => {
     if (player) {
@@ -112,21 +108,32 @@ const currentPlayerLargeCard = (props) => {
     }
     setPlayerDOB(formattedInput);
   };
-  const handleEndContract = async () => {
-    setOpenNotiBox(true);
+  const handleEndContract = () => {
+    console.log("ckick");
+    setIsOpenConfirmBox(true);
+  };
+  useEffect(async () => {
     if (isAcceptKick) {
       try {
         const res = await MyAxios.put(`/doibong/huycauthu`, {
           id_cauthu: player?.id,
           id_doibong: player?.idDoi,
         });
-      } catch (err) {}
+        if (res.status === 200) {
+          setSnackbarMessage("Kết thúc hợp đồng thành công");
+          setSnackbarType("success");
+          setIsOpenSnackbar(true);
+          // setIsOpenConfirmBox(false);
+          // resetAll();
+        }
+      } catch (err) {
+        console.log(err);
+        setSnackbarMessage("Kết thúc hợp đồng thất bại");
+        setSnackbarType("error");
+        setIsOpenSnackbar(true);
+      }
     }
-  };
-  useEffect(async () => {
-    if (isAccept) {
-    }
-  }, [isAccept]);
+  }, [isAcceptKick]);
   const handleSubmitChange = async () => {
     setIsLoading(true);
     try {
@@ -186,25 +193,28 @@ const currentPlayerLargeCard = (props) => {
         orientation="vertical"
         timeout={1000}
       >
-        {openNotiBox && (
-          <ConfirmBox setIsAcept={setIsAcceptKick}>
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-around",
-              }}
-            >
-              <Typography variant="subtitle1" color="primary.dark">
-                Kết thúc hợp đồng với &nbsp;
-              </Typography>
-              <Typography variant="h6" color="primary.dark">
-                {"  "}
-                {player?.hoTen}?
-              </Typography>
-            </Box>
-          </ConfirmBox>
-        )}
+        <ConfirmBox
+          openNotiBox={isOpenConfirmBox}
+          setOpenNotiBox={setIsOpenConfirmBox}
+          setIsAccept={setIsAcceptKick}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-around",
+            }}
+          >
+            <Typography variant="subtitle1" color="primary.dark">
+              Kết thúc hợp đồng với &nbsp;
+            </Typography>
+            <Typography variant="h6" color="primary.dark">
+              {"  "}
+              {player?.hoTen}?
+            </Typography>
+          </Box>
+        </ConfirmBox>
+
         <Box
           className={classes.detailBox}
           sx={{ borderRadius: "15px 15px 15px 15px" }}

@@ -29,7 +29,7 @@ const goalType = [
   {
     id: 2,
     mota: "Bàn thắng thông thường",
-    ten: "Bình thường",
+    ten: "Thông thường",
   },
 ];
 const useStyles = makeStyles((theme) => ({
@@ -44,6 +44,15 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
     alignItems: "center",
   },
+  endedMatchStamp: {
+    position: "absolute",
+    // top: "8px",
+    // right: "5px",
+    borderRadius: "10px",
+    outline: `1px solid ${theme.palette.error.main}`,
+    mt: "0.2rem",
+    mr: "0.2rem",
+  },
 }));
 
 const MatchDetailComponent = (props) => {
@@ -56,14 +65,13 @@ const MatchDetailComponent = (props) => {
   const [startTime, setStartTime] = useState(match?.thoiGianNhanStart || "");
   const [matchResult, setMatchResult] = useState(match?.ketQuaTranDau || "");
   useEffect(() => {
-    console.log(match);
     if (match) {
       setMatchResult(match?.ketQuaTranDau);
     }
   }, [match]);
-  useEffect(() => {
-    console.log(matchResult);
-  }, [matchResult]);
+
+  const [matchStatus, setMatchStatus] = useState(matchResult?.trangThai || "");
+
   const [isLoading, setIsLoading] = useState(false);
   const [isOpenSnackbar, setIsOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
@@ -72,7 +80,11 @@ const MatchDetailComponent = (props) => {
 
   useEffect(() => {
     if (!match?.ketQuaTranDau) return;
-    if (match?.ketQuaTranDau?.trangThai == "Đã kết thúc") {
+    if (
+      match?.ketQuaTranDau?.trangThai == "Đã kết thúc" ||
+      match?.ketQuaTranDau?.trangThai == "Chưa bắt đầu" ||
+      match?.ketQuaTranDau?.trangThai == "Đã cập nhật kết quả"
+    ) {
       setIsShowTimer(false);
       return;
     }
@@ -89,9 +101,13 @@ const MatchDetailComponent = (props) => {
       });
       if (res.status === 200) {
         setSnackbarMessage("Bắt đầu trận đấu thành công");
+        setMatchStatus("Đang thi đấu");
         setMatchResult(res?.data?.data);
         setSnackbarType("success");
         setIsShowTimer(true);
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
       }
     } catch (err) {
       setSnackbarMessage(err?.response?.data?.message);
@@ -109,7 +125,8 @@ const MatchDetailComponent = (props) => {
       });
       if (res.status === 200) {
         setMatchResult(res?.data?.data);
-        setSnackbarMessage("Dừng trận đấu thành công");
+        setSnackbarMessage("Kết thúc trận đấu thành công");
+        setMatchStatus("Đã kết thúc");
         setSnackbarType("success");
         setIsShowTimer(false);
       }
@@ -147,6 +164,10 @@ const MatchDetailComponent = (props) => {
         setGoalPaper([]);
         setMatchResult(res?.data?.data);
         setSnackbarType("success");
+        setMatchStatus("Đã cập nhật kết quả");
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
       }
     } catch (err) {
       console.log(err);
@@ -238,6 +259,23 @@ const MatchDetailComponent = (props) => {
           component={Paper}
           elevation={3}
         >
+          {matchResult?.trangThai == "Đã kết thúc" ||
+            (matchResult?.trangThai == "Đã cập nhật kết quả" && (
+              <Box className={classes.endedMatchStamp}>
+                <Typography
+                  variant="body3"
+                  sx={{
+                    padding: "0rem 0.5rem 0rem 0.5rem",
+                    color: "error.main",
+                  }}
+                >
+                  {matchResult?.trangThai == "Đã kết thúc"
+                    ? "Đã kết thúc"
+                    : "Đã cập nhật kết quả"}
+                </Typography>
+              </Box>
+            ))}
+
           <Grid item xs={4} sx={{ display: "flex", justifyContent: "center" }}>
             <Box
               sx={{
@@ -334,8 +372,13 @@ const MatchDetailComponent = (props) => {
               {matchResult?.dsBanThang?.length > 0 &&
                 matchResult?.dsBanThang.map((goal, index) => (
                   <Typography key={index} sx={{ whiteSpace: "nowrap" }}>
-                    {goal?.idDoi === match?.ketQuaTranDau?.idDoiNha
+                    {goal?.idDoi === match?.ketQuaTranDau?.idDoiNha &&
+                    goal?.loaiBanThang?.id != 3
                       ? `${goal?.tenCauThu} - ${goal?.thoiDiemGhiBan}'`
+                      : null}
+                    {goal?.idDoi !== match?.ketQuaTranDau?.idDoiNha &&
+                    goal?.loaiBanThang?.id == 3
+                      ? `${goal?.tenCauThu} - ${goal?.thoiDiemGhiBan}' (OG)`
                       : null}
                   </Typography>
                 ))}
@@ -366,8 +409,13 @@ const MatchDetailComponent = (props) => {
               {matchResult?.dsBanThang?.length > 0 &&
                 matchResult?.dsBanThang.map((goal, index) => (
                   <Typography key={index} sx={{ whiteSpace: "nowrap" }}>
-                    {goal?.idDoi === match?.ketQuaTranDau?.idDoiKhach
+                    {goal?.idDoi === match?.ketQuaTranDau?.idDoiKhach &&
+                    goal?.loaiBanThang?.id != 3
                       ? `${goal?.tenCauThu} - ${goal?.thoiDiemGhiBan}'`
+                      : null}
+                    {goal?.idDoi !== match?.ketQuaTranDau?.idDoiKhach &&
+                    goal?.loaiBanThang?.id == 3
+                      ? `${goal?.tenCauThu} - ${goal?.thoiDiemGhiBan}' (OG)`
                       : null}
                   </Typography>
                 ))}
@@ -437,11 +485,7 @@ const MatchDetailComponent = (props) => {
                         sx={{ mt: "1rem" }}
                         variant="contained"
                         // onClick={handleStopMatch}
-                        disabled={
-                          matchResult?.trangThai === "Đang thi đấu"
-                            ? false
-                            : true
-                        }
+                        disabled={matchStatus == "Đang thi đấu" ? false : true}
                         onClick={handleStopMatch}
                       >
                         Kết thúc trận đấu
@@ -493,7 +537,7 @@ const MatchDetailComponent = (props) => {
               variant="contained"
               startIcon={<Add></Add>}
               onClick={handleAddPaper}
-              // disabled={matchResult?.trangThai=="Đã kết thúc" ? true : false}
+              disabled={matchStatus != "Đã kết thúc" ? true : false}
             >
               Thêm
             </Button>

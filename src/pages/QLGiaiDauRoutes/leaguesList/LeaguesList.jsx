@@ -202,6 +202,7 @@ const LeaguesList = () => {
             <LeagueDetail
               league={selectedLeague}
               setSelectedLeague={setSelectedLeague}
+              setIsShowDetail={setIsShowDetail}
             ></LeagueDetail>
           </Box>
         )}

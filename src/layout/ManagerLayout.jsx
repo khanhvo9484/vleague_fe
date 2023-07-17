@@ -8,6 +8,7 @@ import {
   AddToPhotos,
   BarChart,
   ArrowForwardIos,
+  CalendarToday,
 } from "@mui/icons-material";
 import { Paper, Box, Button, Typography, Grid } from "@mui/material";
 import LoadingBox from "../components/ui/LoadingBox";
@@ -31,8 +32,13 @@ const menuItems = [
   },
   {
     text: "Lịch thi đấu",
-    icon: <BarChart />,
+    icon: <CalendarToday />,
     path: "/manager/schedule",
+  },
+  {
+    text: "Thống kê",
+    icon: <BarChart />,
+    path: "/manager/statistic",
   },
 ];
 const Dashboard = ({

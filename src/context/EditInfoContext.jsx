@@ -22,7 +22,7 @@ export const EditClubProvider = ({ children }) => {
     setCurrentStadium();
     setCurrentClub();
     setIsEditable(false);
-    setIsFireUpload(false);
+    setIsFireUpload("");
     setImageUrl("");
     setIsUploadingImage(false);
     setHasImageOnQueue(false);

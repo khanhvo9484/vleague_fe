@@ -9,6 +9,7 @@ import { Paper, Box, Button, Typography, Grid } from "@mui/material";
 import LoadingBox from "../../../components/ui/LoadingBox";
 import useEditInfo from "../../../hooks/useEditInfo";
 import ManagerLayout from "../../../layout/ManagerLayout";
+import ComponentLayoutBackdrop from "../../../layout/ComponentLayoutBackdrop";
 import useLoading from "../../../hooks/useLoading";
 const Dashboard = () => {
   const authContext = useAuth();
@@ -19,6 +20,7 @@ const Dashboard = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [notify, setNotify] = useState({ message: "", type: "" });
   const [isEditable, setIsEditable] = useState(false);
+  const [isLoadingBackdrop, setIsLoadingBackdrop] = useState(false);
 
   const {
     currentStadium,
@@ -28,8 +30,8 @@ const Dashboard = () => {
     hasImageOnQueue,
     setIsFireUpload,
     setImageUrl,
+    resetImage,
   } = useEditInfo();
-
   const fetchClub = async () => {
     setIsLoading(true);
     setNotify({ message: "", type: "" });
@@ -57,106 +59,111 @@ const Dashboard = () => {
     }
   }, [club]);
   const handleUpdateClubInfo = () => {
-    setIsLoading(true);
     setIsFireUpload(true);
   };
+
   useEffect(async () => {
     if (!isFireUpload) return;
-    if (hasImageOnQueue) {
-      let count = 0;
-      while (!imageUrl) {
-        if (count == 10) break;
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        count++;
+    let isMounted = true;
+    setIsLoadingBackdrop(true);
+    if (hasImageOnQueue && !imageUrl) {
+      setIsLoadingBackdrop(false);
+      return;
+    }
+    if (isMounted) {
+      try {
+        const res = await MyAxios.put(
+          "/doibong",
+          JSON.stringify({
+            id: club?.id,
+            idQuanLy: manager?.id,
+            ten: currentClub ? currentClub?.ten : club?.ten,
+            idSanNha: currentStadium ? currentStadium : homeStadium?.id,
+            namThanhLap: currentClub
+              ? currentClub?.namThanhLap
+              : club?.namThanhLap,
+            hinhAnh: imageUrl ? imageUrl : club?.hinhAnh,
+          }),
+          {
+            headers: { "Content-Type": "application/json" },
+          }
+        );
+      } catch (err) {
+        setNotify({ message: err.message, type: "error" });
+      } finally {
+        fetchClub();
+        setIsEditable(false);
+        setIsLoadingBackdrop(false);
+        if (imageUrl) {
+          resetImage();
+        }
       }
     }
-    try {
-      const res = await MyAxios.put(
-        "/doibong",
-        JSON.stringify({
-          id: club?.id,
-          idQuanLy: manager?.id,
-          ten: currentClub ? currentClub?.ten : club?.ten,
-          idSanNha: currentStadium ? currentStadium : homeStadium.id,
-          namThanhLap: currentClub ? currentClub.namThanhLap : club.namThanhLap,
-          hinhAnh: imageUrl ? imageUrl : club?.hinhAnh,
-        }),
-        {
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-    } catch (err) {
-      console.log(err);
-      setNotify({ message: err.message, type: "error" });
-    } finally {
-      fetchClub();
-      setIsEditable(false);
-      setIsFireUpload(false);
-      setImageUrl(false);
-    }
-  }, [isFireUpload]);
+  }, [isFireUpload, imageUrl]);
   return (
     <ManagerLayout isLoading={isLoading} notify={notify}>
-      <Box sx={{ ml: "2rem", paddingTop: "2rem" }}>
-        <ClubInfo
-          club={club}
-          manager={manager}
-          homeStadium={homeStadium}
-          verticalLayout={true}
-          isEditable={isEditable}
-        ></ClubInfo>
-      </Box>
+      <ComponentLayoutBackdrop isLoading={isLoadingBackdrop}>
+        <Box sx={{ ml: "2rem", paddingTop: "2rem" }}>
+          <ClubInfo
+            club={club}
+            manager={manager}
+            homeStadium={homeStadium}
+            verticalLayout={true}
+            isEditable={isEditable}
+          ></ClubInfo>
+        </Box>
 
-      <Grid container spacing={0}>
-        <Grid item xs={8} md={8}>
-          {!isLoading && !notify.message && (
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "flex-end",
-              }}
-            >
-              {!isEditable && (
-                <Button
-                  variant="contained"
-                  onClick={() => {
-                    setIsEditable(true);
-                  }}
-                  color="primary"
-                >
-                  <Typography variant="h6"> Sửa thông tin</Typography>
-                </Button>
-              )}
-              {isEditable && (
-                <>
+        <Grid container spacing={0}>
+          <Grid item xs={8} md={8}>
+            {!isLoading && !notify.message && (
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                }}
+              >
+                {!isEditable && (
                   <Button
                     variant="contained"
                     onClick={() => {
-                      handleUpdateClubInfo();
+                      setIsEditable(true);
                     }}
-                    color="secondary"
-                    sx={{ marginRight: "1rem" }}
+                    color="primary"
                   >
-                    <Typography variant="h6" color={"white"}>
-                      {" "}
-                      Cập nhật
-                    </Typography>
+                    <Typography variant="h6"> Sửa thông tin</Typography>
                   </Button>
-                  <Button
-                    variant="contained"
-                    onClick={() => {
-                      setIsEditable(false);
-                    }}
-                    color="error"
-                  >
-                    <Typography variant="h6"> Hủy</Typography>
-                  </Button>
-                </>
-              )}
-            </Box>
-          )}
+                )}
+                {isEditable && (
+                  <>
+                    <Button
+                      variant="contained"
+                      onClick={() => {
+                        handleUpdateClubInfo();
+                      }}
+                      color="secondary"
+                      sx={{ marginRight: "1rem" }}
+                    >
+                      <Typography variant="h6" color={"white"}>
+                        {" "}
+                        Cập nhật
+                      </Typography>
+                    </Button>
+                    <Button
+                      variant="contained"
+                      onClick={() => {
+                        setIsEditable(false);
+                      }}
+                      color="error"
+                    >
+                      <Typography variant="h6"> Hủy</Typography>
+                    </Button>
+                  </>
+                )}
+              </Box>
+            )}
+          </Grid>
         </Grid>
-      </Grid>
+      </ComponentLayoutBackdrop>
     </ManagerLayout>
   );
 };
