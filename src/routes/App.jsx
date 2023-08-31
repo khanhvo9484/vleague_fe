@@ -33,7 +33,7 @@ import { baselightTheme } from "../theme/DefaultTheme";
 import { ThemeProvider } from "@mui/material/styles";
 import RequiredAuth from "../utils/RequiredAuth";
 import Unauthorized from "../pages/publicRoutes/unauthorized/Unauthorized";
-import NotFound from "../pages/publicRoutes/notFound/404NotFound";
+// import NotFound from "../pages/publicRoutes/notFound/404NotFound";
 
 const App = () => {
   return (
@@ -107,7 +107,7 @@ const App = () => {
           element={<Unauthorized></Unauthorized>}
         ></Route>
 
-        <Route path="*" element={<NotFound />} />
+        {/* <Route path="*" element={<NotFound />} /> */}
       </Routes>
     </ThemeProvider>
   );
