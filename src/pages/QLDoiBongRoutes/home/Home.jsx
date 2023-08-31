@@ -70,6 +70,9 @@ const Dashboard = () => {
       setIsLoadingBackdrop(false);
       return;
     }
+    if (imageUrl && !isFireUpload) {
+      return;
+    }
     if (isMounted) {
       try {
         const res = await MyAxios.put(
@@ -95,6 +98,7 @@ const Dashboard = () => {
         setIsEditable(false);
         setIsLoadingBackdrop(false);
         if (imageUrl) {
+          setIsFireUpload(false);
           resetImage();
         }
       }

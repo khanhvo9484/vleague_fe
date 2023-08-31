@@ -129,6 +129,9 @@ const MatchDetailComponent = (props) => {
         setMatchStatus("Đã kết thúc");
         setSnackbarType("success");
         setIsShowTimer(false);
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
       }
     } catch (err) {
       setSnackbarMessage(err?.response?.data?.message);

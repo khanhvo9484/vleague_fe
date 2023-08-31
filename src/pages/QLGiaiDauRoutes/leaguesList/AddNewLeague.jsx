@@ -50,6 +50,10 @@ const AddNewLeague = () => {
       setIsLoading(false);
       return;
     }
+    if (imageUrl && !isFireUpload) {
+      return;
+    }
+
     setIsLoading(true);
     let data = {
       id_nguoitao: auth?.id,
@@ -90,6 +94,7 @@ const AddNewLeague = () => {
       setIsLoading(false);
       setIsOpenSnackbar(true);
       if (imageUrl) {
+        setIsFireUpload(false);
         resetImage();
       }
     }
